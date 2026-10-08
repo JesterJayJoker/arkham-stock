@@ -48,6 +48,12 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
 .browse-intro{display:flex;align-items:end;justify-content:space-between;gap:20px;margin:25px 0 18px}
 .summary-key{font-size:.75rem;line-height:1.45;color:#9eb7a8;max-width:310px}
 .campaign-search{max-width:500px;margin-bottom:16px}
+.campaign-batch-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 17px}
+.campaign-batch-controls button{border:1px solid #4d6b58;border-radius:10px;padding:10px 15px;background:#20392b;color:#e3f6e9;cursor:pointer;font-weight:750}
+.campaign-batch-controls button:disabled{opacity:.55;cursor:not-allowed}
+.campaign-batch-controls #stopCampaignChecks{background:#2c231d;border-color:#735a43}
+.campaign-batch-controls small{color:#abc1b1;font-size:.77rem;line-height:1.45}
+.campaign-batch-progress{color:#a9dbc0;font-size:.79rem;min-height:1.2em;margin:-9px 0 13px}
 .campaign-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .campaign-overview{border:1px solid var(--line);border-radius:16px;padding:18px;background:linear-gradient(165deg,#16201b,#0f1412);min-height:202px;display:flex;flex-direction:column;gap:11px}
 .campaign-overview h3{margin:0;font:700 1.23rem Georgia,serif;line-height:1.22}
@@ -158,6 +164,8 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
       <div id="starterSpotlight" class="starter-spotlight"></div>
       <label class="sr-only" for="campaignSearch">Find a campaign</label>
       <input class="search campaign-search" type="search" id="campaignSearch" placeholder="Find a campaign…" />
+      <div class="campaign-batch-controls"><button type="button" id="checkAllCampaigns">Check all campaign expansions</button><button type="button" id="stopCampaignChecks" hidden>Stop</button><small>Checks modern campaign and investigator boxes, one at a time. Cached results are reused; a full first check may take several minutes. Continues while this tab stays open.</small></div>
+      <div class="campaign-batch-progress" id="campaignBatchProgress" role="status" aria-live="polite"></div>
       <div id="campaignCards" class="campaign-grid"></div>
     </section>
     <nav class="chapter-tabs" id="collectionChapterTabs" aria-label="Collection chapter"><button type="button" class="chapter-tab active" data-chapter="one" aria-pressed="true">Chapter One</button><button type="button" class="chapter-tab" data-chapter="two" aria-pressed="false">Chapter Two</button></nav>
@@ -2518,9 +2526,9 @@ async function loadLiveOffers(p,target){
     if(!r.ok) throw new Error('HTTP '+r.status);
     const data=await r.json();
     const rows=(data.offers||[]).filter(o=>o.stockStatus!=='unknown').sort((a,b)=>{const rank={in_stock:0,preorder:1,out_of_stock:2};return (rank[a.stockStatus]??9)-(rank[b.stockStatus]??9)||(a.price??9999)-(b.price??9999)});
-    if(!rows.length){target.innerHTML='<div class="live-note">No retailer returned a verified stock state this check.</div><div class="amazon-offer"><span>Amazon US</span><span>Not automatically verified</span><a href="'+esc(marketSearchUrl(p,RETAILER_SOURCES.find(x=>x.id==='amazon')))+'" target="_blank" rel="noopener noreferrer">Check Amazon ↗</a></div>';return;}
+    if(!rows.length){target.innerHTML='<div class="live-note">No retailer returned a verified stock state this check.</div><div class="amazon-offer"><span>Amazon US · manual search</span><span>Stock not verified</span><a href="'+esc(marketSearchUrl(p,RETAILER_SOURCES.find(x=>x.id==='amazon')))+'" target="_blank" rel="noopener noreferrer">Search Amazon ↗</a></div>';return;}
     const cacheText=data.cacheState==='fresh'?'shared cache':data.cacheState==='stale'?'stale shared result; refreshing in background':data.cacheState==='refreshed'?'freshly checked':'shared result';
-    target.innerHTML='<div class="live-offers">'+rows.map(o=>`<div class="offer-row"><span class="retailer">${esc((RETAILER_SOURCES.find(x=>x.id===o.retailerId)||{}).name||o.retailerId)}</span><span class="state ${o.stockStatus}">${stockLabel(o.stockStatus)}</span><span>${o.price>0?money(o.price):'Price unknown'}</span><a target="_blank" rel="noopener noreferrer" href="${esc(safeRetailerUrl(o.productUrl,o.retailerId)||marketSearchUrl(p,RETAILER_SOURCES[0]))}">Store ↗</a></div>`).join('')+'</div><div class="amazon-offer"><span>Amazon US</span><span>Not automatically verified</span><a href="'+esc(marketSearchUrl(p,RETAILER_SOURCES.find(x=>x.id==='amazon')))+'" target="_blank" rel="noopener noreferrer">Check Amazon ↗</a></div><div class="live-note">Retailer pages checked '+new Date(data.checkedAt).toLocaleString()+' · '+cacheText+' · Amazon requires manual verification</div>';
+    target.innerHTML='<div class="live-offers">'+rows.map(o=>`<div class="offer-row"><span class="retailer">${esc((RETAILER_SOURCES.find(x=>x.id===o.retailerId)||{}).name||o.retailerId)}</span><span class="state ${o.stockStatus}">${stockLabel(o.stockStatus)}</span><span>${o.price>0?money(o.price):'Price unknown'}</span><a target="_blank" rel="noopener noreferrer" href="${esc(safeRetailerUrl(o.productUrl,o.retailerId)||marketSearchUrl(p,RETAILER_SOURCES[0]))}">Store ↗</a></div>`).join('')+'</div><div class="amazon-offer"><span>Amazon US · manual search</span><span>Stock not verified</span><a href="'+esc(marketSearchUrl(p,RETAILER_SOURCES.find(x=>x.id==='amazon')))+'" target="_blank" rel="noopener noreferrer">Search Amazon ↗</a></div><div class="live-note">Retailer pages checked '+new Date(data.checkedAt).toLocaleString()+' · '+cacheText+' · Amazon listings are search-only</div>';
   }catch(e){target.innerHTML='<div class="live-note">Live check failed: '+esc(e.message)+'. Use the source links below as fallback.</div>';}
 }
 
@@ -2540,7 +2548,7 @@ const RETAILER_SOURCES=[
   {id:'asmodee',name:'Asmodee US',domain:'store.asmodee.com',meta:'Publisher/distributor storefront'},
   {id:'nobleknight',name:'Noble Knight',domain:'nobleknight.com',meta:'New + used/OOP inventory'},
   {name:'Target',domain:'target.com',meta:'Useful for current core/decks'},
-  {id:'amazon',name:'Amazon US',kind:'amazon',meta:'Search Amazon listings; stock and price not automatically verified'},
+  {id:'amazon',name:'Amazon US',kind:'amazon',meta:'Search Amazon listings manually; stock and price not verified'},
   {id:'boarding',name:'Boarding School Games',domain:'boardingschoolgames.com',meta:'Independent retailer'},
   {id:'guardtower',name:'The Guardtower',domain:'theguardtower.com',meta:'Independent U.S. retailer'},
   {id:'hauntedgamecafe',name:'The Haunted Game Cafe',domain:'hauntedgamecafe.com',meta:'Independent U.S. retailer'},
@@ -2764,9 +2772,9 @@ async function fetchStockSummary(){
     if(changed){renderBrowse();renderCatalog();}
   }catch(e){console.warn('Stock summaries unavailable',e);}
 }
-async function checkProductStock(p,{silent=false}={}){
+async function checkProductStock(p,{silent=false,render=true}={}){
   if(!p?.retail||STOCK_LOADING.has(p.id))return;
-  STOCK_LOADING.add(p.id);renderBrowse();renderCatalog();
+  STOCK_LOADING.add(p.id);if(render){renderBrowse();renderCatalog();}
   try{
     const r=await fetch('/api/offers/'+encodeURIComponent(p.id));
     if(!r.ok)throw new Error('Stock check unavailable ('+r.status+')');
@@ -2779,7 +2787,7 @@ async function checkProductStock(p,{silent=false}={}){
       bestPrice:inStock.find(x=>x.price>0)?.price??null,bestOffer:inStock.find(x=>x.price>0)||inStock[0]||null
     });
   }catch(e){if(!silent)console.warn(e);}
-  finally{STOCK_LOADING.delete(p.id);renderBrowse();renderCatalog();}
+  finally{STOCK_LOADING.delete(p.id);if(render){renderBrowse();renderCatalog();}}
 }
 function campaignProducts(cycle){return PRODUCTS.filter(p=>p.cycle===cycle);}
 function campaignPrimary(cycle){return campaignProducts(cycle).filter(p=>['Campaign Expansion','Investigator Expansion'].includes(p.category));}
@@ -2812,12 +2820,14 @@ function renderBrowse(){
 function showCampaign(cycle){
   selectedCampaign=cycle;
   const primary=campaignPrimary(cycle),legacy=campaignProducts(cycle).filter(p=>['Deluxe Expansion','Mythos Pack'].includes(p.category));
-  const extra=campaignProducts(cycle).filter(p=>!primary.includes(p)&&!legacy.includes(p));
+  const returns=campaignProducts(cycle).filter(p=>p.category==='Return To');
+  const original=[...legacy,...returns];
+  const extra=campaignProducts(cycle).filter(p=>!primary.includes(p)&&!original.includes(p));
   document.querySelector('#campaignDialogContent').innerHTML=`<div class="eyebrow">CAMPAIGN GUIDE</div><h2>${esc(cycle)}</h2><p class="campaign-detail-note">Choose modern expansions for the simplest purchase. Legacy packaging is shown separately so you can compare it without accidentally buying duplicate content.</p>
     <button class="button primary" data-check-cycle="${esc(cycle)}">Check this campaign's modern boxes</button>
     <div class="campaign-products">${primary.map(productCard).join('')}</div>
     ${extra.length?`<h3>Additional products</h3><div class="campaign-products">${extra.map(productCard).join('')}</div>`:''}
-    ${legacy.length?`<details class="legacy-expander"><summary>Legacy deluxe & Mythos packs (${legacy.length})</summary><p class="campaign-detail-note">Original packaging may overlap with modern expansions. Return To boxes are separate optional products.</p><button type="button" class="button primary" data-check-legacy="${esc(cycle)}">Check legacy deluxe & Mythos packs (${legacy.length})</button><div class="catalog">${legacy.map(productCard).join('')}</div></details>`:''}`;
+    ${original.length?`<details class="legacy-expander"><summary>Original releases &amp; Return To (${original.length})</summary><p class="campaign-detail-note">Original deluxe and Mythos packs overlap with modern expansions. Return To is optional, distinct content not included in either modern box.</p><button type="button" class="button primary" data-check-legacy="${esc(cycle)}">Check original releases &amp; Return To (${original.length})</button>${legacy.length?`<h3>Deluxe &amp; Mythos packs (${legacy.length})</h3><div class="catalog">${legacy.map(productCard).join('')}</div>`:''}${returns.length?`<h3>Optional Return To (${returns.length})</h3><div class="catalog">${returns.map(productCard).join('')}</div>`:''}</details>`:''}`;
   if(!document.querySelector('#campaignDialog').open) document.querySelector('#campaignDialog').showModal();
 }
 function setView(view){
@@ -2971,8 +2981,8 @@ document.querySelector('#campaignDialogContent').addEventListener('click',async 
   const legacyBtn=e.target.closest('button[data-check-legacy]');
   if(legacyBtn){
     const cycle=legacyBtn.dataset.checkLegacy;
-    const legacy=campaignProducts(cycle).filter(p=>['Deluxe Expansion','Mythos Pack'].includes(p.category));
-    legacyBtn.disabled=true;legacyBtn.textContent=`Checking ${legacy.length} legacy products…`;
+    const legacy=campaignProducts(cycle).filter(p=>['Deluxe Expansion','Mythos Pack','Return To'].includes(p.category));
+    legacyBtn.disabled=true;legacyBtn.textContent=`Checking ${legacy.length} original/Return To products…`;
     // Avoid simultaneous large batches and leave the server's shared cache in control.
     for(const p of legacy)await checkProductStock(p,{silent:true});
     if(document.querySelector('#campaignDialog').open){
@@ -2984,6 +2994,33 @@ document.querySelector('#campaignDialogContent').addEventListener('click',async 
   }
   openProductAction(e);
 });
+// An opt-in, browser-driven campaign sweep. The shared server cache prevents
+// repeated retailer traffic for recently verified products. Never fire 20+ requests concurrently.
+let campaignBatchRunning=false;
+let campaignBatchStop=false;
+function campaignBatchStatus(message){document.querySelector('#campaignBatchProgress').textContent=message;}
+document.querySelector('#checkAllCampaigns').addEventListener('click',async()=>{
+  if(campaignBatchRunning)return;
+  campaignBatchRunning=true;campaignBatchStop=false;
+  const start=document.querySelector('#checkAllCampaigns'),stop=document.querySelector('#stopCampaignChecks');
+  start.disabled=true;stop.hidden=false;
+  const products=[...new Map(CAMPAIGN_CYCLES.flatMap(c=>campaignPrimary(c)).map(p=>[p.id,p])).values()].filter(p=>p.retail);
+  const needed=products.filter(p=>STOCK_SUMMARIES.get(p.id)?.cacheState!=='fresh');
+  const skipped=products.length-needed.length;
+  let done=0;
+  try{
+    if(!needed.length)campaignBatchStatus(`All ${products.length} campaign boxes already have recent cached checks.`);
+    for(const p of needed){
+      if(campaignBatchStop)break;
+      campaignBatchStatus(`Checking ${done+1} of ${needed.length}: ${p.name} (${skipped} recent results reused). This can take several minutes.`);
+      await checkProductStock(p,{silent:true,render:false});
+      done++;
+      if(currentView==='campaigns')renderBrowse();
+    }
+    if(needed.length)campaignBatchStatus(campaignBatchStop?`Stopped after ${done}/${needed.length} checks; ${skipped} cached results reused.`:`Finished ${done} checks; ${skipped} recent cached results reused. Unknown stock is not sold out.`);
+  }finally{campaignBatchRunning=false;start.disabled=false;stop.hidden=true;campaignBatchStop=false;}
+});
+document.querySelector('#stopCampaignChecks').addEventListener('click',()=>{campaignBatchStop=true;campaignBatchStatus('Stopping after the current retailer check finishes…');});
 document.querySelector('#campaignCards').addEventListener('click',e=>{
   const btn=e.target.closest('button[data-cycle]');if(btn)showCampaign(btn.dataset.cycle);
 });

@@ -70,12 +70,12 @@ test('Return To has its own view and is excluded from Rare / OOP',()=>{
   assert.doesNotMatch(el('#catalog').innerHTML,/Return to the Dunwich Legacy/i);
 });
 
-test('legacy batch excludes Return To and shows accurate count',()=>{
+test('original releases batch includes optional Return To and shows accurate count',()=>{
   const {context,el}=mount();
   vm.runInContext("showCampaign('The Dunwich Legacy')",context);
   const html=el('#campaignDialogContent').innerHTML;
-  assert.match(html,/Check legacy deluxe & Mythos packs \(7\)/);
-  assert.doesNotMatch(html,/Check legacy deluxe & Mythos packs \(8\)/);
+  assert.match(html,/Check original releases &amp; Return To \(8\)/);
+  assert.match(html,/Optional Return To \(1\)/);
 });
 
 test('setup wizard Chapter One and Two each include relevant products',()=>{

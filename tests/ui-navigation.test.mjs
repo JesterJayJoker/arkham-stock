@@ -53,7 +53,7 @@ test('campaign detail starts with modern boxes and collapses legacy products',()
   const {context,el}=mount();
   vm.runInContext("showCampaign('The Dunwich Legacy')",context);
   const html=el('#campaignDialogContent').innerHTML;
-  assert.match(html,/Legacy deluxe &amp; Mythos packs|Legacy deluxe & Mythos packs/);
+  assert.match(html,/Original releases &amp; Return To|Original releases & Return To/);
   assert.match(html,/Campaign Expansion/);
   assert.match(html,/Investigator Expansion/);
   assert.match(html,/<details class="legacy-expander">/);
