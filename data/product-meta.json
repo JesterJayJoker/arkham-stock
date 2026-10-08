@@ -67,7 +67,7 @@
     "sku": "AHC103EN",
     "aliases": [
       "Andre Patel Investigator Deck",
-      "Andr\u00e9 Patel Investigator Deck"
+      "André Patel Investigator Deck"
     ]
   },
   "deck-2026-marie": {
@@ -121,7 +121,25 @@
   "return-notz": {
     "aliases": [
       "Return to the Night of the Zealot",
-      "Return to Night of the Zealot"
+      "Arkham Horror The Card Game Return to the Night of the Zealot"
+    ],
+    "sku": "AHC26",
+    "upc": "841333105266"
+  },
+  "standalone-barkham": {
+    "sku": "PAHC01",
+    "upc": "841333111410",
+    "aliases": [
+      "Barkham Horror: The Meddling of Meowlathotep",
+      "Barkham Horror The Meddling of Meowlathotep Scenario Pack"
+    ]
+  },
+  "dunwich-where-doom-awaits": {
+    "sku": "AHC07",
+    "upc": "841333102357",
+    "aliases": [
+      "Where Doom Awaits",
+      "Arkham Horror The Card Game Where Doom Awaits Mythos Pack"
     ]
   }
 }

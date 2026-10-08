@@ -21,6 +21,14 @@ export function scoreCandidate(product, candidate) {
   const aliases = [product.name, ...(product.aliases || [])];
   const cTitle = candidate.title || candidate.name || candidate.url || '';
   const cNorm = normalizeTitle(cTitle);
+  // A conflicting product identifier is stronger negative evidence than a
+  // superficially matching title. Never promote that candidate to stock.
+  const sku = v => String(v||'').replace(/[^a-z0-9]/gi,'').toUpperCase();
+  const upc = v => String(v||'').replace(/\D/g,'');
+  if (product.sku && candidate.sku && sku(product.sku)!==sku(candidate.sku)) return 0;
+  if (product.upc && candidate.upc && upc(product.upc)!==upc(candidate.upc)) return 0;
+  if (/\b(?:box only|empty box|missing cards|incomplete|components only|parts only)\b/i.test(cTitle)) return 0;
+
   let best = 0;
 
   for (const alias of aliases) {

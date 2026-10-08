@@ -1,3 +1,5 @@
+> Latest release: [v0.14 notes](V14_RELEASE_NOTES.md).
+
 > Latest changes: see [v0.13 release notes](V13_RELEASE_NOTES.md).
 
 # Arkham Stock v0.13 — public beta build
