@@ -1,0 +1,9 @@
+.git
+.github
+.env
+*.zip
+data/cache-runtime.json
+data/test-runtime-cache.json
+.DS_Store
+
+data/live-smoke-cache.json

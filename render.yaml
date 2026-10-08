@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: arkham-stock
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CACHE_FILE
+        value: /tmp/arkham-stock-cache.json
+      - key: OFFER_CACHE_MS
+        value: "7200000"
+      - key: OFFER_STALE_MS
+        value: "86400000"
+      - key: MAX_PARALLEL
+        value: "3"
+      - key: RETAILER_BUDGET_MS
+        value: "8000"
+      - key: RETAILER_FETCH_TIMEOUT_MS
+        value: "4500"
+      - key: RATE_LIMIT_MAX
+        value: "120"
+      - key: TRUST_PROXY
+        value: "1"

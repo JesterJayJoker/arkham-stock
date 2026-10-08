@@ -1,0 +1,19 @@
+services:
+  arkham-stock:
+    build: .
+    ports:
+      - "8787:8787"
+    environment:
+      PORT: "8787"
+      CACHE_FILE: /data/cache.json
+      OFFER_CACHE_MS: "7200000"
+      OFFER_STALE_MS: "86400000"
+      MAX_PARALLEL: "3"
+      RETAILER_BUDGET_MS: "8000"
+      RETAILER_FETCH_TIMEOUT_MS: "4500"
+      RATE_LIMIT_MAX: "120"
+      TRUST_PROXY: "0"
+    volumes:
+      - arkham-stock-data:/data
+volumes:
+  arkham-stock-data:
