@@ -128,3 +128,7 @@ See [V10_RELEASE_NOTES.md](V10_RELEASE_NOTES.md) for category bulk checks, Cardh
 - Availability remains time-stamped, cached, and subject to retailer changes. Automated unit tests are **not** a substitute for real hosted checkout verification.
 
 For the public beta, test at least the Drowned City campaign, Barkham Horror, Return to the Night of the Zealot, Where Doom Awaits, and the 2026 Core Set on the deployed host.
+
+## v0.15 mobile improvements
+
+See `V15_RELEASE_NOTES.md` for collapsible mobile filters, collection scrolling, and modal background scroll locking.

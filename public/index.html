@@ -132,6 +132,34 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
 .setup-footer{position:sticky;bottom:-18px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:16px 0;background:#121817;border-top:1px solid var(--line)}
 .setup-footer span{margin-right:auto;font-size:.85rem;color:#b6c8bc}
 </style>
+<style>
+/* v0.15 mobile ergonomics */
+.mobile-filter-toggle,.mobile-filter-actions{display:none}
+.setup-bulk-disclosure{border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin:10px 0}
+.setup-bulk-disclosure>summary{cursor:pointer;font-weight:750;color:#d6ebdd}
+.setup-bulk-disclosure .setup-hint{margin-bottom:4px}
+body.modal-scroll-locked{position:fixed;left:0;right:0;width:100%;overflow:hidden}
+@media(max-width:640px){
+  .mobile-filter-toggle{display:flex;align-items:center;justify-content:space-between;width:100%;border:1px solid #527160;background:#193025;color:#e2f4e8;border-radius:12px;padding:13px 15px;margin:8px 0 12px;font-weight:750}
+  #mobileFilterCount{margin-left:auto;margin-right:12px;font-size:.78rem;color:#c7e4d2}
+  #catalogToolbar{display:none;position:static;top:auto;backdrop-filter:none;margin-bottom:16px;z-index:auto}
+  #catalogToolbar.mobile-filter-open{display:grid}
+  .mobile-filter-actions{display:flex;gap:10px;grid-column:1/-1}
+  .mobile-filter-actions button{flex:1}
+  #setupDialog{display:none;flex-direction:column;width:calc(100vw - 22px);max-height:calc(100dvh - 24px);height:calc(100dvh - 24px);overflow:hidden;padding:16px 16px 0}
+  #setupDialog[open]{display:flex}
+  #setupDialog>.eyebrow,#setupDialog>h2,#setupDialog>.muted,#setupDialog>#setupChapterTabs,#setupDialog>#setupBulkDisclosure{flex-shrink:0}
+  #setupDialog>h2{font-size:1.45rem;margin:5px 0}
+  #setupDialog>.muted{font-size:.78rem;line-height:1.35;margin:5px 0 8px;max-width:calc(100% - 24px)}
+  #setupChapterTabs{margin:8px 0}
+  #setupBulkDisclosure{margin:4px 0;padding:7px 10px}
+  #setupChecklist{flex:1;min-height:0;max-height:none;overflow-y:auto;overscroll-behavior:contain;margin:9px 0 0;padding-right:3px}
+  #setupDialog .setup-footer{position:relative;bottom:auto;flex-shrink:0;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 0 max(12px,env(safe-area-inset-bottom));margin:0;background:#111716}
+  #setupDialog #setupCount{grid-column:1/-1;font-size:.74rem}
+  #setupDialog #setupCancel,#setupDialog #setupSave{width:100%;min-width:0;padding:10px 7px;white-space:nowrap;font-size:.83rem}
+  #campaignDialog,#detailDialog{max-height:calc(100dvh - 24px);overscroll-behavior:contain}
+}
+</style>
 </head>
 <body>
   <header class="hero">
@@ -199,6 +227,7 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
       <button class="chapter-tab active" data-investigator-type="expansions" aria-pressed="true">Investigator Expansions</button>
       <button class="chapter-tab" data-investigator-type="decks" aria-pressed="false">Investigator Decks</button>
     </nav>
+    <button type="button" id="mobileFilterToggle" class="mobile-filter-toggle" aria-controls="catalogToolbar" aria-expanded="false">Filters <span id="mobileFilterCount"></span> ▾</button>
     <section class="toolbar" id="catalogToolbar" aria-label="Catalog filters">
       <input id="searchInput" class="search" type="search" placeholder="Search product, cycle, or category…" />
       <select id="cycleFilter" class="select"><option value="all">All cycles</option></select>
@@ -218,6 +247,7 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
       </select>
       <label class="toggle"><input id="missingOnly" type="checkbox" /><span>Missing only</span></label>
       <label class="toggle"><input id="wantedOnly" type="checkbox" /><span>Wanted only</span></label>
+      <div class="mobile-filter-actions"><button type="button" id="clearMobileFilters" class="button">Clear all</button><button type="button" id="applyMobileFilters" class="button primary">Apply filters</button></div>
     </section>
 
     <section class="cycle-summary-wrap" id="collectionCycles">
@@ -258,8 +288,8 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
     <h2>What do you own?</h2>
     <p class="muted">Select physical products you own. Campaign and Investigator boxes are separate. Legacy packs are optional. Saving replaces your owned selections but keeps your wishlist.</p>
     <nav class="chapter-tabs" id="setupChapterTabs" aria-label="Choose collection chapter"><button type="button" class="chapter-tab active" data-chapter="one" aria-pressed="true">Chapter One</button><button type="button" class="chapter-tab" data-chapter="two" aria-pressed="false">Chapter Two</button></nav>
-    <div class="setup-bulk-controls"><button type="button" class="setup-mini" id="setupSelectAll">Select all retail products in this chapter</button><button type="button" class="setup-mini" id="setupSelectModern">Select modern boxes only</button><button type="button" class="setup-mini" id="setupClearChapter">Clear this chapter</button></div>
-    <p class="setup-hint">Select all includes original packs and optional Return To boxes. Modern boxes selects one current-style Core Set plus Campaign and Investigator Expansions. Nothing changes until you save.</p>
+    <details id="setupBulkDisclosure" class="setup-bulk-disclosure"><summary>Bulk actions</summary><div class="setup-bulk-controls"><button type="button" class="setup-mini" id="setupSelectAll">Select all retail products in this chapter</button><button type="button" class="setup-mini" id="setupSelectModern">Select modern boxes only</button><button type="button" class="setup-mini" id="setupClearChapter">Clear this chapter</button></div>
+    <p class="setup-hint">Select all includes original packs and optional Return To boxes. Modern boxes selects one current-style Core Set plus Campaign and Investigator Expansions. Nothing changes until you save.</p></details>
     <div id="setupChecklist" class="setup-checklist"></div>
     <div class="setup-footer"><span id="setupCount" aria-live="polite"></span><button id="setupCancel" class="button">Cancel</button><button id="setupSave" class="button primary">Save my collection</button></div>
   </dialog>
@@ -2869,7 +2899,7 @@ function showCampaign(cycle){
     <div class="campaign-products">${primary.map(productCard).join('')}</div>
     ${extra.length?`<h3>Additional products</h3><div class="campaign-products">${extra.map(productCard).join('')}</div>`:''}
     ${original.length?`<details class="legacy-expander"><summary>Original releases &amp; Return To (${original.length})</summary><p class="campaign-detail-note">Original deluxe and Mythos packs overlap with modern expansions. Return To is optional, distinct content not included in either modern box.</p>${marketRegion==='US'?`<button type="button" class="button primary" data-check-legacy="${esc(cycle)}">Check original releases &amp; Return To (${original.length})</button>`:''}${legacy.length?`<h3>Deluxe &amp; Mythos packs (${legacy.length})</h3><div class="catalog">${legacy.map(productCard).join('')}</div>`:''}${returns.length?`<h3>Optional Return To (${returns.length})</h3><div class="catalog">${returns.map(productCard).join('')}</div>`:''}</details>`:''}`;
-  if(!document.querySelector('#campaignDialog').open) document.querySelector('#campaignDialog').showModal();
+  if(!document.querySelector('#campaignDialog').open) document.querySelector('#campaignDialog').showModal();lockBackgroundScroll();
 }
 function setBrowseChapter(chapter){
   browseChapter=['one','two','all'].includes(chapter)?chapter:'all';
@@ -2896,6 +2926,8 @@ function setView(view){
   document.querySelector('#campaignExplorer').hidden=!campaign;
   document.querySelector('#catalogWrap').hidden=campaign;
   document.querySelector('#catalogToolbar').hidden=campaign;
+  document.querySelector('#mobileFilterToggle').hidden=campaign;
+  if(campaign)closeMobileFilters();
   document.querySelector('#collectionAdvisor').hidden=!collection;
   document.querySelector('#investigatorTabs').hidden=currentView!=='investigators';
   document.querySelector('#collectionChapterTabs').hidden=!collection;
@@ -2998,7 +3030,7 @@ function showDetail(p){
     ${overlap && !state.owned[p.id] ? `<div class="overlap">You already own packaging that covers ${overlap} of this product’s ${p.units.length} modeled content units. Check overlap before buying.</div>`:''}
     ${p.snapshot?`<p><strong>Stored market snapshot:</strong> ${money(p.snapshot.price)} at ${esc(p.snapshot.retailer)}. Observed ${esc(p.snapshot.observedOn)}; ${esc(p.snapshot.freshness)}.</p>`:''}
     ${p.retail?(marketRegion==='UK'?regionSearchLinks(p):`<p class="muted"><strong>Live retailer check:</strong> the backend verifies retailer product pages; search links remain as fallback.</p><button id="detailLiveBtn" class="live-btn"><span class="live-dot"></span>Check live stock now</button><div id="liveOfferPanel"></div><div class="source-links">${sourceLinksHtml(p)}</div>`):''}${p.source?`<div class="source-links"><a target="_blank" rel="noopener" href="${p.source}">Official / source page ↗<span class="source-meta">Catalog/reference source</span></a></div>`:''}`;
-  document.querySelector('#detailDialog').showModal();
+  document.querySelector('#detailDialog').showModal();lockBackgroundScroll();
   if(p.retail){ const btn=document.querySelector('#detailLiveBtn'), panel=document.querySelector('#liveOfferPanel'); if(btn&&panel) btn.addEventListener('click',()=>loadLiveOffers(p,panel)); }
 }
 
@@ -3123,11 +3155,49 @@ document.querySelector('#starterSpotlight').addEventListener('click',e=>{
   const btn=e.target.closest('button[data-product]');
   if(btn){const p=PRODUCTS.find(x=>x.id===btn.dataset.product);if(p)showDetail(p);}
 });
+let modalLockedScrollY=0;
+const arkhamModals=['campaignDialog','detailDialog','setupDialog'].map(id=>document.querySelector('#'+id));
+function lockBackgroundScroll(){
+  if(document.body.classList.contains('modal-scroll-locked'))return;
+  modalLockedScrollY=window.scrollY;
+  document.body.style.top=`-${modalLockedScrollY}px`;
+  document.body.classList.add('modal-scroll-locked');
+}
+function unlockBackgroundScroll(){
+  if(arkhamModals.some(d=>d.open))return;
+  if(!document.body.classList.contains('modal-scroll-locked'))return;
+  document.body.classList.remove('modal-scroll-locked');
+  document.body.style.top='';
+  window.scrollTo(0,modalLockedScrollY);
+}
+arkhamModals.forEach(dialog=>dialog.addEventListener('close',unlockBackgroundScroll));
 document.querySelector('#campaignDialogClose').addEventListener('click',()=>document.querySelector('#campaignDialog').close());
 document.querySelector('#campaignDialog').addEventListener('close',()=>{selectedCampaign=null;});
 document.querySelector('#browseChapterTabs').addEventListener('click',e=>{
   const btn=e.target.closest('button[data-browse-chapter]');if(btn)setBrowseChapter(btn.dataset.browseChapter);
 });
+function updateMobileFilterCount(){
+  const values=['cycleFilter','availabilityFilter','statusFilter'].filter(id=>document.querySelector('#'+id).value!=='all').length;
+  const count=values+Number(Boolean(document.querySelector('#'+'searchInput').value.trim()))+Number(document.querySelector('#'+'missingOnly').checked)+Number(document.querySelector('#'+'wantedOnly').checked);
+  document.querySelector('#'+'mobileFilterCount').textContent=count?`(${count} active)`:'';
+}
+function closeMobileFilters(){
+  document.querySelector('#'+'catalogToolbar').classList.remove('mobile-filter-open');
+  document.querySelector('#'+'mobileFilterToggle').setAttribute('aria-expanded','false');
+}
+document.querySelector('#'+'mobileFilterToggle').addEventListener('click',()=>{
+  const opened=document.querySelector('#'+'catalogToolbar').classList.toggle('mobile-filter-open');
+  document.querySelector('#'+'mobileFilterToggle').setAttribute('aria-expanded',String(opened));
+});
+document.querySelector('#'+'applyMobileFilters').addEventListener('click',()=>{updateMobileFilterCount();closeMobileFilters();renderCatalog();});
+document.querySelector('#'+'clearMobileFilters').addEventListener('click',()=>{
+  for(const id of ['cycleFilter','availabilityFilter','statusFilter'])document.querySelector('#'+id).value='all';
+  document.querySelector('#'+'searchInput').value='';
+  document.querySelector('#'+'missingOnly').checked=false;
+  document.querySelector('#'+'wantedOnly').checked=false;
+  updateMobileFilterCount();renderCatalog();closeMobileFilters();
+});
+['searchInput','cycleFilter','availabilityFilter','statusFilter','missingOnly','wantedOnly'].forEach(id=>document.querySelector('#'+id).addEventListener(id==='searchInput'?'input':'change',updateMobileFilterCount));
 document.querySelector('#browseNav').addEventListener('click',e=>{
   const btn=e.target.closest('button[data-view]');if(btn)setView(btn.dataset.view);
 });
@@ -3172,7 +3242,7 @@ function setSetupChapter(chapter){
 }
 function openSetup(){
   setupSelection=new Set(Object.keys(state.owned).filter(k=>state.owned[k]));
-  renderSetupChecklist();document.querySelector('#setupDialog').showModal();
+  renderSetupChecklist();document.querySelector('#setupDialog').showModal();lockBackgroundScroll();
 }
 document.querySelector('#setupBtn').addEventListener('click',openSetup);
 document.querySelector('#collectionChapterTabs').addEventListener('click',e=>{const b=e.target.closest('button[data-chapter]');if(b)setCollectionChapter(b.dataset.chapter);});

@@ -10,7 +10,7 @@ function mount(){
   function el(id){
     if(!elements.has(id)) elements.set(id,{
       innerHTML:'',textContent:'',value:['#cycleFilter','#statusFilter','#availabilityFilter'].includes(id)?'all':'',checked:false,hidden:false,open:false,
-      classList:{toggle(){}},dataset:{},setAttribute(){},listeners:{},addEventListener(type,fn){this.listeners[type]=fn},trigger(type,e={}){return this.listeners[type]?.(e)},appendChild(){},
+      classList:{toggle(){return true},add(){},remove(){},contains(){return false}},dataset:{},setAttribute(){},listeners:{},addEventListener(type,fn){this.listeners[type]=fn},trigger(type,e={}){return this.listeners[type]?.(e)},appendChild(){},
       querySelector:q=>el(q),showModal(){this.open=true},close(){this.open=false}
     });
     return elements.get(id);
@@ -18,10 +18,10 @@ function mount(){
   const tabs=['campaigns','investigators','standalones','returns','rare','collection','all'].map(view=>({dataset:{view},classList:{toggle(){}},setAttribute(){}}));
   const chapterTabs=['one','two'].map(chapter=>({dataset:{chapter},classList:{toggle(){}},setAttribute(){}}));
   const storage=new Map();
-  const context=vm.createContext({window:{},console,Intl,URL,Date,Set,Map,Promise,Number,String,
+  const context=vm.createContext({window:{scrollY:0,scrollTo(){}},console,Intl,URL,Date,Set,Map,Promise,Number,String,
     localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},
     sessionStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},
-    document:{querySelector:el,querySelectorAll:q=>q.includes('[data-chapter]')?chapterTabs:tabs,createElement:()=>({}),visibilityState:'hidden'},
+    document:{body:{classList:{contains(){return false},add(){},remove(){}},style:{}},querySelector:el,querySelectorAll:q=>q.includes('[data-chapter]')?chapterTabs:tabs,createElement:()=>({}),visibilityState:'hidden'},
     fetch:async()=>({ok:true,json:async()=>({items:[]})}),setTimeout(){},setInterval(){},confirm(){return true},alert(){}
   });
   for(const script of scripts)vm.runInContext(script,context);
