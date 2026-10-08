@@ -120,8 +120,8 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
 <style>
 .setup-dialog{width:min(800px,calc(100vw - 24px));max-height:90vh;overflow:auto;padding:24px 22px 18px}
 .setup-dialog h2{font-family:Georgia,serif;font-size:1.8rem;margin:10px 0}
-.setup-checklist{display:grid;gap:12px;margin:22px 0;max-height:52vh;overflow:auto;padding-right:4px}
-.setup-group{border:1px solid var(--line);border-radius:13px;padding:12px 14px;background:#111816}
+.setup-checklist{display:flex;flex-direction:column;align-items:stretch;gap:12px;margin:22px 0;max-height:52vh;overflow:auto;padding-right:4px}
+.setup-group{display:block;flex:0 0 auto;min-height:0;align-self:stretch;border:1px solid var(--line);border-radius:13px;padding:12px 14px;background:#111816}
 .setup-group>summary{cursor:pointer;font-weight:800;padding:3px 0}
 .setup-options{display:grid;gap:8px;margin:12px 0}
 .setup-option{display:flex;align-items:flex-start;gap:10px;color:#d7e6dc;font-size:.92rem;cursor:pointer}
@@ -160,6 +160,15 @@ body.modal-scroll-locked{position:fixed;left:0;right:0;width:100%;overflow:hidde
   #campaignDialog,#detailDialog{max-height:calc(100dvh - 24px);overscroll-behavior:contain}
 }
 </style>
+<style>
+/* v0.16: accordion height must follow content, not available flex space. */
+#setupChecklist{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;align-content:flex-start;gap:12px}
+#setupChecklist>.setup-group{display:block;flex:0 0 auto;min-height:0;height:auto;align-self:stretch}
+#setupChecklist>.setup-group:not([open]){flex:0 0 auto}
+.cold-start-notice{font-size:.83rem;line-height:1.45;color:#c7d6cb;background:#15241d;border:1px solid #385747;border-radius:11px;padding:10px 13px;max-width:760px;margin:15px 0 0}
+.cold-start-notice strong{color:#d8efdf}
+@media(max-width:640px){#setupChecklist{flex:1 1 auto;min-height:0;max-height:none;overflow-y:auto;overscroll-behavior:contain}#setupChecklist>.setup-group{flex:0 0 auto}}
+</style>
 </head>
 <body>
   <header class="hero">
@@ -167,6 +176,7 @@ body.modal-scroll-locked{position:fixed;left:0;right:0;width:100%;overflow:hidde
       <div class="eyebrow">ARKHAM HORROR LCG COLLECTION + STOCK TRACKER</div>
       <h1>Arkham Stock</h1><div class="region-selector"><label for="marketRegion">Shopping region</label><select id="marketRegion"><option value="US">US · English</option><option value="UK">UK · English (search preview)</option></select><small style="color:#b1c8b7">More countries and translated editions planned</small></div>
       <p class="lede">Track every product, understand legacy-vs-repackaged overlap, and find the cheapest sensible path to completion. <strong>No login required.</strong></p>
+      <p class="cold-start-notice" role="note"><strong>First visit may take longer:</strong> our free server can sleep when inactive and may need up to a minute to wake up. Collection browsing remains available while it starts.</p>
       <div class="hero-actions">
         <button id="setupBtn" class="button primary">Set up my collection</button>
         <button id="exportBtn" class="button">Export backup (JSON)</button>

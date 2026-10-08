@@ -1,8 +1,8 @@
-> Latest release: [v0.14 notes](V14_RELEASE_NOTES.md).
+# Arkham Stock
 
-> Latest changes: see [v0.13 release notes](V13_RELEASE_NOTES.md).
+**First visit may take longer:** Free Render hosting may put the server to sleep when idle. Waking can take up to a minute; please allow time for stock checks to initialize.
 
-# Arkham Stock v0.13 — public beta build
+[Release history](CHANGELOG.md) · [Deployment](DEPLOY.md) · [Privacy](PRIVACY.md) · [Contributing](CONTRIBUTING.md)
 
 Arkham Stock is an independent fan-made Arkham Horror: The Card Game collection and retail-availability tracker inspired by the old Stackham Horror workflow.
 
@@ -33,7 +33,7 @@ docker compose up --build
 
 ## Public traffic protections
 
-v0.4–v0.6 include:
+Public traffic protections include:
 
 - persistent shared offer cache
 - stale-while-revalidate behavior
@@ -96,39 +96,3 @@ See `DEPLOY.md`. The repository contains a Dockerfile, Docker Compose configurat
 ## Disclaimer
 
 Arkham Stock is an independent fan utility and is not affiliated with Fantasy Flight Games, Asmodee, ArkhamDB, or the retailers it checks. Product names and trademarks belong to their respective owners.
-
-## v0.5: Campaign-first browsing
-
-The default page now shows 11 campaigns, plus a current Core Set spotlight. Campaign details emphasize the modern Campaign and Investigator Expansions, with original deluxe boxes and Mythos packs behind an expandable section.
-
-Visitors can switch between Campaigns, Investigators, Standalones, Rare/OOP, My Collection, and All Products. Collection mode shows only owned or wanted items; the 114-item catalog remains available under All Products. Product cards show cached verified stock summaries before historical snapshots. The stock filter never counts unverified items as out of stock.
-
-Opening the site loads the shared stock-summary cache without triggering a sweep of every retailer for all 114 items. At most two prioritized products (2026 Core and Children of Blood) may be automatically checked once per browser session when no usable cache is available. Campaign details provide a one-click check for that campaign's modern boxes.
-
-**Important:** Render free-tier sleep and ephemeral storage mean automatic checks cannot run continuously while the instance is sleeping. This release does not claim to provide comprehensive, real-time inventory for all products.
-
-## v0.6: Automatic checking, Amazon, and quick collection setup
-
-The server checks one retail product per three minutes (configurable) while active. Shared summaries refresh in the browser without generating a full retailer sweep per visitor. Render's free tier sleeps, so these checks are **not** guaranteed to run continuously. `GET /api/health` and `GET /api/stock-summary` include `autoStock` progress. See `V06_RELEASE_NOTES.md`.
-
-Amazon US appears as a manual product search link. Amazon is **not** a verified automatic stock source without authorized access to product and offer data. The site's live stock counts and lowest prices still come from supported direct retailer checks only.
-
-**Set up my collection** opens a guided ownership checklist. Legacy packs and Return To products are separate from modern campaign/investigator boxes; marking one never silently marks another. JSON export/restore remains for backups.
-
-## v0.10 updates
-
-See [V10_RELEASE_NOTES.md](V10_RELEASE_NOTES.md) for category bulk checks, Cardhaus category-page rejection, compact advisor, and UK search preview.
-
-## v0.13 retailer reliability update
-
-- Shopify variant prices now use the cheapest **available, matching** variant, not a sold-out variant. If SKU/UPC conflicts, the offer is unknown rather than guessed.
-- Boarding School Games product-specific extended-delay CTAs are checked alongside Shopify variant data. Listings can be `delayed`, `backorder`, `preorder`, `used`, `out_of_stock`, or `unknown` instead of all appearing as ordinary `in_stock`.
-- Used, incomplete, box-only, and mixed-bundle listings are differentiated or rejected. A used copy is not counted as an ordinary new in-stock copy.
-- The Return To completion note is above the list, not appended to the final title.
-- Availability remains time-stamped, cached, and subject to retailer changes. Automated unit tests are **not** a substitute for real hosted checkout verification.
-
-For the public beta, test at least the Drowned City campaign, Barkham Horror, Return to the Night of the Zealot, Where Doom Awaits, and the 2026 Core Set on the deployed host.
-
-## v0.15 mobile improvements
-
-See `V15_RELEASE_NOTES.md` for collapsible mobile filters, collection scrolling, and modal background scroll locking.
