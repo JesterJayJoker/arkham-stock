@@ -2623,10 +2623,22 @@ const RETAILER_SOURCES=[
 function marketAlias(p){ return MARKET_ALIASES[p.id] || p.name; }
 function marketTerms(p){ return `Arkham Horror LCG \"${marketAlias(p)}\"`; }
 function googleSearchUrl(q){ return 'https://www.google.com/search?q='+encodeURIComponent(q); }
+// eBay search-only pilot: negative terms reduce accessories, but results are never verified.
+const EBAY_EXCLUSIONS=['divider','dividers','deck box','deckbox','storage','proxy','proxies','replacement','single card','card sleeves','empty box','box only','print and play'];
+function ebayProductSearchUrl(p){
+  const name=marketAlias(p);
+  const terms=`Arkham Horror \"${name}\"`;
+  const excludes=EBAY_EXCLUSIONS.map(x=>'-"'+x+'"').join(' ');
+  return 'https://www.ebay.com/sch/i.html?'+new URLSearchParams({_nkw:terms+' '+excludes,_sacat:'0',LH_BIN:'1',_sop:'15'}).toString();
+}
+function ebayCampaignSearchUrl(cycle){
+  const terms=`Arkham Horror \"${cycle}\" (complete,lot,collection) -divider -\"box only\" -proxy`;
+  return 'https://www.ebay.com/sch/i.html?'+new URLSearchParams({_nkw:terms,_sacat:'0',LH_BIN:'1',_sop:'15'}).toString();
+}
 function marketSearchUrl(p,source){
   if(source.kind==='bgo') return p.bgoSearch;
   if(source.kind==='amazon') return 'https://www.amazon.com/s?k='+encodeURIComponent('Arkham Horror The Card Game '+marketAlias(p));
-  if(source.kind==='ebay') return 'https://www.ebay.com/sch/i.html?'+new URLSearchParams({_nkw:'Arkham Horror LCG '+marketAlias(p),_sacat:'0',LH_BIN:'1'}).toString();
+  if(source.kind==='ebay') return ebayProductSearchUrl(p);
   const stockTerms=' (\"in stock\" OR \"add to cart\" OR available)';
   return googleSearchUrl(marketTerms(p)+(source.domain?' site:'+source.domain:'')+stockTerms);
 }
@@ -2897,7 +2909,7 @@ function renderBrowse(){
   document.querySelector('#campaignCards').innerHTML=cycles.map(c=>{
     const primary=campaignPrimary(c),legacy=campaignProducts(c).filter(p=>['Deluxe Expansion','Mythos Pack'].includes(p.category)).length;
     const owned=primary.filter(p=>productCovered(p)).length;
-    return `<article class="campaign-overview"><div class="eyebrow">${primary.length>1?'CAMPAIGN + INVESTIGATORS':'CAMPAIGN'}</div><h3>${esc(c)}</h3><div class="cycle-sub">${owned}/${primary.length} modern boxes' content covered${legacy?' · '+legacy+' legacy items':''}</div><div class="cycle-statuses">${primary.map(p=>campaignStockRow(p,p.category==='Campaign Expansion'?'Campaign':'Investigators')).join('')}</div><button class="campaign-open" data-cycle="${esc(c)}">Explore campaign →</button></article>`;
+    return `<article class="campaign-overview"><div class="eyebrow">${primary.length>1?'CAMPAIGN + INVESTIGATORS':'CAMPAIGN'}</div><h3>${esc(c)}</h3><div class="cycle-sub">${owned}/${primary.length} modern boxes' content covered${legacy?' · '+legacy+' legacy items':''}</div><div class="cycle-statuses">${primary.map(p=>campaignStockRow(p,p.category==='Campaign Expansion'?'Campaign':'Investigators')).join('')}</div><button class="campaign-open" data-cycle="${esc(c)}">Explore campaign →</button>${legacy?`<a class="market-link" target="_blank" rel="noopener noreferrer" href="${esc(ebayCampaignSearchUrl(c))}">Find complete legacy collection on eBay ↗</a>`:''}</article>`;
   }).join('')||'<div class="view-empty">No matching campaigns.</div>';
 }
 function showCampaign(cycle){
@@ -2910,7 +2922,7 @@ function showCampaign(cycle){
     ${marketRegion==='US'?`<button class="button primary" data-check-cycle="${esc(cycle)}">Check this campaign's modern boxes</button>`:regionSearchLinks(primary[0]||campaignProducts(cycle)[0])}
     <div class="campaign-products">${primary.map(productCard).join('')}</div>
     ${extra.length?`<h3>Additional products</h3><div class="campaign-products">${extra.map(productCard).join('')}</div>`:''}
-    ${original.length?`<details class="legacy-expander"><summary>Original releases &amp; Return To (${original.length})</summary><p class="campaign-detail-note">Original deluxe and Mythos packs overlap with modern expansions. Return To is optional, distinct content not included in either modern box.</p>${marketRegion==='US'?`<button type="button" class="button primary" data-check-legacy="${esc(cycle)}">Check original releases &amp; Return To (${original.length})</button>`:''}${legacy.length?`<h3>Deluxe &amp; Mythos packs (${legacy.length})</h3><div class="catalog">${legacy.map(productCard).join('')}</div>`:''}${returns.length?`<h3>Optional Return To (${returns.length})</h3><div class="catalog">${returns.map(productCard).join('')}</div>`:''}</details>`:''}`;
+    ${original.length?`<details class="legacy-expander"><summary>Original releases &amp; Return To (${original.length})</summary><p class="campaign-detail-note">Original deluxe and Mythos packs overlap with modern expansions. Return To is optional, distinct content not included in either modern box.</p>${marketRegion==='US'?`<button type="button" class="button primary" data-check-legacy="${esc(cycle)}">Check original releases &amp; Return To (${original.length})</button>`:''}${legacy.length?`<h3>Deluxe &amp; Mythos packs (${legacy.length})</h3><p class="campaign-detail-note">Each pack has its own eBay search. <a target="_blank" rel="noopener noreferrer" href="${esc(ebayCampaignSearchUrl(cycle))}">Search eBay for a complete original campaign collection ↗</a> (results unverified).</p><div class="catalog">${legacy.map(productCard).join('')}</div>`:''}${returns.length?`<h3>Optional Return To (${returns.length})</h3><div class="catalog">${returns.map(productCard).join('')}</div>`:''}</details>`:''}`;
   if(!document.querySelector('#campaignDialog').open) document.querySelector('#campaignDialog').showModal();lockBackgroundScroll();
 }
 function setBrowseChapter(chapter){

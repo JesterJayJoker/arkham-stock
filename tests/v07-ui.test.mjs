@@ -18,7 +18,7 @@ function mount(){
   const tabs=['campaigns','investigators','standalones','returns','rare','collection','all'].map(view=>({dataset:{view},classList:{toggle(){}},setAttribute(){}}));
   const chapterTabs=['one','two'].map(chapter=>({dataset:{chapter},classList:{toggle(){}},setAttribute(){}}));
   const storage=new Map();
-  const context=vm.createContext({window:{scrollY:0,scrollTo(){}},console,Intl,URL,Date,Set,Map,Promise,Number,String,
+  const context=vm.createContext({window:{scrollY:0,scrollTo(){}},console,Intl,URL,URLSearchParams,Date,Set,Map,Promise,Number,String,
     localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},
     sessionStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},
     document:{body:{classList:{contains(){return false},add(){},remove(){}},style:{}},querySelector:el,querySelectorAll:q=>q.includes('[data-chapter]')?chapterTabs:tabs,createElement:()=>({}),visibilityState:'hidden'},

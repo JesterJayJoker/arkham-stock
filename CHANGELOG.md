@@ -201,3 +201,8 @@ Upload the changed files while preserving their folder paths, then deploy the la
 - The free Render instance sleeps after inactivity; cached data is ephemeral.
 - Cover art is not yet implemented, to avoid unlicensed or unreliable image URLs.
 
+
+## v0.18 — eBay search relevance and campaign collections
+- eBay searches use Buy It Now and Price + Shipping lowest first.
+- Product searches use quoted names and exclude common accessories, dividers, proxies, and incomplete boxes. Search results remain unverified.
+- Original campaign guides retain individually searchable deluxe/Mythos packs and add a campaign collection eBay search.
