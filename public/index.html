@@ -106,6 +106,16 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
 @media(max-width:1000px){.catalog-section-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.catalog-section-grid{grid-template-columns:1fr}}
 .advisor-panel{grid-template-columns:1fr;gap:14px}.advisor-panel>div:first-child p{max-width:850px;margin-bottom:0}.advice-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.advice{padding:10px 12px}.advice details summary{cursor:pointer}.advice details summary strong{display:inline}.advice details small{margin:9px 0 0 12px}.advice-summary{color:#a8c5b2;font-size:.85rem;margin:0 0 8px}.bulk-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0 14px}.bulk-toolbar button{border:1px solid #4d6b58;border-radius:10px;padding:9px 14px;background:#20392b;color:#e3f6e9;cursor:pointer;font-weight:750}.bulk-toolbar button:disabled{opacity:.5;cursor:not-allowed}.bulk-toolbar small{color:#a7bdad;font-size:.78rem}.region-selector{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 14px}.region-selector label{font-size:.8rem;color:#c1d8c8}.region-selector select{background:#101a16;color:#e1f4e6;border:1px solid #54725f;border-radius:8px;padding:7px 9px}.region-notice{border:1px solid #6c6038;color:#e2d4ad;background:#201d13;padding:10px;border-radius:10px;font-size:.84rem;margin:10px 0}.region-notice[hidden]{display:none}@media(max-width:800px){.advice-list{grid-template-columns:1fr}}
+.chapter-primary{margin:18px 0 8px;padding:4px 0 2px;border-bottom:1px solid var(--line)}
+.chapter-primary .chapter-tab{min-width:130px}
+.chapter-explainer{color:#b7cbbd;font-size:.83rem;margin:2px 0 14px}
+.setup-bulk-controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+.setup-hint{color:#b2c6b8;font-size:.78rem;line-height:1.5;margin:8px 0}
+.uk-search .uk-search-actions{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.uk-search .uk-search-actions a{display:inline-block;color:#d7f5d9;border:1px solid #7c855c;background:#2b3021;padding:9px 12px;border-radius:8px;text-decoration:none;font-weight:700}
+.uk-search .uk-search-actions a:hover,.uk-search .uk-search-actions a:focus-visible{background:#425039;outline:2px solid #a9c89e}
+.uk-search small{display:block;color:#c5c5b5}
+@media(max-width:640px){.chapter-primary .chapter-tab{min-width:0;flex:1}.setup-bulk-controls .setup-mini{flex:1 1 100%}}
 </style>
 <style>
 .setup-dialog{width:min(800px,calc(100vw - 24px));max-height:90vh;overflow:auto;padding:24px 22px 18px}
@@ -145,7 +155,13 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
       <div class="eyebrow">EXPLORE ARKHAM</div>
       <h2>Find your next investigation.</h2>
       <p>Browse campaigns first, find a standalone, or hunt discontinued releases. The complete catalog is still available.</p>
-      <nav id="browseNav" class="browse-nav" aria-label="Browse by goal">
+      <nav id="browseChapterTabs" class="chapter-tabs chapter-primary" aria-label="Browse release chapter">
+        <button type="button" class="chapter-tab" data-browse-chapter="one" aria-pressed="false">Chapter One</button>
+        <button type="button" class="chapter-tab" data-browse-chapter="two" aria-pressed="false">Chapter Two</button>
+        <button type="button" class="chapter-tab active" data-browse-chapter="all" aria-pressed="true">All chapters</button>
+      </nav>
+      <p class="chapter-explainer" id="browseChapterExplanation">Browse both release chapters. Shopping region is selected separately above.</p>
+      <nav id="browseNav" class="browse-nav" aria-label="Browse by product type">
         <button class="browse-tab active" data-view="campaigns" aria-pressed="true">Campaigns</button>
         <button class="browse-tab" data-view="investigators" aria-pressed="false">Investigators</button>
         <button class="browse-tab" data-view="standalones" aria-pressed="false">Standalones</button>
@@ -242,6 +258,8 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
     <h2>What do you own?</h2>
     <p class="muted">Select physical products you own. Campaign and Investigator boxes are separate. Legacy packs are optional. Saving replaces your owned selections but keeps your wishlist.</p>
     <nav class="chapter-tabs" id="setupChapterTabs" aria-label="Choose collection chapter"><button type="button" class="chapter-tab active" data-chapter="one" aria-pressed="true">Chapter One</button><button type="button" class="chapter-tab" data-chapter="two" aria-pressed="false">Chapter Two</button></nav>
+    <div class="setup-bulk-controls"><button type="button" class="setup-mini" id="setupSelectAll">Select all retail products in this chapter</button><button type="button" class="setup-mini" id="setupSelectModern">Select modern boxes only</button><button type="button" class="setup-mini" id="setupClearChapter">Clear this chapter</button></div>
+    <p class="setup-hint">Select all includes original packs and optional Return To boxes. Modern boxes selects one current-style Core Set plus Campaign and Investigator Expansions. Nothing changes until you save.</p>
     <div id="setupChecklist" class="setup-checklist"></div>
     <div class="setup-footer"><span id="setupCount" aria-live="polite"></span><button id="setupCancel" class="button">Cancel</button><button id="setupSave" class="button primary">Save my collection</button></div>
   </dialog>
@@ -2510,7 +2528,7 @@ const money = v => new Intl.NumberFormat('en-US',{style:'currency',currency:'USD
 let marketRegion=localStorage.getItem('arkham-stock-market-region')==='UK'?'UK':'US';
 function regionSearchLinks(p){
   const q=marketAlias(p);
-  return `<div class="region-notice">UK availability is not automatically verified. <a href="${esc(googleSearchUrl('site:boardgameprices.co.uk '+q))}" target="_blank" rel="noopener noreferrer" style="color:#d7f5d9">Search BoardGamePrices.co.uk ↗</a> · <a href="https://www.amazon.co.uk/s?k=${encodeURIComponent('Arkham Horror The Card Game '+q)}" target="_blank" rel="noopener noreferrer" style="color:#d7f5d9">Search Amazon UK ↗</a>. Confirm English edition and shipping before purchase.</div>`;
+  return `<div class="region-notice uk-search"><strong>UK stock not automatically verified</strong><div class="uk-search-actions"><a href="${esc(googleSearchUrl('site:boardgameprices.co.uk '+q))}" target="_blank" rel="noopener noreferrer">Find on BoardGamePrices (web search) ↗</a><a href="https://www.amazon.co.uk/s?k=${encodeURIComponent('Arkham Horror The Card Game '+q)}" target="_blank" rel="noopener noreferrer">Search Amazon UK ↗</a></div><small>These open external searches. Confirm the English edition, seller and shipping before buying.</small></div>`;
 }
 let API_AVAILABLE=null;
 async function apiAvailable(){
@@ -2618,7 +2636,7 @@ function renderStats(){
     ['Catalog',PRODUCTS.length,'physical + promo/PnP entries',100],
     ['Owned',ownedCount,`${pct(mine.size,units.size)}% unique-content coverage`,pct(mine.size,units.size)],
     ['Wanted',wanted,'products on your list',Math.min(100,wanted*5)],
-    ['Current line',current,'Chapter Two products tracked',100],
+    ['Main campaigns complete',CAMPAIGN_CYCLES.filter(c=>{const boxes=campaignPrimary(c);return boxes.length && boxes.every(p=>productCovered(p));}).length,`of ${CAMPAIGN_CYCLES.length} campaign groups`,pct(CAMPAIGN_CYCLES.filter(c=>{const boxes=campaignPrimary(c);return boxes.length && boxes.every(p=>productCovered(p));}).length,CAMPAIGN_CYCLES.length)],
   ].map(([l,v,s,p])=>`<article class="stat"><div class="value">${v}</div><div class="label">${l} · ${s}</div><div class="progress"><span style="width:${p}%"></span></div></article>`).join('');
 }
 
@@ -2635,6 +2653,9 @@ function unitPctFor(prefix,type){
 // Chapter grouping follows the product release line, not the calendar year.
 function chapterFor(p){return p.status==='current'?'two':'one';}
 let collectionChapter='one',setupChapter='one';
+let browseChapter=localStorage.getItem('arkham-stock-browse-chapter')||'all';
+if(!['one','two','all'].includes(browseChapter))browseChapter='all';
+function matchesBrowseChapter(p){return browseChapter==='all'||chapterFor(p)===browseChapter;}
 const CHAPTER_ONE_CYCLES=[...repackCycles,'Edge of the Earth','The Scarlet Keys','The Feast of Hemlock Vale'];
 const CHAPTER_TWO_CYCLES=['The Drowned City','Children of Blood'];
 function mainContentCoverage(title){
@@ -2716,6 +2737,7 @@ function filteredProducts(){
     if(marketRegion==='US' && avail==='in_stock' && !(stock?.cacheState==='fresh' && stock.inStockCount>0))return false;
     if(marketRegion==='US' && avail==='preorder' && !(stock?.cacheState==='fresh' && stock.preorderCount>0))return false;
     if(marketRegion==='US' && avail==='unchecked' && stock)return false;
+    if(!matchesBrowseChapter(p))return false;
     if(currentView==='investigators' && p.category!==(investigatorType==='decks'?'Investigator Deck':'Investigator Expansion'))return false;
     if(currentView==='standalones' && p.category!=='Scenario Pack')return false;
     if(currentView==='rare' && !(p.status==='legacy-oop'&&p.category!=='Return To'))return false;
@@ -2820,9 +2842,9 @@ function campaignStockRow(p,label){
 function renderBrowse(){
   if(currentView!=='campaigns')return;
   const q=(document.querySelector('#campaignSearch')?.value||'').trim().toLowerCase();
-  const cycles=CAMPAIGN_CYCLES.filter(c=>c.toLowerCase().includes(q));
+  const cycles=CAMPAIGN_CYCLES.filter(c=>c.toLowerCase().includes(q) && (browseChapter==='all'||campaignPrimary(c).some(p=>chapterFor(p)===browseChapter)));
   const starter=PRODUCTS.find(p=>p.id==='core-2026');
-  document.querySelector('#starterSpotlight').innerHTML=starter?`<div class="starter-content"><div class="eyebrow">NEW TO ARKHAM?</div><h3>Start with the Core Set</h3><p>The current Core Set is the simplest starting point for new players.</p></div><div class="starter-stock">${cachedStockHtml(starter)}<button class="campaign-open" data-product="${starter.id}">View Core Set →</button></div>`:'';
+  document.querySelector('#starterSpotlight').innerHTML=starter && browseChapter!=='one'?`<div class="starter-content"><div class="eyebrow">NEW TO ARKHAM?</div><h3>Start with the Core Set</h3><p>The current Core Set is the simplest starting point for new players.</p></div><div class="starter-stock">${cachedStockHtml(starter)}<button class="campaign-open" data-product="${starter.id}">View Core Set →</button></div>`:'';
   document.querySelector('#campaignCards').innerHTML=cycles.map(c=>{
     const primary=campaignPrimary(c),legacy=campaignProducts(c).filter(p=>['Deluxe Expansion','Mythos Pack'].includes(p.category)).length;
     const owned=primary.filter(p=>productCovered(p)).length;
@@ -2841,6 +2863,18 @@ function showCampaign(cycle){
     ${extra.length?`<h3>Additional products</h3><div class="campaign-products">${extra.map(productCard).join('')}</div>`:''}
     ${original.length?`<details class="legacy-expander"><summary>Original releases &amp; Return To (${original.length})</summary><p class="campaign-detail-note">Original deluxe and Mythos packs overlap with modern expansions. Return To is optional, distinct content not included in either modern box.</p>${marketRegion==='US'?`<button type="button" class="button primary" data-check-legacy="${esc(cycle)}">Check original releases &amp; Return To (${original.length})</button>`:''}${legacy.length?`<h3>Deluxe &amp; Mythos packs (${legacy.length})</h3><div class="catalog">${legacy.map(productCard).join('')}</div>`:''}${returns.length?`<h3>Optional Return To (${returns.length})</h3><div class="catalog">${returns.map(productCard).join('')}</div>`:''}</details>`:''}`;
   if(!document.querySelector('#campaignDialog').open) document.querySelector('#campaignDialog').showModal();
+}
+function setBrowseChapter(chapter){
+  browseChapter=['one','two','all'].includes(chapter)?chapter:'all';
+  localStorage.setItem('arkham-stock-browse-chapter',browseChapter);
+  for(const b of document.querySelectorAll('#browseChapterTabs [data-browse-chapter]')){
+    const active=b.dataset.browseChapter===browseChapter;
+    b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));
+  }
+  document.querySelector('#browseChapterExplanation').textContent=browseChapter==='one'?'Chapter One releases: original and repackaged cycles, legacy packs, and associated scenarios.':browseChapter==='two'?'Chapter Two releases: new Core Set, new campaign content, investigator decks and associated scenarios.':'Both release chapters shown. Choose a chapter to narrow every product category.';
+  catalogLimit=CATALOG_PAGE_SIZE;
+  renderBrowse();renderCatalog();
+  if(currentView==='collection')setCollectionChapter(browseChapter==='two'?'two':'one');
 }
 function setView(view){
   currentView=VIEW_INFO[view]?view:'campaigns';
@@ -2871,6 +2905,7 @@ function setView(view){
   renderBrowse();renderCatalog();
   if(!campaign && !collection)document.querySelector('#checkAllCurrent').textContent='Check all '+(currentView==='investigators'?(investigatorType==='decks'?'investigator decks':'investigator expansions'):currentView==='returns'?'Return To products':currentView==='rare'?'legacy releases':currentView==='standalones'?'standalones':'products');
 }
+setBrowseChapter(browseChapter);
 document.querySelector('#marketRegion').value=marketRegion;
 document.querySelector('#marketRegion').addEventListener('change',e=>{
   marketRegion=e.target.value==='UK'?'UK':'US';
@@ -3033,7 +3068,7 @@ document.querySelector('#checkAllCampaigns').addEventListener('click',async()=>{
   campaignBatchRunning=true;campaignBatchStop=false;
   const start=document.querySelector('#checkAllCampaigns'),stop=document.querySelector('#stopCampaignChecks');
   start.disabled=true;stop.hidden=false;
-  const products=[...new Map(CAMPAIGN_CYCLES.flatMap(c=>campaignPrimary(c)).map(p=>[p.id,p])).values()].filter(p=>p.retail);
+  const products=[...new Map(CAMPAIGN_CYCLES.flatMap(c=>campaignPrimary(c)).map(p=>[p.id,p])).values()].filter(p=>p.retail && matchesBrowseChapter(p));
   const needed=products.filter(p=>STOCK_SUMMARIES.get(p.id)?.cacheState!=='fresh');
   const skipped=products.length-needed.length;
   let done=0;
@@ -3083,6 +3118,9 @@ document.querySelector('#starterSpotlight').addEventListener('click',e=>{
 });
 document.querySelector('#campaignDialogClose').addEventListener('click',()=>document.querySelector('#campaignDialog').close());
 document.querySelector('#campaignDialog').addEventListener('close',()=>{selectedCampaign=null;});
+document.querySelector('#browseChapterTabs').addEventListener('click',e=>{
+  const btn=e.target.closest('button[data-browse-chapter]');if(btn)setBrowseChapter(btn.dataset.browseChapter);
+});
 document.querySelector('#browseNav').addEventListener('click',e=>{
   const btn=e.target.closest('button[data-view]');if(btn)setView(btn.dataset.view);
 });
@@ -3113,8 +3151,8 @@ function renderSetupChecklist(){
     if(!byGroup.has(group))byGroup.set(group,[]);
     byGroup.get(group).push(p);
   }
-  const groups=[...byGroup].map(([label,items])=>`<details class="setup-group"><summary>${esc(label)} (${items.length})</summary><div class="setup-options">${items.map(setupOption).join('')}</div></details>`).join('');
-  root.innerHTML=campaigns+groups;
+  const core=byGroup.has('Core sets')?`<details class="setup-group" data-setup-extra="Core sets"><summary>Core sets (${byGroup.get('Core sets').length})</summary><div class="setup-options">${byGroup.get('Core sets').map(setupOption).join('')}</div></details>`:'';
+  root.innerHTML=core+campaigns+[...byGroup].filter(([label])=>label!=='Core sets').map(([label,items])=>`<details class="setup-group" data-setup-extra="${esc(label)}"><summary>${esc(label)} (${items.length})</summary><div class="setup-options">${items.map(setupOption).join('')}</div></details>`).join('');
   document.querySelector('#setupCount').textContent=setupSelection.size+' products selected across both chapters';
 }
 function setSetupChapter(chapter){
@@ -3143,10 +3181,31 @@ document.querySelector('#setupChecklist').addEventListener('click',e=>{
   const btn=e.target.closest('button[data-setup-pair]');if(!btn)return;
   const pair=campaignPrimary(btn.dataset.setupPair);
   for(const p of pair)setupSelection.add(p.id);
-  renderSetupChecklist();
-  // Restore the campaign panel after re-rendering the checkboxes.
-  const groups=document.querySelectorAll('#setupChecklist details.setup-group');
-  for(const group of groups)if(group.querySelector('summary')?.textContent===btn.dataset.setupPair)group.open=true;
+  for(const input of document.querySelectorAll('#setupChecklist input[data-setup-product]')){if(setupSelection.has(input.dataset.setupProduct))input.checked=true;}
+  document.querySelector('#setupCount').textContent=setupSelection.size+' products selected across both chapters';
+});
+function setupChapterItems(){return PRODUCTS.filter(p=>chapterFor(p)===setupChapter);}
+function syncSetupChecks(){
+  for(const input of document.querySelectorAll('#setupChecklist input[data-setup-product]'))input.checked=setupSelection.has(input.dataset.setupProduct);
+  document.querySelector('#setupCount').textContent=setupSelection.size+' products selected across both chapters';
+}
+document.querySelector('#setupSelectAll').addEventListener('click',()=>{
+  const items=setupChapterItems().filter(p=>p.retail);
+  if(!window.confirm(`Mark all ${items.length} retail products in Chapter ${setupChapter==='one'?'One':'Two'} as physically owned? This includes optional and overlapping legacy products. Nothing is saved until you select Save my collection.`))return;
+  for(const p of items)setupSelection.add(p.id);
+  syncSetupChecks();
+});
+document.querySelector('#setupSelectModern').addEventListener('click',()=>{
+  const chapter=setupChapter;
+  for(const p of setupChapterItems()){
+    const modern=['Campaign Expansion','Investigator Expansion'].includes(p.category) || p.id===(chapter==='two'?'core-2026':'core-revised');
+    if(modern)setupSelection.add(p.id);
+  }
+  syncSetupChecks();
+});
+document.querySelector('#setupClearChapter').addEventListener('click',()=>{
+  for(const p of setupChapterItems())setupSelection.delete(p.id);
+  syncSetupChecks();
 });
 document.querySelector('#setupSave').addEventListener('click',()=>{
   state.owned=Object.fromEntries([...setupSelection].map(id=>[id,true]));
