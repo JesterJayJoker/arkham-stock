@@ -30,6 +30,9 @@ export function createStockService({retailers,fetchOffer,freshMs=2*60*60*1000,st
       const verified=offers.filter(o=>o && o.confidence>=0.55 && o.stockStatus!=='unknown');
       const byPrice=(a,b)=>(a.price??Infinity)-(b.price??Infinity);
       const inStock=verified.filter(o=>o.stockStatus==='in_stock').sort(byPrice);
+      const delayed=verified.filter(o=>o.stockStatus==='delayed').sort(byPrice);
+      const backorder=verified.filter(o=>o.stockStatus==='backorder').sort(byPrice);
+      const used=verified.filter(o=>o.stockStatus==='used').sort(byPrice);
       const preorder=verified.filter(o=>o.stockStatus==='preorder').sort(byPrice);
       const outOfStock=verified.filter(o=>o.stockStatus==='out_of_stock').sort(byPrice);
       const value={
@@ -38,6 +41,9 @@ export function createStockService({retailers,fetchOffer,freshMs=2*60*60*1000,st
         checkedAt:new Date().toISOString(),
         offers,
         inStock,
+        delayed,
+        backorder,
+        used,
         preorder,
         outOfStock,
         bestPrice:inStock[0]?.price??null,
@@ -80,6 +86,10 @@ export function createStockService({retailers,fetchOffer,freshMs=2*60*60*1000,st
         cacheAgeMs:entry.ageMs,
         cacheState:entry.ageMs<=freshMs?'fresh':(entry.ageMs<=staleMs?'stale':'expired'),
         inStockCount:Array.isArray(value.inStock)?value.inStock.length:0,
+        delayedCount:Array.isArray(value.delayed)?value.delayed.length:0,
+        backorderCount:Array.isArray(value.backorder)?value.backorder.length:0,
+        usedCount:Array.isArray(value.used)?value.used.length:0,
+        alternativeOffer:value.delayed?.[0]||value.used?.[0]||value.backorder?.[0]||null,
         preorderCount:Array.isArray(value.preorder)?value.preorder.length:0,
         bestPrice:value.bestPrice??null,
         bestOffer:value.bestOffer??null

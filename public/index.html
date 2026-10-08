@@ -25,7 +25,7 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
 @media(max-width:640px){main{padding-left:14px;padding-right:14px}.hero-inner{padding-left:16px;padding-right:16px}.stats,.catalog,.cycle-summary{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}.search{grid-column:auto}.detail-grid,.source-links{grid-template-columns:1fr}.hero h1{font-size:3.4rem}}
 
 
-.live-btn{display:inline-flex;align-items:center;gap:6px;margin-top:8px;border:1px solid #365046;background:#12201b;color:#c9e7d7;border-radius:9px;padding:7px 9px;cursor:pointer;font-size:.78rem}.live-btn:hover{border-color:#4f7665}.live-dot{width:7px;height:7px;border-radius:50%;background:#739087}.live-dot.ok{background:#5ccf8a}.live-dot.warn{background:#e5b35a}.live-dot.bad{background:#da7777}.live-offers{margin-top:16px;display:grid;gap:8px}.offer-row{border:1px solid var(--line);background:#0c1210;border-radius:10px;padding:10px 12px;display:grid;grid-template-columns:1.3fr .75fr .65fr auto;gap:8px;align-items:center;font-size:.82rem}.offer-row .retailer{font-weight:750}.offer-row .state{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em}.offer-row .state.in_stock{color:#86e5ad}.offer-row .state.preorder{color:#e4c277}.offer-row .state.out_of_stock{color:#d58a8a}.offer-row a{color:#bfd8cc}.live-note{font-size:.78rem;color:var(--muted);margin-top:8px}.live-loading{padding:12px;border:1px dashed var(--line);border-radius:10px;color:var(--muted)}@media(max-width:640px){.offer-row{grid-template-columns:1fr 1fr}.offer-row a{grid-column:1/-1}}
+.live-btn{display:inline-flex;align-items:center;gap:6px;margin-top:8px;border:1px solid #365046;background:#12201b;color:#c9e7d7;border-radius:9px;padding:7px 9px;cursor:pointer;font-size:.78rem}.live-btn:hover{border-color:#4f7665}.live-dot{width:7px;height:7px;border-radius:50%;background:#739087}.live-dot.ok{background:#5ccf8a}.live-dot.warn{background:#e5b35a}.live-dot.bad{background:#da7777}.live-offers{margin-top:16px;display:grid;gap:8px}.offer-row{border:1px solid var(--line);background:#0c1210;border-radius:10px;padding:10px 12px;display:grid;grid-template-columns:1.3fr .75fr .65fr auto;gap:8px;align-items:center;font-size:.82rem}.offer-row .retailer{font-weight:750}.offer-row .state{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em}.offer-row .state.in_stock{color:#86e5ad}.offer-row .state.delayed,.offer-row .state.backorder,.offer-row .state.used{color:#e4c277}.offer-row .state.preorder{color:#e4c277}.offer-row .state.out_of_stock{color:#d58a8a}.offer-row a{color:#bfd8cc}.live-note{font-size:.78rem;color:var(--muted);margin-top:8px}.live-loading{padding:12px;border:1px dashed var(--line);border-radius:10px;color:var(--muted)}@media(max-width:640px){.offer-row{grid-template-columns:1fr 1fr}.offer-row a{grid-column:1/-1}}
 
 [hidden]{display:none!important}
 /* v0.5 campaign-first experience */
@@ -2536,7 +2536,7 @@ async function apiAvailable(){
   try{const r=await fetch('/api/health',{cache:'no-store'}); API_AVAILABLE=r.ok;}catch{API_AVAILABLE=false;}
   return API_AVAILABLE;
 }
-function stockLabel(s){return ({in_stock:'In stock',out_of_stock:'Out of stock',preorder:'Pre-order',unknown:'Unknown'})[s]||s;}
+function stockLabel(s){return ({in_stock:'In stock',out_of_stock:'Out of stock',preorder:'Pre-order',delayed:'Shipping delayed',backorder:'Backorder / special order',used:'Used copy',unknown:'Unknown'})[s]||s;}
 async function loadLiveOffers(p,target){
   if(marketRegion==='UK'){target.innerHTML=regionSearchLinks(p);return;}
   target.innerHTML='<div class="live-loading">Checking retailer product pages…</div>';
@@ -2550,10 +2550,10 @@ async function loadLiveOffers(p,target){
     }
     if(!r.ok) throw new Error('HTTP '+r.status);
     const data=await r.json();
-    const rows=(data.offers||[]).filter(o=>o.stockStatus!=='unknown').sort((a,b)=>{const rank={in_stock:0,preorder:1,out_of_stock:2};return (rank[a.stockStatus]??9)-(rank[b.stockStatus]??9)||(a.price??9999)-(b.price??9999)});
+    const rows=(data.offers||[]).filter(o=>o.stockStatus!=='unknown').sort((a,b)=>{const rank={in_stock:0,delayed:1,used:2,backorder:3,preorder:4,out_of_stock:5};return (rank[a.stockStatus]??9)-(rank[b.stockStatus]??9)||(a.price??9999)-(b.price??9999)});
     if(!rows.length){target.innerHTML='<div class="live-note">No retailer returned a verified stock state this check.</div><div class="amazon-offer"><span>Amazon US · manual search</span><span>Stock not verified</span><a href="'+esc(marketSearchUrl(p,RETAILER_SOURCES.find(x=>x.id==='amazon')))+'" target="_blank" rel="noopener noreferrer">Search Amazon ↗</a></div>';return;}
     const cacheText=data.cacheState==='fresh'?'shared cache':data.cacheState==='stale'?'stale shared result; refreshing in background':data.cacheState==='refreshed'?'freshly checked':'shared result';
-    target.innerHTML='<div class="live-offers">'+rows.map(o=>`<div class="offer-row"><span class="retailer">${esc((RETAILER_SOURCES.find(x=>x.id===o.retailerId)||{}).name||o.retailerId)}</span><span class="state ${o.stockStatus}">${stockLabel(o.stockStatus)}</span><span>${o.price>0?money(o.price):'Price unknown'}</span><a target="_blank" rel="noopener noreferrer" href="${esc(safeRetailerUrl(o.productUrl,o.retailerId)||marketSearchUrl(p,RETAILER_SOURCES[0]))}">Store ↗</a></div>`).join('')+'</div><div class="amazon-offer"><span>Amazon US · manual search</span><span>Stock not verified</span><a href="'+esc(marketSearchUrl(p,RETAILER_SOURCES.find(x=>x.id==='amazon')))+'" target="_blank" rel="noopener noreferrer">Search Amazon ↗</a></div><div class="live-note">Retailer pages checked '+new Date(data.checkedAt).toLocaleString()+' · '+cacheText+' · Amazon listings are search-only</div>';
+    target.innerHTML='<div class="live-offers">'+rows.map(o=>`<div class="offer-row"><span class="retailer">${esc((RETAILER_SOURCES.find(x=>x.id===o.retailerId)||{}).name||o.retailerId)}</span><span class="state ${o.stockStatus}">${stockLabel(o.stockStatus)}${o.fulfillmentNotice?`<small style="display:block;text-transform:none;letter-spacing:0">${esc(o.fulfillmentNotice)}</small>`:''}</span><span>${o.price>0?money(o.price):'Price unknown'}</span><a target="_blank" rel="noopener noreferrer" href="${esc(safeRetailerUrl(o.productUrl,o.retailerId)||marketSearchUrl(p,RETAILER_SOURCES[0]))}">Store ↗</a></div>`).join('')+'</div><div class="amazon-offer"><span>Amazon US · manual search</span><span>Stock not verified</span><a href="'+esc(marketSearchUrl(p,RETAILER_SOURCES.find(x=>x.id==='amazon')))+'" target="_blank" rel="noopener noreferrer">Search Amazon ↗</a></div><div class="live-note">Retailer pages checked '+new Date(data.checkedAt).toLocaleString()+' · '+cacheText+' · Amazon listings are search-only</div>';
   }catch(e){target.innerHTML='<div class="live-note">Live check failed: '+esc(e.message)+'. Use the source links below as fallback.</div>';}
 }
 
@@ -2694,7 +2694,7 @@ function renderAdvisor(){
   const returns=PRODUCTS.filter(p=>chapterFor(p)===chapter&&p.category==='Return To');
   if(returns.length){
     const missing=returns.filter(p=>!state.owned[p.id]);
-    rows.push(`<div class="advice"><details><summary><strong>Optional Return To</strong> · ${returns.length-missing.length}/${returns.length} owned</summary><small>${missing.length?missing.map(p=>esc(p.name)).join('<br>'):'All owned'} · Does not affect main campaign completion.</small></details></div>`);
+    rows.push(`<div class="advice"><details><summary><strong>Optional Return To</strong> · ${returns.length-missing.length}/${returns.length} owned</summary><small><strong>Does not affect main campaign completion.</strong><br>${missing.length?missing.map(p=>esc(p.name)).join('<br>'):'All owned'}</small></details></div>`);
   }
   document.querySelector('#advisor').innerHTML=`<div class="advice-summary">${complete} main campaigns complete · ${missingCycles} campaigns with missing content. Expand the sections you want to review.</div><div class="advice-list">${rows.join('')||'<div class="advice good">No missing content in this chapter.</div>'}</div>`;
 }
@@ -2777,15 +2777,16 @@ function cachedStockHtml(p){
   const x=STOCK_SUMMARIES.get(p.id);
   if(!x) return '<div class="stock-strip unknown"><strong>Not yet verified</strong><small>Open this product to check current retailer stock.</small></div>';
   const stale=x.cacheState!=='fresh';
-  const label=stale?'Previous check (stale)':(x.inStockCount>0?'In stock':x.preorderCount>0?'Pre-order found':'No confirmed stock');
+  const label=stale?'Previous check (stale)':(x.inStockCount>0?'In stock':x.delayedCount>0?'Shipping delayed':x.usedCount>0?'Used copy available':x.backorderCount>0?'Backorder / special order':x.preorderCount>0?'Pre-order found':'No confirmed stock');
   const cls=stale?'stale':x.inStockCount>0?'':'unknown';
-  const best=x.bestPrice>0 ? money(x.bestPrice) : 'Price unknown';
-  const shop=x.bestOffer?.retailerId;
+  const displayOffer=x.bestOffer||(x.inStockCount?null:x.alternativeOffer);
+  const best=(x.bestPrice??displayOffer?.price)>0 ? money(x.bestPrice??displayOffer.price) : 'Price unknown';
+  const shop=displayOffer?.retailerId;
   const store=RETAILER_SOURCES.find(y=>y.id===shop)?.name||shop||'';
-  const storeUrl=safeRetailerUrl(x.bestOffer?.productUrl,shop);
+  const storeUrl=safeRetailerUrl(displayOffer?.productUrl,shop);
   const storeLink=storeUrl?`<a class="stock-store-link" href="${esc(storeUrl)}" target="_blank" rel="noopener noreferrer">${esc(store)} ↗</a>`:esc(store);
   const when=x.checkedAt?new Date(x.checkedAt).toLocaleString():'unknown';
-  return `<div class="stock-strip ${cls}"><strong>${esc(label)}${!stale && x.inStockCount ? ` · ${x.inStockCount} store${x.inStockCount===1?'':'s'}`:''}</strong>${x.inStockCount ? `<span class="store-price">${esc(best)}${store?' · '+storeLink:''}</span>`:''}<small>Checked ${esc(when)}${stale?' · Recheck recommended':''}</small></div>`;
+  return `<div class="stock-strip ${cls}"><strong>${esc(label)}${!stale && x.inStockCount ? ` · ${x.inStockCount} store${x.inStockCount===1?'':'s'}`:''}</strong>${(x.inStockCount||x.delayedCount||x.usedCount||x.backorderCount) ? `<span class="store-price">${esc(best)}${store?' · '+storeLink:''}</span>`:''}<small>Checked ${esc(when)}${stale?' · Recheck recommended':''}</small></div>`;
 }
 async function fetchStockSummary(){
   try{
@@ -2795,7 +2796,7 @@ async function fetchStockSummary(){
     let changed=false;
     for(const x of d.items||[]){
       const previous=STOCK_SUMMARIES.get(x.productId);
-      if(!previous || previous.checkedAt!==x.checkedAt || previous.cacheState!==x.cacheState || previous.inStockCount!==x.inStockCount || previous.preorderCount!==x.preorderCount || previous.bestPrice!==x.bestPrice)changed=true;
+      if(!previous || previous.checkedAt!==x.checkedAt || previous.cacheState!==x.cacheState || previous.inStockCount!==x.inStockCount || previous.preorderCount!==x.preorderCount || previous.delayedCount!==x.delayedCount || previous.usedCount!==x.usedCount || previous.backorderCount!==x.backorderCount || previous.bestPrice!==x.bestPrice)changed=true;
       STOCK_SUMMARIES.set(x.productId,x);
     }
     const auto=d.autoStock, el=document.querySelector('#autoStockStatus');
@@ -2813,9 +2814,12 @@ async function checkProductStock(p,{silent=false,render=true}={}){
     const d=await r.json();
     const inStock=Array.isArray(d.inStock)?d.inStock:[];
     const preorder=Array.isArray(d.preorder)?d.preorder:[];
+    const delayed=Array.isArray(d.delayed)?d.delayed:[];
+    const used=Array.isArray(d.used)?d.used:[];
+    const backorder=Array.isArray(d.backorder)?d.backorder:[];
     STOCK_SUMMARIES.set(p.id,{
       productId:p.id,checkedAt:d.checkedAt||new Date().toISOString(),cacheAgeMs:0,
-      cacheState:d.cacheState==='stale'?'stale':'fresh',inStockCount:inStock.length,preorderCount:preorder.length,
+      cacheState:d.cacheState==='stale'?'stale':'fresh',inStockCount:inStock.length,preorderCount:preorder.length,delayedCount:delayed.length,usedCount:used.length,backorderCount:backorder.length,alternativeOffer:delayed[0]||used[0]||backorder[0]||null,
       bestPrice:inStock.find(x=>x.price>0)?.price??null,bestOffer:inStock.find(x=>x.price>0)||inStock[0]||null
     });
   }catch(e){if(!silent)console.warn(e);}
@@ -2831,6 +2835,9 @@ function campaignStockLabel(p){
   if(!x)return 'Not yet checked';
   if(x.cacheState!=='fresh')return 'Previous check';
   if(x.inStockCount)return `${x.inStockCount} store${x.inStockCount===1?'':'s'} · ${x.bestPrice>0?money(x.bestPrice):'Price unknown'}`;
+  if(x.delayedCount)return 'Shipping delayed';
+  if(x.usedCount)return 'Used copy available';
+  if(x.backorderCount)return 'Backorder / special order';
   if(x.preorderCount)return 'Pre-order found';
   return 'No confirmed stock';
 }

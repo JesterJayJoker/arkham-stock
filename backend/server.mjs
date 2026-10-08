@@ -77,7 +77,7 @@ const server=http.createServer(async(req,res)=>{
   try{
     if(!rateLimit(req,res)) return;
     const u=new URL(req.url,'http://localhost');
-    if(u.pathname==='/api/health') return send(res,200,{ok:true,version:'0.10.0',products:PRODUCTS.length,retailers:retailerSummary(),cache:cacheStats(),inFlight:stock.inFlightCount(),rateLimit:limiter.stats(),loginRequired:false,autoStock:autoStock.status()});
+    if(u.pathname==='/api/health') return send(res,200,{ok:true,version:'0.13.0',products:PRODUCTS.length,retailers:retailerSummary(),cache:cacheStats(),inFlight:stock.inFlightCount(),rateLimit:limiter.stats(),loginRequired:false,autoStock:autoStock.status()});
     if(u.pathname==='/api/products') return send(res,200,PRODUCTS);
     if(u.pathname==='/api/retailers') return send(res,200,retailerSummary());
     if(u.pathname==='/api/stock-summary') return send(res,200,{generatedAt:new Date().toISOString(),items:stock.getCachedSummary(PRODUCT_MAP),autoStock:autoStock.status()});
@@ -115,5 +115,5 @@ const server=http.createServer(async(req,res)=>{
   }catch(e){send(res,500,{error:'Internal server error',detail:process.env.NODE_ENV==='development'?e.message:undefined});}
 });
 
-if(process.env.NODE_ENV!=='test') server.listen(PORT,()=>{console.log(`Arkham Stock v0.6 running at http://localhost:${PORT}`);if(process.env.AUTO_CHECK_ENABLED!=='0')autoStock.start();});
+if(process.env.NODE_ENV!=='test') server.listen(PORT,()=>{console.log(`Arkham Stock v0.13 running at http://localhost:${PORT}`);if(process.env.AUTO_CHECK_ENABLED!=='0')autoStock.start();});
 export {server};

@@ -1,6 +1,6 @@
-> Latest changes: see [v0.8 release notes](V08_RELEASE_NOTES.md).
+> Latest changes: see [v0.13 release notes](V13_RELEASE_NOTES.md).
 
-# Arkham Stock v0.6 — public-release build
+# Arkham Stock v0.13 — public beta build
 
 Arkham Stock is an independent fan-made Arkham Horror: The Card Game collection and retail-availability tracker inspired by the old Stackham Horror workflow.
 
@@ -116,3 +116,13 @@ Amazon US appears as a manual product search link. Amazon is **not** a verified 
 ## v0.10 updates
 
 See [V10_RELEASE_NOTES.md](V10_RELEASE_NOTES.md) for category bulk checks, Cardhaus category-page rejection, compact advisor, and UK search preview.
+
+## v0.13 retailer reliability update
+
+- Shopify variant prices now use the cheapest **available, matching** variant, not a sold-out variant. If SKU/UPC conflicts, the offer is unknown rather than guessed.
+- Boarding School Games product-specific extended-delay CTAs are checked alongside Shopify variant data. Listings can be `delayed`, `backorder`, `preorder`, `used`, `out_of_stock`, or `unknown` instead of all appearing as ordinary `in_stock`.
+- Used, incomplete, box-only, and mixed-bundle listings are differentiated or rejected. A used copy is not counted as an ordinary new in-stock copy.
+- The Return To completion note is above the list, not appended to the final title.
+- Availability remains time-stamped, cached, and subject to retailer changes. Automated unit tests are **not** a substitute for real hosted checkout verification.
+
+For the public beta, test at least the Drowned City campaign, Barkham Horror, Return to the Night of the Zealot, Where Doom Awaits, and the 2026 Core Set on the deployed host.

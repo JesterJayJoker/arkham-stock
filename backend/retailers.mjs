@@ -80,14 +80,41 @@ function jsonLdProducts(html) {
   return result;
 }
 
-function stockFromText(text='') {
-  const t=text.toLowerCase();
-  if (/pre[- ]?order|preorder|expected release date/.test(t)) return {status:'preorder',evidence:'Product page labels the item as a pre-order'};
-  if (/sold out|out of stock|currently unavailable|notify me when available|unavailable/.test(t)) return {status:'out_of_stock',evidence:'Product page contains an explicit sold-out/unavailable state'};
-  if (/in stock and ready for shipping|ready to ship|online[^.]{0,80}in stock|add to cart|adding to cart/.test(t)) return {status:'in_stock',evidence:'Product page exposes an online purchase/ship signal'};
-  if (/store availability|available for pickup|in-store pickup/.test(t) && /\bin stock\b/.test(t)) return {status:'unknown',evidence:'Only local/pickup stock could be verified'};
-  if (/\bin in stock\b|current stock/.test(t)) return {status:'in_stock',evidence:'Product page explicitly states in stock'};
-  return {status:'unknown',evidence:'No unambiguous stock signal found'};
+// Classify fulfillment only from product-specific copy, never site-wide footers.
+export function fulfillmentFromProductText(text='') {
+  const t=stripTags(String(text)).toLowerCase();
+  if (/\bpre[- ]?order(?:s|ing)?\b|expected release date/.test(t))return {status:'preorder',notice:'Preorder: ships around release date'};
+  if (/special order|back[- ]?order(?:ed)?|awaiting (?:a )?reprint|ship(?:s)? when (?:back )?in stock/.test(t))return {status:'backorder',notice:'Backorder or special order: not ready to ship'};
+  if (/extended delay|extended fulfillment|may be delayed up to \d+ days|shipping delay|delayed shipping|typically ships? in \d+[-–]\d+ weeks?|additional (?:handling|processing) (?:of )?\d+[-–]\d+ (?:business )?days?/.test(t))return {status:'delayed',notice:'Extended shipping or handling delay: check retailer terms'};
+  return {status:null,notice:null};
+}
+export function productCondition(title='',description='') {
+  const t=stripTags(String(title)).toLowerCase();const d=stripTags(String(description)).toLowerCase();
+  const incomplete=/(?:box\s*only|empty\s*box|no\s*cards|without\s*cards|missing\s*(?:cards|components|pieces)|incomplete|components?\s*only|parts?\s*only|replacement\s*(?:box|cards|parts)|box\s*and\s*insert\s*only)/i;
+  if(incomplete.test(t)||incomplete.test(d.slice(0,350)))return {condition:'incomplete',completeness:'incomplete'};
+  if(/(?:^|[\s(])(?:used|pre-owned|preowned|second-hand|secondhand|opened)(?:[\s):,-]|$)/i.test(t))return {condition:'used',completeness:'unknown'};
+  if(/(?:^|[\s(])(?:new|factory sealed|brand new)(?:[\s):,-]|$)/i.test(t))return {condition:'new',completeness:'complete'};
+  return {condition:'unknown',completeness:'unknown'};
+}
+function normalizeId(s){return String(s||'').replace(/[^a-z0-9]/gi,'').toUpperCase();}
+function normalizeBarcode(s){return String(s||'').replace(/\D/g,'');}
+// Only price an available variant matching the product identifiers.
+export function selectShopifyVariant(variants,product) {
+  const all=Array.isArray(variants)?variants:[];
+  const sku=normalizeId(product.sku),upc=normalizeBarcode(product.upc);
+  const identified=all.filter(v=>normalizeId(v.sku)||normalizeBarcode(v.barcode));
+  let eligible=all;
+  if(sku||upc){
+    const matches=all.filter(v=>(sku&&normalizeId(v.sku)===sku)||(upc&&normalizeBarcode(v.barcode)===upc));
+    if(matches.length)eligible=matches;
+    else if(identified.length)eligible=[]; // Mixed variants with no identifier match: do not guess
+  }
+  if(!eligible.length)return {variant:null,reason:'No variant matches requested SKU/UPC'};
+  const available=eligible.filter(v=>v.available===true);
+  const pool=available.length?available:eligible;
+  const priced=pool.filter(v=>Number.isFinite(Number(v.price))&&Number(v.price)>0);
+  const variant=(priced.length?priced:pool).slice().sort((a,b)=>(Number(a.price)||Infinity)-(Number(b.price)||Infinity))[0];
+  return {variant,available:available.length>0,reason:available.length?'Matching available variant':'Matching variants unavailable'};
 }
 
 function parseMoney(v) {
@@ -111,10 +138,14 @@ async function parseGenericProductPage(url, retailerId, productId, confidence=0.
   else if(avail.includes('preorder') || avail.includes('presale')) stock='preorder';
   let evidence='Structured availability metadata';
   if(stock==='unknown'){stock='unknown';evidence='No product-specific structured availability; site-wide text is not stock proof';}
-  const price=parseMoney(offer.price ?? findMeta(html,'product:price:amount') ?? ((body.match(/(?:Price|Our Price)\s*[: ]\s*\$([0-9]+(?:\.[0-9]{2})?)/i)||[])[1]) ?? ((body.match(/\$([0-9]+(?:\.[0-9]{2})?)/)||[])[1]));
+  const price=parseMoney(offer.price ?? findMeta(html,'product:price:amount') ?? null);
   const sku=ld.sku || (body.match(/\bSKU\s*[:#]?\s*([A-Z0-9-]{4,})/i)||[])[1] || null;
   const upc=ld.gtin13 || ld.gtin12 || (body.match(/\bUPC\s*[:#]?\s*(\d{10,14})/i)||[])[1] || null;
-  return {productId,retailerId,titleSeen:title,skuSeen:sku,upcSeen:upc,price,shipping:null,stockStatus:stock,productUrl:r.url,checkedAt:new Date().toISOString(),confidence,evidence};
+  const {condition,completeness}=productCondition(title,ld.description||'');
+  const f=fulfillmentFromProductText(String(ld.description||''));
+  if(stock==='in_stock' && f.status){stock=f.status;evidence+='; '+f.notice;}
+  if(stock==='in_stock' && condition==='used')stock='used';
+  return {productId,retailerId,titleSeen:title,skuSeen:sku,upcSeen:upc,price,shipping:null,stockStatus:stock,condition,completeness,fulfillmentNotice:f.notice,productUrl:r.url,checkedAt:new Date().toISOString(),confidence,evidence};
 }
 
 async function shopifySuggest(base, q, signal=null) {
@@ -125,25 +156,41 @@ async function shopifySuggest(base, q, signal=null) {
   return products.map(p=>({title:p.title||p.name||'',url:abs(base,p.url),price:parseMoney(p.price),sku:p.sku||null})).filter(x=>x.url);
 }
 
-async function shopifyProductJson(url, retailerId, productId, confidence, signal=null) {
-  const u=new URL(url); u.search=''; u.hash='';
+async function shopifyProductJson(url, retailerId, product, confidence, signal=null) {
+  const u=new URL(url);u.search='';u.hash='';
   const jsUrl=u.href.replace(/\/$/,'')+'.js';
   try {
-    const r=await get(jsUrl,'application/json,text/plain,*/*',signal);
+    // Boarding School Games places extended-delay warnings on its product page.
+    // Request it alongside the variant data, without delaying the common path.
+    const [r,pageResult]=await Promise.all([
+      get(jsUrl,'application/json,text/plain,*/*',signal),
+      retailerId==='boarding'?get(u.href,'text/html,application/xhtml+xml',signal).then(async r=>({url:r.url,html:await r.text()})).catch(()=>null):Promise.resolve(null)
+    ]);
     const p=await r.json();
-    const vars=Array.isArray(p.variants)?p.variants:[];
-    const available=vars.some(v=>v.available===true);
-    const prices=vars.map(v=>Number(v.price)/100).filter(v=>Number.isFinite(v) && v > 0);
-    const price=prices.length?Math.min(...prices):null;
-    const variant=vars.find(v=>v.available)||vars[0]||{};
-    const bodyTitle=p.title||'';
-    const preorder=/pre[- ]?order/i.test(bodyTitle);
-    return {productId,retailerId,titleSeen:bodyTitle,skuSeen:variant.sku||null,upcSeen:variant.barcode||null,price,shipping:null,stockStatus:preorder?'preorder':(available?'in_stock':'out_of_stock'),productUrl:u.href,checkedAt:new Date().toISOString(),confidence,evidence:preorder?'Product is labeled pre-order':(available?'Shopify variant reports available':'Shopify variants report unavailable')};
+    const title=p.title||'';
+    const selection=selectShopifyVariant(p.variants,product);
+    const variant=selection.variant;
+    if(!variant)return {productId:product.id,retailerId,titleSeen:title,skuSeen:null,upcSeen:null,price:null,shipping:null,stockStatus:'unknown',condition:'unknown',completeness:'unknown',fulfillmentNotice:null,productUrl:u.href,checkedAt:new Date().toISOString(),confidence:0,evidence:selection.reason};
+    const cents=Number(variant.price);
+    const price=Number.isFinite(cents)&&cents>0?cents/100:null;
+    const desc=String(p.description||'');
+    const conditionInfo=productCondition(title+' '+String(variant.title||''),desc);
+    let stock=selection.available?'in_stock':'out_of_stock';
+    const productHtml=pageResult && isProductDetailUrl(pageResult.url,retailerId)?pageResult.html:'';
+    // Restrict page HTML to a product-specific extended-delay CTA, not a footer.
+    const cta=productHtml.match(/(?:Add to Cart[^<]{0,120}(?:Extended Delay|Special Order|Backorder|Pre-?order)|(?:Extended Delay|Special Order|Backorder|Pre-?order)[^<]{0,120}Add to Cart|<[^>]*>[^<]{0,160}Extended Delay[^<]{0,120}<\/[^>]+>)/i)?.[0]||'';
+    const f=fulfillmentFromProductText([title,variant.title,desc,cta].filter(Boolean).join(' '));
+    let notice=f.notice;
+    if(stock==='in_stock' && f.status)stock=f.status;
+    if(stock==='in_stock' && conditionInfo.condition==='used')stock='used';
+    if(stock==='in_stock' && retailerId==='boarding' && !productHtml && !f.status){
+      stock='unknown';notice='Retailer fulfillment could not be checked';
+    }
+    return {productId:product.id,retailerId,titleSeen:title,skuSeen:variant.sku||null,upcSeen:variant.barcode||null,price,shipping:null,stockStatus:stock,condition:conditionInfo.condition,completeness:conditionInfo.completeness,fulfillmentNotice:notice,productUrl:u.href,checkedAt:new Date().toISOString(),confidence,evidence:(selection.available?'Shopify matching variant available':'Shopify matching variants unavailable')+(notice?'; '+notice:'')};
   } catch {
-    return parseGenericProductPage(u.href,retailerId,productId,confidence-0.05,signal);
+    return parseGenericProductPage(u.href,retailerId,product.id,confidence-0.05,signal);
   }
 }
-
 
 // A search hit is not proof of product identity. Re-validate the retailer's
 // actual product record, especially for overlapping Core Set editions.
@@ -159,6 +206,10 @@ export function verifyOfferIdentity(product, offer) {
   const t = normalizeTitle(title);
   if (/playmat|game mat|deck tome|sleeve|binder|token|insert|storage|upgrade kit/.test(t))
     return {valid:false,reason:'Accessory rather than requested game product'};
+  const listingPath=(()=>{try{return decodeURIComponent(new URL(offer.productUrl).pathname).replace(/[-_]/g,' ');}catch{return '';}})();
+  const condition=productCondition(title+' '+listingPath);
+  if(condition.condition==='incomplete'||offer.completeness==='incomplete')return {valid:false,reason:'Incomplete product or box-only listing'};
+  if(/\b(?:bundle|lot of|collection of)\b/i.test(title) && !/\b(?:bundle|lot of|collection of)\b/i.test(product.name))return {valid:false,reason:'Mixed bundle rather than the requested individual product'};
   // The 2016, 2021 revised, and 2026 core sets share ambiguous retailer titles.
   // An unqualified 'Core Set' listing is never enough to identify the edition.
   if (['core-2016','core-revised','core-2026'].includes(product.id)) {
@@ -219,7 +270,7 @@ export async function fetchOffer(product,cfg,{signal=null}={}) {
         if(!isProductDetailUrl(chosen.url,cfg.id)){lastError=new Error('Category page, not a product');all=all.filter(x=>x.url!==chosen.url);continue;}
         const conf=Math.max(0.55,chosen.matchScore);
         const offer = cfg.kind==='shopify' && /\/products\//.test(new URL(chosen.url).pathname)
-          ? await shopifyProductJson(chosen.url,cfg.id,product.id,conf,signal)
+          ? await shopifyProductJson(chosen.url,cfg.id,product,conf,signal)
           : await parseGenericProductPage(chosen.url,cfg.id,product.id,conf,signal);
         if(!isProductDetailUrl(offer.productUrl,cfg.id)){lastError=new Error('Final URL is not a product page');continue;}
         const identity = verifyOfferIdentity(product,offer);
