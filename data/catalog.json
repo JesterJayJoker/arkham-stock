@@ -1,0 +1,2225 @@
+[
+  {
+    "id": "core-2016",
+    "name": "Arkham Horror: The Card Game Core Set (2016)",
+    "category": "Core",
+    "cycle": "Core",
+    "status": "legacy-oop",
+    "packaging": "Core",
+    "year": 2016,
+    "units": [
+      "core:chapter1:base"
+    ],
+    "notes": "Original 1\u20132 player core. A second copy was historically common for a full playset.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Octagon Board Games",
+      "price": 55.0,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Arkham+Horror%3A+The+Card+Game+2016"
+  },
+  {
+    "id": "core-revised",
+    "name": "Arkham Horror: The Card Game Revised Core Set",
+    "category": "Core",
+    "cycle": "Core",
+    "status": "chapter-one",
+    "packaging": "Core",
+    "year": 2021,
+    "units": [
+      "core:chapter1:base",
+      "core:chapter1:full-playset"
+    ],
+    "notes": null,
+    "source": "https://www.fantasyflightgames.com/product/arkham-horror-the-card-game/",
+    "snapshot": {
+      "retailer": "Spielbound",
+      "price": 39.99,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Arkham+Horror%3A+The+Card+Game+Revised+Core+Set"
+  },
+  {
+    "id": "core-2026",
+    "name": "Arkham Horror: The Card Game Core Set (2026)",
+    "category": "Core",
+    "cycle": "Core",
+    "status": "current",
+    "packaging": "Core",
+    "year": 2026,
+    "units": [
+      "core:chapter2:base"
+    ],
+    "notes": "Chapter Two core. Kept separate from Chapter One cores because the card pool is not modeled as a strict one-for-one equivalence.",
+    "source": "https://www.fantasyflightgames.com/productline/arkham-horror-the-card-game/",
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Arkham+Horror%3A+The+Card+Game+Core+Set+%282026%29"
+  },
+  {
+    "id": "dunwich-original",
+    "name": "The Dunwich Legacy",
+    "category": "Deluxe Expansion",
+    "cycle": "The Dunwich Legacy",
+    "status": "legacy-oop",
+    "packaging": "Deluxe Expansion",
+    "year": 2017,
+    "units": [
+      "dunwich:0:campaign",
+      "dunwich:0:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Dunwich+Legacy"
+  },
+  {
+    "id": "dunwich-miskatonic-museum",
+    "name": "The Miskatonic Museum",
+    "category": "Mythos Pack",
+    "cycle": "The Dunwich Legacy",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2017,
+    "units": [
+      "dunwich:1:campaign",
+      "dunwich:1:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Gamezenter",
+      "price": 13.59,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Miskatonic+Museum"
+  },
+  {
+    "id": "dunwich-essex-county-express",
+    "name": "The Essex County Express",
+    "category": "Mythos Pack",
+    "cycle": "The Dunwich Legacy",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2017,
+    "units": [
+      "dunwich:2:campaign",
+      "dunwich:2:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Cardhaus Games",
+      "price": 11.89,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Essex+County+Express"
+  },
+  {
+    "id": "dunwich-blood-on-the-altar",
+    "name": "Blood on the Altar",
+    "category": "Mythos Pack",
+    "cycle": "The Dunwich Legacy",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2018,
+    "units": [
+      "dunwich:3:campaign",
+      "dunwich:3:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Gamezenter",
+      "price": 13.59,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Blood+on+the+Altar"
+  },
+  {
+    "id": "dunwich-undimensioned-and-unseen",
+    "name": "Undimensioned and Unseen",
+    "category": "Mythos Pack",
+    "cycle": "The Dunwich Legacy",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2018,
+    "units": [
+      "dunwich:4:campaign",
+      "dunwich:4:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Undimensioned+and+Unseen"
+  },
+  {
+    "id": "dunwich-where-doom-awaits",
+    "name": "Where Doom Awaits",
+    "category": "Mythos Pack",
+    "cycle": "The Dunwich Legacy",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2018,
+    "units": [
+      "dunwich:5:campaign",
+      "dunwich:5:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Where+Doom+Awaits"
+  },
+  {
+    "id": "dunwich-lost-in-time-and-space",
+    "name": "Lost in Time and Space",
+    "category": "Mythos Pack",
+    "cycle": "The Dunwich Legacy",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2018,
+    "units": [
+      "dunwich:6:campaign",
+      "dunwich:6:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Lost+in+Time+and+Space"
+  },
+  {
+    "id": "dunwich-campaign",
+    "name": "The Dunwich Legacy Campaign Expansion",
+    "category": "Campaign Expansion",
+    "cycle": "The Dunwich Legacy",
+    "status": "chapter-one",
+    "packaging": "Campaign Expansion",
+    "year": 2022,
+    "units": [
+      "dunwich:0:campaign",
+      "dunwich:1:campaign",
+      "dunwich:2:campaign",
+      "dunwich:3:campaign",
+      "dunwich:4:campaign",
+      "dunwich:5:campaign",
+      "dunwich:6:campaign"
+    ],
+    "notes": "Modern repackaging of all campaign/scenario content from the original seven-product cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Dunwich+Legacy+Campaign+Expansion"
+  },
+  {
+    "id": "dunwich-investigator",
+    "name": "The Dunwich Legacy Investigator Expansion",
+    "category": "Investigator Expansion",
+    "cycle": "The Dunwich Legacy",
+    "status": "chapter-one",
+    "packaging": "Investigator Expansion",
+    "year": 2022,
+    "units": [
+      "dunwich:0:player",
+      "dunwich:1:player",
+      "dunwich:2:player",
+      "dunwich:3:player",
+      "dunwich:4:player",
+      "dunwich:5:player",
+      "dunwich:6:player"
+    ],
+    "notes": "Modern repackaging of all investigator/player-card content from the original seven-product cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Dunwich+Legacy+Investigator+Expansion"
+  },
+  {
+    "id": "return-dunwich",
+    "name": "Return to The Dunwich Legacy",
+    "category": "Return To",
+    "cycle": "The Dunwich Legacy",
+    "status": "legacy-oop",
+    "packaging": "Return To",
+    "year": 2018,
+    "units": [
+      "dunwich:return"
+    ],
+    "notes": "Distinct Return To content; not included in the modern Campaign/Investigator boxes.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Return+to+The+Dunwich+Legacy"
+  },
+  {
+    "id": "carcosa-original",
+    "name": "The Path to Carcosa",
+    "category": "Deluxe Expansion",
+    "cycle": "The Path to Carcosa",
+    "status": "legacy-oop",
+    "packaging": "Deluxe Expansion",
+    "year": 2017,
+    "units": [
+      "carcosa:0:campaign",
+      "carcosa:0:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Amazon",
+      "price": 48.29,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Path+to+Carcosa"
+  },
+  {
+    "id": "carcosa-echoes-of-the-past",
+    "name": "Echoes of the Past",
+    "category": "Mythos Pack",
+    "cycle": "The Path to Carcosa",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2017,
+    "units": [
+      "carcosa:1:campaign",
+      "carcosa:1:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Echoes+of+the+Past"
+  },
+  {
+    "id": "carcosa-the-unspeakable-oath",
+    "name": "The Unspeakable Oath",
+    "category": "Mythos Pack",
+    "cycle": "The Path to Carcosa",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2017,
+    "units": [
+      "carcosa:2:campaign",
+      "carcosa:2:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Unspeakable+Oath"
+  },
+  {
+    "id": "carcosa-a-phantom-of-truth",
+    "name": "A Phantom of Truth",
+    "category": "Mythos Pack",
+    "cycle": "The Path to Carcosa",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2018,
+    "units": [
+      "carcosa:3:campaign",
+      "carcosa:3:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Cardhaus Games",
+      "price": 11.99,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=A+Phantom+of+Truth"
+  },
+  {
+    "id": "carcosa-the-pallid-mask",
+    "name": "The Pallid Mask",
+    "category": "Mythos Pack",
+    "cycle": "The Path to Carcosa",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2018,
+    "units": [
+      "carcosa:4:campaign",
+      "carcosa:4:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Amazon",
+      "price": 22.87,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Pallid+Mask"
+  },
+  {
+    "id": "carcosa-black-stars-rise",
+    "name": "Black Stars Rise",
+    "category": "Mythos Pack",
+    "cycle": "The Path to Carcosa",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2018,
+    "units": [
+      "carcosa:5:campaign",
+      "carcosa:5:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Black+Stars+Rise"
+  },
+  {
+    "id": "carcosa-dim-carcosa",
+    "name": "Dim Carcosa",
+    "category": "Mythos Pack",
+    "cycle": "The Path to Carcosa",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2018,
+    "units": [
+      "carcosa:6:campaign",
+      "carcosa:6:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Amazon",
+      "price": 21.15,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Dim+Carcosa"
+  },
+  {
+    "id": "carcosa-campaign",
+    "name": "The Path to Carcosa Campaign Expansion",
+    "category": "Campaign Expansion",
+    "cycle": "The Path to Carcosa",
+    "status": "chapter-one",
+    "packaging": "Campaign Expansion",
+    "year": 2022,
+    "units": [
+      "carcosa:0:campaign",
+      "carcosa:1:campaign",
+      "carcosa:2:campaign",
+      "carcosa:3:campaign",
+      "carcosa:4:campaign",
+      "carcosa:5:campaign",
+      "carcosa:6:campaign"
+    ],
+    "notes": "Modern repackaging of all campaign/scenario content from the original seven-product cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Path+to+Carcosa+Campaign+Expansion"
+  },
+  {
+    "id": "carcosa-investigator",
+    "name": "The Path to Carcosa Investigator Expansion",
+    "category": "Investigator Expansion",
+    "cycle": "The Path to Carcosa",
+    "status": "chapter-one",
+    "packaging": "Investigator Expansion",
+    "year": 2022,
+    "units": [
+      "carcosa:0:player",
+      "carcosa:1:player",
+      "carcosa:2:player",
+      "carcosa:3:player",
+      "carcosa:4:player",
+      "carcosa:5:player",
+      "carcosa:6:player"
+    ],
+    "notes": "Modern repackaging of all investigator/player-card content from the original seven-product cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Gamezenter",
+      "price": 47.99,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Path+to+Carcosa+Investigator+Expansion"
+  },
+  {
+    "id": "return-carcosa",
+    "name": "Return to The Path to Carcosa",
+    "category": "Return To",
+    "cycle": "The Path to Carcosa",
+    "status": "legacy-oop",
+    "packaging": "Return To",
+    "year": 2018,
+    "units": [
+      "carcosa:return"
+    ],
+    "notes": "Distinct Return To content; not included in the modern Campaign/Investigator boxes.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Return+to+The+Path+to+Carcosa"
+  },
+  {
+    "id": "forgotten-original",
+    "name": "The Forgotten Age",
+    "category": "Deluxe Expansion",
+    "cycle": "The Forgotten Age",
+    "status": "legacy-oop",
+    "packaging": "Deluxe Expansion",
+    "year": 2018,
+    "units": [
+      "forgotten:0:campaign",
+      "forgotten:0:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Target",
+      "price": 29.94,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Forgotten+Age"
+  },
+  {
+    "id": "forgotten-threads-of-fate",
+    "name": "Threads of Fate",
+    "category": "Mythos Pack",
+    "cycle": "The Forgotten Age",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2018,
+    "units": [
+      "forgotten:1:campaign",
+      "forgotten:1:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Threads+of+Fate"
+  },
+  {
+    "id": "forgotten-the-boundary-beyond",
+    "name": "The Boundary Beyond",
+    "category": "Mythos Pack",
+    "cycle": "The Forgotten Age",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2018,
+    "units": [
+      "forgotten:2:campaign",
+      "forgotten:2:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Cardhaus Games",
+      "price": 11.89,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Boundary+Beyond"
+  },
+  {
+    "id": "forgotten-heart-of-the-elders",
+    "name": "Heart of the Elders",
+    "category": "Mythos Pack",
+    "cycle": "The Forgotten Age",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2019,
+    "units": [
+      "forgotten:3:campaign",
+      "forgotten:3:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Legendesque",
+      "price": 13.99,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Heart+of+the+Elders"
+  },
+  {
+    "id": "forgotten-the-city-of-archives",
+    "name": "The City of Archives",
+    "category": "Mythos Pack",
+    "cycle": "The Forgotten Age",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2019,
+    "units": [
+      "forgotten:4:campaign",
+      "forgotten:4:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+City+of+Archives"
+  },
+  {
+    "id": "forgotten-the-depths-of-yoth",
+    "name": "The Depths of Yoth",
+    "category": "Mythos Pack",
+    "cycle": "The Forgotten Age",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2019,
+    "units": [
+      "forgotten:5:campaign",
+      "forgotten:5:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Boardtopia",
+      "price": 24.99,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Depths+of+Yoth"
+  },
+  {
+    "id": "forgotten-shattered-aeons",
+    "name": "Shattered Aeons",
+    "category": "Mythos Pack",
+    "cycle": "The Forgotten Age",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2019,
+    "units": [
+      "forgotten:6:campaign",
+      "forgotten:6:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Shattered+Aeons"
+  },
+  {
+    "id": "forgotten-campaign",
+    "name": "The Forgotten Age Campaign Expansion",
+    "category": "Campaign Expansion",
+    "cycle": "The Forgotten Age",
+    "status": "chapter-one",
+    "packaging": "Campaign Expansion",
+    "year": 2023,
+    "units": [
+      "forgotten:0:campaign",
+      "forgotten:1:campaign",
+      "forgotten:2:campaign",
+      "forgotten:3:campaign",
+      "forgotten:4:campaign",
+      "forgotten:5:campaign",
+      "forgotten:6:campaign"
+    ],
+    "notes": "Modern repackaging of all campaign/scenario content from the original seven-product cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Gamezenter",
+      "price": 74.99,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Forgotten+Age+Campaign+Expansion"
+  },
+  {
+    "id": "forgotten-investigator",
+    "name": "The Forgotten Age Investigator Expansion",
+    "category": "Investigator Expansion",
+    "cycle": "The Forgotten Age",
+    "status": "chapter-one",
+    "packaging": "Investigator Expansion",
+    "year": 2023,
+    "units": [
+      "forgotten:0:player",
+      "forgotten:1:player",
+      "forgotten:2:player",
+      "forgotten:3:player",
+      "forgotten:4:player",
+      "forgotten:5:player",
+      "forgotten:6:player"
+    ],
+    "notes": "Modern repackaging of all investigator/player-card content from the original seven-product cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Forgotten+Age+Investigator+Expansion"
+  },
+  {
+    "id": "return-forgotten",
+    "name": "Return to The Forgotten Age",
+    "category": "Return To",
+    "cycle": "The Forgotten Age",
+    "status": "legacy-oop",
+    "packaging": "Return To",
+    "year": 2019,
+    "units": [
+      "forgotten:return"
+    ],
+    "notes": "Distinct Return To content; not included in the modern Campaign/Investigator boxes.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Return+to+The+Forgotten+Age"
+  },
+  {
+    "id": "circle-original",
+    "name": "The Circle Undone",
+    "category": "Deluxe Expansion",
+    "cycle": "The Circle Undone",
+    "status": "legacy-oop",
+    "packaging": "Deluxe Expansion",
+    "year": 2019,
+    "units": [
+      "circle:0:campaign",
+      "circle:0:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Circle+Undone"
+  },
+  {
+    "id": "circle-the-secret-name",
+    "name": "The Secret Name",
+    "category": "Mythos Pack",
+    "cycle": "The Circle Undone",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2019,
+    "units": [
+      "circle:1:campaign",
+      "circle:1:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Secret+Name"
+  },
+  {
+    "id": "circle-the-wages-of-sin",
+    "name": "The Wages of Sin",
+    "category": "Mythos Pack",
+    "cycle": "The Circle Undone",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2019,
+    "units": [
+      "circle:2:campaign",
+      "circle:2:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Wages+of+Sin"
+  },
+  {
+    "id": "circle-for-the-greater-good",
+    "name": "For the Greater Good",
+    "category": "Mythos Pack",
+    "cycle": "The Circle Undone",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2020,
+    "units": [
+      "circle:3:campaign",
+      "circle:3:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Gamezenter",
+      "price": 13.59,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=For+the+Greater+Good"
+  },
+  {
+    "id": "circle-union-and-disillusion",
+    "name": "Union and Disillusion",
+    "category": "Mythos Pack",
+    "cycle": "The Circle Undone",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2020,
+    "units": [
+      "circle:4:campaign",
+      "circle:4:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Octagon Board Games",
+      "price": 20.0,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Union+and+Disillusion"
+  },
+  {
+    "id": "circle-in-the-clutches-of-chaos",
+    "name": "In the Clutches of Chaos",
+    "category": "Mythos Pack",
+    "cycle": "The Circle Undone",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2020,
+    "units": [
+      "circle:5:campaign",
+      "circle:5:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=In+the+Clutches+of+Chaos"
+  },
+  {
+    "id": "circle-before-the-black-throne",
+    "name": "Before the Black Throne",
+    "category": "Mythos Pack",
+    "cycle": "The Circle Undone",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2020,
+    "units": [
+      "circle:6:campaign",
+      "circle:6:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Before+the+Black+Throne"
+  },
+  {
+    "id": "circle-campaign",
+    "name": "The Circle Undone Campaign Expansion",
+    "category": "Campaign Expansion",
+    "cycle": "The Circle Undone",
+    "status": "chapter-one",
+    "packaging": "Campaign Expansion",
+    "year": 2023,
+    "units": [
+      "circle:0:campaign",
+      "circle:1:campaign",
+      "circle:2:campaign",
+      "circle:3:campaign",
+      "circle:4:campaign",
+      "circle:5:campaign",
+      "circle:6:campaign"
+    ],
+    "notes": "Modern repackaging of all campaign/scenario content from the original seven-product cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Circle+Undone+Campaign+Expansion"
+  },
+  {
+    "id": "circle-investigator",
+    "name": "The Circle Undone Investigator Expansion",
+    "category": "Investigator Expansion",
+    "cycle": "The Circle Undone",
+    "status": "chapter-one",
+    "packaging": "Investigator Expansion",
+    "year": 2023,
+    "units": [
+      "circle:0:player",
+      "circle:1:player",
+      "circle:2:player",
+      "circle:3:player",
+      "circle:4:player",
+      "circle:5:player",
+      "circle:6:player"
+    ],
+    "notes": "Modern repackaging of all investigator/player-card content from the original seven-product cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Circle+Undone+Investigator+Expansion"
+  },
+  {
+    "id": "return-circle",
+    "name": "Return to The Circle Undone",
+    "category": "Return To",
+    "cycle": "The Circle Undone",
+    "status": "legacy-oop",
+    "packaging": "Return To",
+    "year": 2021,
+    "units": [
+      "circle:return"
+    ],
+    "notes": "Distinct Return To content; not included in the modern Campaign/Investigator boxes.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Return+to+The+Circle+Undone"
+  },
+  {
+    "id": "dream-original",
+    "name": "The Dream-Eaters",
+    "category": "Deluxe Expansion",
+    "cycle": "The Dream-Eaters",
+    "status": "legacy-oop",
+    "packaging": "Deluxe Expansion",
+    "year": 2019,
+    "units": [
+      "dream:0:campaign",
+      "dream:0:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Dream-Eaters"
+  },
+  {
+    "id": "dream-the-search-for-kadath",
+    "name": "The Search for Kadath",
+    "category": "Mythos Pack",
+    "cycle": "The Dream-Eaters",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2019,
+    "units": [
+      "dream:1:campaign",
+      "dream:1:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Boardtopia",
+      "price": 39.99,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Search+for+Kadath"
+  },
+  {
+    "id": "dream-a-thousand-shapes-of-horror",
+    "name": "A Thousand Shapes of Horror",
+    "category": "Mythos Pack",
+    "cycle": "The Dream-Eaters",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2019,
+    "units": [
+      "dream:2:campaign",
+      "dream:2:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=A+Thousand+Shapes+of+Horror"
+  },
+  {
+    "id": "dream-dark-side-of-the-moon",
+    "name": "Dark Side of the Moon",
+    "category": "Mythos Pack",
+    "cycle": "The Dream-Eaters",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2020,
+    "units": [
+      "dream:3:campaign",
+      "dream:3:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Dark+Side+of+the+Moon"
+  },
+  {
+    "id": "dream-point-of-no-return",
+    "name": "Point of No Return",
+    "category": "Mythos Pack",
+    "cycle": "The Dream-Eaters",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2020,
+    "units": [
+      "dream:4:campaign",
+      "dream:4:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Amazon",
+      "price": 44.9,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Point+of+No+Return"
+  },
+  {
+    "id": "dream-where-the-gods-dwell",
+    "name": "Where the Gods Dwell",
+    "category": "Mythos Pack",
+    "cycle": "The Dream-Eaters",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2020,
+    "units": [
+      "dream:5:campaign",
+      "dream:5:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Boardtopia",
+      "price": 49.99,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Where+the+Gods+Dwell"
+  },
+  {
+    "id": "dream-weaver-of-the-cosmos",
+    "name": "Weaver of the Cosmos",
+    "category": "Mythos Pack",
+    "cycle": "The Dream-Eaters",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2020,
+    "units": [
+      "dream:6:campaign",
+      "dream:6:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Legendesque",
+      "price": 13.99,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Weaver+of+the+Cosmos"
+  },
+  {
+    "id": "dream-campaign",
+    "name": "The Dream-Eaters Campaign Expansion",
+    "category": "Campaign Expansion",
+    "cycle": "The Dream-Eaters",
+    "status": "chapter-one",
+    "packaging": "Campaign Expansion",
+    "year": 2024,
+    "units": [
+      "dream:0:campaign",
+      "dream:1:campaign",
+      "dream:2:campaign",
+      "dream:3:campaign",
+      "dream:4:campaign",
+      "dream:5:campaign",
+      "dream:6:campaign"
+    ],
+    "notes": "Modern repackaging of all campaign/scenario content from the original seven-product cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Dream-Eaters+Campaign+Expansion"
+  },
+  {
+    "id": "dream-investigator",
+    "name": "The Dream-Eaters Investigator Expansion",
+    "category": "Investigator Expansion",
+    "cycle": "The Dream-Eaters",
+    "status": "chapter-one",
+    "packaging": "Investigator Expansion",
+    "year": 2024,
+    "units": [
+      "dream:0:player",
+      "dream:1:player",
+      "dream:2:player",
+      "dream:3:player",
+      "dream:4:player",
+      "dream:5:player",
+      "dream:6:player"
+    ],
+    "notes": "Modern repackaging of all investigator/player-card content from the original seven-product cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Dream-Eaters+Investigator+Expansion"
+  },
+  {
+    "id": "innsmouth-original",
+    "name": "The Innsmouth Conspiracy",
+    "category": "Deluxe Expansion",
+    "cycle": "The Innsmouth Conspiracy",
+    "status": "legacy-oop",
+    "packaging": "Deluxe Expansion",
+    "year": 2020,
+    "units": [
+      "innsmouth:0:campaign",
+      "innsmouth:0:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Innsmouth+Conspiracy"
+  },
+  {
+    "id": "innsmouth-in-too-deep",
+    "name": "In Too Deep",
+    "category": "Mythos Pack",
+    "cycle": "The Innsmouth Conspiracy",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2020,
+    "units": [
+      "innsmouth:1:campaign",
+      "innsmouth:1:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Legendesque",
+      "price": 13.99,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=In+Too+Deep"
+  },
+  {
+    "id": "innsmouth-devil-reef",
+    "name": "Devil Reef",
+    "category": "Mythos Pack",
+    "cycle": "The Innsmouth Conspiracy",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2020,
+    "units": [
+      "innsmouth:2:campaign",
+      "innsmouth:2:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Noble Knight",
+      "price": 49.95,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Devil+Reef"
+  },
+  {
+    "id": "innsmouth-horror-in-high-gear",
+    "name": "Horror in High Gear",
+    "category": "Mythos Pack",
+    "cycle": "The Innsmouth Conspiracy",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2021,
+    "units": [
+      "innsmouth:3:campaign",
+      "innsmouth:3:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Gamezenter",
+      "price": 13.59,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Horror+in+High+Gear"
+  },
+  {
+    "id": "innsmouth-a-light-in-the-fog",
+    "name": "A Light in the Fog",
+    "category": "Mythos Pack",
+    "cycle": "The Innsmouth Conspiracy",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2021,
+    "units": [
+      "innsmouth:4:campaign",
+      "innsmouth:4:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=A+Light+in+the+Fog"
+  },
+  {
+    "id": "innsmouth-the-lair-of-dagon",
+    "name": "The Lair of Dagon",
+    "category": "Mythos Pack",
+    "cycle": "The Innsmouth Conspiracy",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2021,
+    "units": [
+      "innsmouth:5:campaign",
+      "innsmouth:5:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Just Games Rochester",
+      "price": 16.99,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Lair+of+Dagon"
+  },
+  {
+    "id": "innsmouth-into-the-maelstrom",
+    "name": "Into the Maelstrom",
+    "category": "Mythos Pack",
+    "cycle": "The Innsmouth Conspiracy",
+    "status": "legacy-oop",
+    "packaging": "Mythos Pack",
+    "year": 2021,
+    "units": [
+      "innsmouth:6:campaign",
+      "innsmouth:6:player"
+    ],
+    "notes": "Legacy packaging: includes both scenario/campaign material and player cards from this slice of the cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Legendesque",
+      "price": 13.99,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Into+the+Maelstrom"
+  },
+  {
+    "id": "innsmouth-campaign",
+    "name": "The Innsmouth Conspiracy Campaign Expansion",
+    "category": "Campaign Expansion",
+    "cycle": "The Innsmouth Conspiracy",
+    "status": "chapter-one",
+    "packaging": "Campaign Expansion",
+    "year": 2024,
+    "units": [
+      "innsmouth:0:campaign",
+      "innsmouth:1:campaign",
+      "innsmouth:2:campaign",
+      "innsmouth:3:campaign",
+      "innsmouth:4:campaign",
+      "innsmouth:5:campaign",
+      "innsmouth:6:campaign"
+    ],
+    "notes": "Modern repackaging of all campaign/scenario content from the original seven-product cycle.",
+    "source": null,
+    "snapshot": {
+      "retailer": "Gamezenter",
+      "price": 74.99,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Innsmouth+Conspiracy+Campaign+Expansion"
+  },
+  {
+    "id": "innsmouth-investigator",
+    "name": "The Innsmouth Conspiracy Investigator Expansion",
+    "category": "Investigator Expansion",
+    "cycle": "The Innsmouth Conspiracy",
+    "status": "chapter-one",
+    "packaging": "Investigator Expansion",
+    "year": 2024,
+    "units": [
+      "innsmouth:0:player",
+      "innsmouth:1:player",
+      "innsmouth:2:player",
+      "innsmouth:3:player",
+      "innsmouth:4:player",
+      "innsmouth:5:player",
+      "innsmouth:6:player"
+    ],
+    "notes": "Modern repackaging of all investigator/player-card content from the original seven-product cycle.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Innsmouth+Conspiracy+Investigator+Expansion"
+  },
+  {
+    "id": "edge-campaign",
+    "name": "Edge of the Earth Campaign Expansion",
+    "category": "Campaign Expansion",
+    "cycle": "Edge of the Earth",
+    "status": "chapter-one",
+    "packaging": "Campaign Expansion",
+    "year": 2021,
+    "units": [
+      "edge:campaign"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Edge+of+the+Earth+Campaign+Expansion"
+  },
+  {
+    "id": "edge-investigator",
+    "name": "Edge of the Earth Investigator Expansion",
+    "category": "Investigator Expansion",
+    "cycle": "Edge of the Earth",
+    "status": "chapter-one",
+    "packaging": "Investigator Expansion",
+    "year": 2021,
+    "units": [
+      "edge:player"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Edge+of+the+Earth+Investigator+Expansion"
+  },
+  {
+    "id": "scarlet-campaign",
+    "name": "The Scarlet Keys Campaign Expansion",
+    "category": "Campaign Expansion",
+    "cycle": "The Scarlet Keys",
+    "status": "chapter-one",
+    "packaging": "Campaign Expansion",
+    "year": 2022,
+    "units": [
+      "scarlet:campaign"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Scarlet+Keys+Campaign+Expansion"
+  },
+  {
+    "id": "scarlet-investigator",
+    "name": "The Scarlet Keys Investigator Expansion",
+    "category": "Investigator Expansion",
+    "cycle": "The Scarlet Keys",
+    "status": "chapter-one",
+    "packaging": "Investigator Expansion",
+    "year": 2022,
+    "units": [
+      "scarlet:player"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Scarlet+Keys+Investigator+Expansion"
+  },
+  {
+    "id": "hemlock-campaign",
+    "name": "The Feast of Hemlock Vale Campaign Expansion",
+    "category": "Campaign Expansion",
+    "cycle": "The Feast of Hemlock Vale",
+    "status": "chapter-one",
+    "packaging": "Campaign Expansion",
+    "year": 2024,
+    "units": [
+      "hemlock:campaign"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": {
+      "retailer": "Many Realms",
+      "price": 74.99,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Feast+of+Hemlock+Vale+Campaign+Expansion"
+  },
+  {
+    "id": "hemlock-investigator",
+    "name": "The Feast of Hemlock Vale Investigator Expansion",
+    "category": "Investigator Expansion",
+    "cycle": "The Feast of Hemlock Vale",
+    "status": "chapter-one",
+    "packaging": "Investigator Expansion",
+    "year": 2024,
+    "units": [
+      "hemlock:player"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": {
+      "retailer": "Many Realms",
+      "price": 47.99,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Feast+of+Hemlock+Vale+Investigator+Expansion"
+  },
+  {
+    "id": "drowned-campaign",
+    "name": "The Drowned City Campaign Expansion",
+    "category": "Campaign Expansion",
+    "cycle": "The Drowned City",
+    "status": "current",
+    "packaging": "Campaign Expansion",
+    "year": 2025,
+    "units": [
+      "drowned:campaign"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Drowned+City+Campaign+Expansion"
+  },
+  {
+    "id": "drowned-investigator",
+    "name": "The Drowned City Investigator Expansion",
+    "category": "Investigator Expansion",
+    "cycle": "The Drowned City",
+    "status": "current",
+    "packaging": "Investigator Expansion",
+    "year": 2025,
+    "units": [
+      "drowned:player"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Drowned+City+Investigator+Expansion"
+  },
+  {
+    "id": "children-of-blood",
+    "name": "Children of Blood",
+    "category": "Campaign Expansion",
+    "cycle": "Children of Blood",
+    "status": "current",
+    "packaging": "Campaign Expansion",
+    "year": 2026,
+    "units": [
+      "children:campaign"
+    ],
+    "notes": "Three-scenario small campaign expansion.",
+    "source": "https://www.fantasyflightgames.com/product/children-of-blood/",
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Children+of+Blood"
+  },
+  {
+    "id": "standalone-curse-rougarou",
+    "name": "Curse of the Rougarou",
+    "category": "Scenario Pack",
+    "cycle": "Standalone Scenarios",
+    "status": "chapter-one",
+    "packaging": "Scenario Pack",
+    "year": 2016,
+    "units": [
+      "standalone:curse-rougarou"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Curse+of+the+Rougarou"
+  },
+  {
+    "id": "standalone-carnevale",
+    "name": "Carnevale of Horrors",
+    "category": "Scenario Pack",
+    "cycle": "Standalone Scenarios",
+    "status": "chapter-one",
+    "packaging": "Scenario Pack",
+    "year": 2016,
+    "units": [
+      "standalone:carnevale"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Carnevale+of+Horrors"
+  },
+  {
+    "id": "standalone-labyrinths",
+    "name": "The Labyrinths of Lunacy",
+    "category": "Scenario Pack",
+    "cycle": "Standalone Scenarios",
+    "status": "chapter-one",
+    "packaging": "Scenario Pack",
+    "year": 2017,
+    "units": [
+      "standalone:labyrinths"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": {
+      "retailer": "Boxcat Games",
+      "price": 17.99,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Labyrinths+of+Lunacy"
+  },
+  {
+    "id": "standalone-guardians",
+    "name": "Guardians of the Abyss",
+    "category": "Scenario Pack",
+    "cycle": "Standalone Scenarios",
+    "status": "chapter-one",
+    "packaging": "Scenario Pack",
+    "year": 2018,
+    "units": [
+      "standalone:guardians"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Guardians+of+the+Abyss"
+  },
+  {
+    "id": "standalone-excelsior",
+    "name": "Murder at the Excelsior Hotel",
+    "category": "Scenario Pack",
+    "cycle": "Standalone Scenarios",
+    "status": "chapter-one",
+    "packaging": "Scenario Pack",
+    "year": 2019,
+    "units": [
+      "standalone:excelsior"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Murder+at+the+Excelsior+Hotel"
+  },
+  {
+    "id": "standalone-blob",
+    "name": "The Blob That Ate Everything",
+    "category": "Scenario Pack",
+    "cycle": "Standalone Scenarios",
+    "status": "chapter-one",
+    "packaging": "Scenario Pack",
+    "year": 2019,
+    "units": [
+      "standalone:blob"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Blob+That+Ate+Everything"
+  },
+  {
+    "id": "standalone-barkham",
+    "name": "Barkham Horror: The Meddling of Meowlathotep",
+    "category": "Scenario Pack",
+    "cycle": "Standalone Scenarios",
+    "status": "legacy-oop",
+    "packaging": "Scenario Pack",
+    "year": 2020,
+    "units": [
+      "standalone:barkham"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Barkham+Horror%3A+The+Meddling+of+Meowlathotep"
+  },
+  {
+    "id": "standalone-war-outer-gods",
+    "name": "War of the Outer Gods",
+    "category": "Scenario Pack",
+    "cycle": "Standalone Scenarios",
+    "status": "chapter-one",
+    "packaging": "Scenario Pack",
+    "year": 2020,
+    "units": [
+      "standalone:war-outer-gods"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=War+of+the+Outer+Gods"
+  },
+  {
+    "id": "standalone-machinations",
+    "name": "Machinations Through Time",
+    "category": "Scenario Pack",
+    "cycle": "Standalone Scenarios",
+    "status": "chapter-one",
+    "packaging": "Scenario Pack",
+    "year": 2022,
+    "units": [
+      "standalone:machinations"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Machinations+Through+Time"
+  },
+  {
+    "id": "standalone-fortune-folly",
+    "name": "Fortune and Folly",
+    "category": "Scenario Pack",
+    "cycle": "Standalone Scenarios",
+    "status": "chapter-one",
+    "packaging": "Scenario Pack",
+    "year": 2023,
+    "units": [
+      "standalone:fortune-folly"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Fortune+and+Folly"
+  },
+  {
+    "id": "standalone-blob-else",
+    "name": "The Blob That Ate Everything ELSE!",
+    "category": "Scenario Pack",
+    "cycle": "Standalone Scenarios",
+    "status": "chapter-one",
+    "packaging": "Scenario Pack",
+    "year": 2023,
+    "units": [
+      "standalone:blob-else"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Blob+That+Ate+Everything+ELSE%21"
+  },
+  {
+    "id": "standalone-midwinter",
+    "name": "The Midwinter Gala",
+    "category": "Scenario Pack",
+    "cycle": "Standalone Scenarios",
+    "status": "chapter-one",
+    "packaging": "Scenario Pack",
+    "year": 2024,
+    "units": [
+      "standalone:midwinter"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Midwinter+Gala"
+  },
+  {
+    "id": "standalone-film-fatale",
+    "name": "Film Fatale",
+    "category": "Scenario Pack",
+    "cycle": "Standalone Scenarios",
+    "status": "current",
+    "packaging": "Scenario Pack",
+    "year": 2025,
+    "units": [
+      "standalone:film-fatale"
+    ],
+    "notes": null,
+    "source": "https://www.fantasyflightgames.com/product/film-fatale/",
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Film+Fatale"
+  },
+  {
+    "id": "standalone-traces-nowhere",
+    "name": "Traces to Nowhere",
+    "category": "Scenario Pack",
+    "cycle": "Standalone Scenarios",
+    "status": "current",
+    "packaging": "Scenario Pack",
+    "year": 2026,
+    "units": [
+      "standalone:traces-nowhere"
+    ],
+    "notes": null,
+    "source": "https://www.fantasyflightgames.com/en/products/arkham-horror-the-card-game/products/traces-nowhere/",
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Traces+to+Nowhere"
+  },
+  {
+    "id": "starter-nathaniel",
+    "name": "Nathaniel Cho Investigator Starter Deck",
+    "category": "Investigator Deck",
+    "cycle": "Investigator Starter Decks",
+    "status": "chapter-one",
+    "packaging": "Investigator Deck",
+    "year": 2020,
+    "units": [
+      "starter:nathaniel"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Nathaniel+Cho+Investigator+Starter+Deck"
+  },
+  {
+    "id": "starter-harvey",
+    "name": "Harvey Walters Investigator Starter Deck",
+    "category": "Investigator Deck",
+    "cycle": "Investigator Starter Decks",
+    "status": "chapter-one",
+    "packaging": "Investigator Deck",
+    "year": 2020,
+    "units": [
+      "starter:harvey"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": {
+      "retailer": "Legendesque",
+      "price": 13.99,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Harvey+Walters+Investigator+Starter+Deck"
+  },
+  {
+    "id": "starter-winifred",
+    "name": "Winifred Habbamock Investigator Starter Deck",
+    "category": "Investigator Deck",
+    "cycle": "Investigator Starter Decks",
+    "status": "chapter-one",
+    "packaging": "Investigator Deck",
+    "year": 2020,
+    "units": [
+      "starter:winifred"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Winifred+Habbamock+Investigator+Starter+Deck"
+  },
+  {
+    "id": "starter-jacqueline",
+    "name": "Jacqueline Fine Investigator Starter Deck",
+    "category": "Investigator Deck",
+    "cycle": "Investigator Starter Decks",
+    "status": "chapter-one",
+    "packaging": "Investigator Deck",
+    "year": 2020,
+    "units": [
+      "starter:jacqueline"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": {
+      "retailer": "Noble Knight",
+      "price": 49.95,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Jacqueline+Fine+Investigator+Starter+Deck"
+  },
+  {
+    "id": "starter-stella",
+    "name": "Stella Clark Investigator Starter Deck",
+    "category": "Investigator Deck",
+    "cycle": "Investigator Starter Decks",
+    "status": "chapter-one",
+    "packaging": "Investigator Deck",
+    "year": 2020,
+    "units": [
+      "starter:stella"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Stella+Clark+Investigator+Starter+Deck"
+  },
+  {
+    "id": "deck-2026-tommy",
+    "name": "Tommy Muldoon Investigator Deck",
+    "category": "Investigator Deck",
+    "cycle": "Investigator Decks (2026)",
+    "status": "current",
+    "packaging": "Investigator Deck",
+    "year": 2026,
+    "units": [
+      "deck2026:tommy"
+    ],
+    "notes": "Ready-to-play Guardian deck from the Chapter Two product line.",
+    "source": "https://www.fantasyflightgames.com/product/tommy-muldoon-investigator-deck/",
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Tommy+Muldoon+Investigator+Deck"
+  },
+  {
+    "id": "deck-2026-carolyn",
+    "name": "Carolyn Fern Investigator Deck",
+    "category": "Investigator Deck",
+    "cycle": "Investigator Decks (2026)",
+    "status": "current",
+    "packaging": "Investigator Deck",
+    "year": 2026,
+    "units": [
+      "deck2026:carolyn"
+    ],
+    "notes": "Ready-to-play Seeker deck from the Chapter Two product line.",
+    "source": "https://www.fantasyflightgames.com/productline/arkham-horror-the-card-game/",
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Carolyn+Fern+Investigator+Deck"
+  },
+  {
+    "id": "deck-2026-andre",
+    "name": "Andr\u00e9 Patel Investigator Deck",
+    "category": "Investigator Deck",
+    "cycle": "Investigator Decks (2026)",
+    "status": "current",
+    "packaging": "Investigator Deck",
+    "year": 2026,
+    "units": [
+      "deck2026:andre"
+    ],
+    "notes": "Ready-to-play Rogue deck from the Chapter Two product line.",
+    "source": "https://www.fantasyflightgames.com/productline/arkham-horror-the-card-game/",
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Andr%C3%A9+Patel+Investigator+Deck"
+  },
+  {
+    "id": "deck-2026-marie",
+    "name": "Marie Lambeau Investigator Deck",
+    "category": "Investigator Deck",
+    "cycle": "Investigator Decks (2026)",
+    "status": "current",
+    "packaging": "Investigator Deck",
+    "year": 2026,
+    "units": [
+      "deck2026:marie"
+    ],
+    "notes": "Ready-to-play Mystic deck from the Chapter Two product line.",
+    "source": "https://www.fantasyflightgames.com/productline/arkham-horror-the-card-game/",
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Marie+Lambeau+Investigator+Deck"
+  },
+  {
+    "id": "deck-2026-miguel",
+    "name": "Miguel de la Cruz Investigator Deck",
+    "category": "Investigator Deck",
+    "cycle": "Investigator Decks (2026)",
+    "status": "current",
+    "packaging": "Investigator Deck",
+    "year": 2026,
+    "units": [
+      "deck2026:miguel"
+    ],
+    "notes": "Ready-to-play Survivor deck from the Chapter Two product line.",
+    "source": "https://www.fantasyflightgames.com/productline/arkham-horror-the-card-game/",
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Miguel+de+la+Cruz+Investigator+Deck"
+  },
+  {
+    "id": "promo-jenny",
+    "name": "Hour of the Huntress / Jenny Barnes promo cards",
+    "category": "Promo / Novella",
+    "cycle": "Promotional",
+    "status": "promo",
+    "packaging": "Promo / Novella",
+    "year": null,
+    "units": [
+      "promo:jenny"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Hour+of+the+Huntress+%2F+Jenny+Barnes+promo+cards"
+  },
+  {
+    "id": "promo-roland",
+    "name": "The Dirge of Reason / Roland Banks promo cards",
+    "category": "Promo / Novella",
+    "cycle": "Promotional",
+    "status": "promo",
+    "packaging": "Promo / Novella",
+    "year": null,
+    "units": [
+      "promo:roland"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Dirge+of+Reason+%2F+Roland+Banks+promo+cards"
+  },
+  {
+    "id": "promo-norman",
+    "name": "Ire of the Void / Norman Withers promo cards",
+    "category": "Promo / Novella",
+    "cycle": "Promotional",
+    "status": "promo",
+    "packaging": "Promo / Novella",
+    "year": null,
+    "units": [
+      "promo:norman"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": {
+      "retailer": "Noble Knight",
+      "price": 24.95,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Ire+of+the+Void+%2F+Norman+Withers+promo+cards"
+  },
+  {
+    "id": "promo-silas",
+    "name": "The Deep Gate / Silas Marsh promo cards",
+    "category": "Promo / Novella",
+    "cycle": "Promotional",
+    "status": "promo",
+    "packaging": "Promo / Novella",
+    "year": null,
+    "units": [
+      "promo:silas"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Deep+Gate+%2F+Silas+Marsh+promo+cards"
+  },
+  {
+    "id": "promo-carolyn",
+    "name": "To Fight the Black Wind / Carolyn Fern promo cards",
+    "category": "Promo / Novella",
+    "cycle": "Promotional",
+    "status": "promo",
+    "packaging": "Promo / Novella",
+    "year": null,
+    "units": [
+      "promo:carolyn"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=To+Fight+the+Black+Wind+%2F+Carolyn+Fern+promo+cards"
+  },
+  {
+    "id": "promo-dexter",
+    "name": "Blood of Baalshandor / Dexter Drake promo cards",
+    "category": "Promo / Novella",
+    "cycle": "Promotional",
+    "status": "promo",
+    "packaging": "Promo / Novella",
+    "year": null,
+    "units": [
+      "promo:dexter"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": {
+      "retailer": "Noble Knight",
+      "price": 34.95,
+      "observedOn": "2026-10-06",
+      "freshness": "Board Game Oracle page was crawled roughly three weeks earlier"
+    },
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Blood+of+Baalshandor+%2F+Dexter+Drake+promo+cards"
+  },
+  {
+    "id": "promo-gloria",
+    "name": "Dark Revelations / Gloria Goldberg promo cards",
+    "category": "Promo / Novella",
+    "cycle": "Promotional",
+    "status": "promo",
+    "packaging": "Promo / Novella",
+    "year": null,
+    "units": [
+      "promo:gloria"
+    ],
+    "notes": null,
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Dark+Revelations+%2F+Gloria+Goldberg+promo+cards"
+  },
+  {
+    "id": "parallel-roland",
+    "name": "Read or Die",
+    "category": "Parallel / Print-and-Play",
+    "cycle": "Parallel",
+    "status": "pnp",
+    "packaging": "Parallel / Print-and-Play",
+    "year": null,
+    "units": [
+      "parallel:roland"
+    ],
+    "notes": "Official parallel-investigator / print-and-play content; listed for completeness but not treated as a normal retail SKU.",
+    "source": null,
+    "snapshot": null,
+    "retail": false,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Read+or+Die"
+  },
+  {
+    "id": "parallel-agnes",
+    "name": "All or Nothing",
+    "category": "Parallel / Print-and-Play",
+    "cycle": "Parallel",
+    "status": "pnp",
+    "packaging": "Parallel / Print-and-Play",
+    "year": null,
+    "units": [
+      "parallel:agnes"
+    ],
+    "notes": "Official parallel-investigator / print-and-play content; listed for completeness but not treated as a normal retail SKU.",
+    "source": null,
+    "snapshot": null,
+    "retail": false,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=All+or+Nothing"
+  },
+  {
+    "id": "parallel-skids",
+    "name": "Bad Blood",
+    "category": "Parallel / Print-and-Play",
+    "cycle": "Parallel",
+    "status": "pnp",
+    "packaging": "Parallel / Print-and-Play",
+    "year": null,
+    "units": [
+      "parallel:skids"
+    ],
+    "notes": "Official parallel-investigator / print-and-play content; listed for completeness but not treated as a normal retail SKU.",
+    "source": null,
+    "snapshot": null,
+    "retail": false,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Bad+Blood"
+  },
+  {
+    "id": "parallel-daisy",
+    "name": "By the Book",
+    "category": "Parallel / Print-and-Play",
+    "cycle": "Parallel",
+    "status": "pnp",
+    "packaging": "Parallel / Print-and-Play",
+    "year": null,
+    "units": [
+      "parallel:daisy"
+    ],
+    "notes": "Official parallel-investigator / print-and-play content; listed for completeness but not treated as a normal retail SKU.",
+    "source": null,
+    "snapshot": null,
+    "retail": false,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=By+the+Book"
+  },
+  {
+    "id": "parallel-wendy",
+    "name": "Red Tide Rising",
+    "category": "Parallel / Print-and-Play",
+    "cycle": "Parallel",
+    "status": "pnp",
+    "packaging": "Parallel / Print-and-Play",
+    "year": null,
+    "units": [
+      "parallel:wendy"
+    ],
+    "notes": "Official parallel-investigator / print-and-play content; listed for completeness but not treated as a normal retail SKU.",
+    "source": null,
+    "snapshot": null,
+    "retail": false,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Red+Tide+Rising"
+  },
+  {
+    "id": "parallel-pete",
+    "name": "On the Road Again",
+    "category": "Parallel / Print-and-Play",
+    "cycle": "Parallel",
+    "status": "pnp",
+    "packaging": "Parallel / Print-and-Play",
+    "year": null,
+    "units": [
+      "parallel:pete"
+    ],
+    "notes": "Official parallel-investigator / print-and-play content; listed for completeness but not treated as a normal retail SKU.",
+    "source": null,
+    "snapshot": null,
+    "retail": false,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=On+the+Road+Again"
+  },
+  {
+    "id": "parallel-jim",
+    "name": "Laid to Rest",
+    "category": "Parallel / Print-and-Play",
+    "cycle": "Parallel",
+    "status": "pnp",
+    "packaging": "Parallel / Print-and-Play",
+    "year": null,
+    "units": [
+      "parallel:jim"
+    ],
+    "notes": "Official parallel-investigator / print-and-play content; listed for completeness but not treated as a normal retail SKU.",
+    "source": null,
+    "snapshot": null,
+    "retail": false,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Laid+to+Rest"
+  },
+  {
+    "id": "parallel-zoey",
+    "name": "Path of the Righteous",
+    "category": "Parallel / Print-and-Play",
+    "cycle": "Parallel",
+    "status": "pnp",
+    "packaging": "Parallel / Print-and-Play",
+    "year": null,
+    "units": [
+      "parallel:zoey"
+    ],
+    "notes": "Official parallel-investigator / print-and-play content; listed for completeness but not treated as a normal retail SKU.",
+    "source": null,
+    "snapshot": null,
+    "retail": false,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Path+of+the+Righteous"
+  },
+  {
+    "id": "parallel-rex",
+    "name": "Relics of the Past",
+    "category": "Parallel / Print-and-Play",
+    "cycle": "Parallel",
+    "status": "pnp",
+    "packaging": "Parallel / Print-and-Play",
+    "year": null,
+    "units": [
+      "parallel:rex"
+    ],
+    "notes": "Official parallel-investigator / print-and-play content; listed for completeness but not treated as a normal retail SKU.",
+    "source": null,
+    "snapshot": null,
+    "retail": false,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Relics+of+the+Past"
+  },
+  {
+    "id": "parallel-jenny",
+    "name": "Hunting for Answers",
+    "category": "Parallel / Print-and-Play",
+    "cycle": "Parallel",
+    "status": "pnp",
+    "packaging": "Parallel / Print-and-Play",
+    "year": null,
+    "units": [
+      "parallel:jenny"
+    ],
+    "notes": "Official parallel-investigator / print-and-play content; listed for completeness but not treated as a normal retail SKU.",
+    "source": null,
+    "snapshot": null,
+    "retail": false,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Hunting+for+Answers"
+  },
+  {
+    "id": "parallel-silas",
+    "name": "Pistols and Pearls",
+    "category": "Parallel / Print-and-Play",
+    "cycle": "Parallel",
+    "status": "pnp",
+    "packaging": "Parallel / Print-and-Play",
+    "year": null,
+    "units": [
+      "parallel:silas"
+    ],
+    "notes": "Official parallel-investigator / print-and-play content; listed for completeness but not treated as a normal retail SKU.",
+    "source": null,
+    "snapshot": null,
+    "retail": false,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Pistols+and+Pearls"
+  },
+  {
+    "id": "parallel-carolyn",
+    "name": "Aura of Faith",
+    "category": "Parallel / Print-and-Play",
+    "cycle": "Parallel",
+    "status": "pnp",
+    "packaging": "Parallel / Print-and-Play",
+    "year": null,
+    "units": [
+      "parallel:carolyn"
+    ],
+    "notes": "Official parallel-investigator / print-and-play content; listed for completeness but not treated as a normal retail SKU.",
+    "source": null,
+    "snapshot": null,
+    "retail": false,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Aura+of+Faith"
+  },
+  {
+    "id": "parallel-marie",
+    "name": "Enthralling Encore",
+    "category": "Parallel / Print-and-Play",
+    "cycle": "Parallel",
+    "status": "pnp",
+    "packaging": "Parallel / Print-and-Play",
+    "year": null,
+    "units": [
+      "parallel:marie"
+    ],
+    "notes": "Official parallel-investigator / print-and-play content; listed for completeness but not treated as a normal retail SKU.",
+    "source": null,
+    "snapshot": null,
+    "retail": false,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Enthralling+Encore"
+  }
+]

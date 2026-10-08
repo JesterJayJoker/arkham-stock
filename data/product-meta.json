@@ -1,0 +1,121 @@
+{
+  "core-2016": {
+    "aliases": [
+      "Arkham Horror: The Card Game Core Set 2016",
+      "Arkham Horror The Card Game Core Set"
+    ]
+  },
+  "core-revised": {
+    "aliases": [
+      "Arkham Horror: The Card Game Revised Core Set"
+    ]
+  },
+  "core-2026": {
+    "sku": "AHC100EN",
+    "upc": "841333133139",
+    "aliases": [
+      "Arkham Horror: The Card Game Core Set 2026",
+      "Arkham Horror The Card Game Core Set"
+    ]
+  },
+  "drowned-investigator": {
+    "sku": "AHC83EN",
+    "upc": "841333128302",
+    "aliases": [
+      "The Drowned City Investigator Expansion"
+    ]
+  },
+  "drowned-campaign": {
+    "sku": "AHC84EN",
+    "upc": "841333128319",
+    "aliases": [
+      "The Drowned City Campaign Expansion"
+    ]
+  },
+  "children-of-blood": {
+    "sku": "AHC106EN",
+    "aliases": [
+      "Children of Blood Small Campaign Expansion"
+    ]
+  },
+  "standalone-film-fatale": {
+    "sku": "AHC85EN",
+    "upc": "841333129880",
+    "aliases": [
+      "Film Fatale Scenario Pack"
+    ]
+  },
+  "standalone-traces-nowhere": {
+    "sku": "AHC107EN",
+    "aliases": [
+      "Traces to Nowhere Scenario Pack"
+    ]
+  },
+  "deck-2026-tommy": {
+    "sku": "AHC101EN",
+    "aliases": [
+      "Tommy Muldoon Investigator Deck"
+    ]
+  },
+  "deck-2026-carolyn": {
+    "sku": "AHC102EN",
+    "aliases": [
+      "Carolyn Fern Investigator Deck"
+    ]
+  },
+  "deck-2026-andre": {
+    "sku": "AHC103EN",
+    "aliases": [
+      "Andre Patel Investigator Deck",
+      "André Patel Investigator Deck"
+    ]
+  },
+  "deck-2026-marie": {
+    "sku": "AHC104EN",
+    "aliases": [
+      "Marie Lambeau Investigator Deck"
+    ]
+  },
+  "deck-2026-miguel": {
+    "sku": "AHC105EN",
+    "aliases": [
+      "Miguel de la Cruz Investigator Deck"
+    ]
+  },
+  "dream-investigator": {
+    "sku": "AHC78EN",
+    "upc": "841333125028",
+    "aliases": [
+      "The Dream-Eaters Investigator Expansion"
+    ]
+  },
+  "dream-campaign": {
+    "sku": "AHC79EN",
+    "upc": "841333125035",
+    "aliases": [
+      "The Dream-Eaters Campaign Expansion"
+    ]
+  },
+  "standalone-midwinter": {
+    "sku": "AHC80EN",
+    "upc": "841333126148",
+    "aliases": [
+      "The Midwinter Gala Scenario Pack",
+      "Midwinter Gala Scenario Pack"
+    ]
+  },
+  "innsmouth-investigator": {
+    "sku": "AHC81EN",
+    "upc": "841333125820",
+    "aliases": [
+      "The Innsmouth Conspiracy Investigator Expansion"
+    ]
+  },
+  "innsmouth-campaign": {
+    "sku": "AHC82EN",
+    "upc": "841333125837",
+    "aliases": [
+      "The Innsmouth Conspiracy Campaign Expansion"
+    ]
+  }
+}
