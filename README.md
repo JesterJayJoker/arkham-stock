@@ -1,4 +1,4 @@
-# Arkham Stock v0.4 — public-release build
+# Arkham Stock v0.5 — public-release build
 
 Arkham Stock is an independent fan-made Arkham Horror: The Card Game collection and retail-availability tracker inspired by the old Stackham Horror workflow.
 
@@ -29,7 +29,7 @@ docker compose up --build
 
 ## Public traffic protections
 
-v0.4 adds:
+v0.4 and v0.5 include:
 
 - persistent shared offer cache
 - stale-while-revalidate behavior
@@ -79,7 +79,7 @@ Send the key as `Authorization: Bearer <key>` or `X-Admin-Key: <key>`.
 npm test
 ```
 
-The current release passes **12/12 automated tests**, covering product matching, Shopify stock parsing, persistent cache behavior, rate limiting, request coalescing, fresh-cache reuse, stale-while-revalidate behavior, and bounded retailer timeouts.
+The current release passes **23/23 automated tests**, covering product matching, Shopify stock parsing, persistent cache behavior, rate limiting, request coalescing, fresh-cache reuse, stale-while-revalidate behavior, and bounded retailer timeouts.
 
 ## Collection privacy
 
@@ -92,3 +92,13 @@ See `DEPLOY.md`. The repository contains a Dockerfile, Docker Compose configurat
 ## Disclaimer
 
 Arkham Stock is an independent fan utility and is not affiliated with Fantasy Flight Games, Asmodee, ArkhamDB, or the retailers it checks. Product names and trademarks belong to their respective owners.
+
+## v0.5: Campaign-first browsing
+
+The default page now shows 11 campaigns, plus a current Core Set spotlight. Campaign details emphasize the modern Campaign and Investigator Expansions, with original deluxe boxes and Mythos packs behind an expandable section.
+
+Visitors can switch between Campaigns, Investigators, Standalones, Rare/OOP, My Collection, and All Products. Collection mode shows only owned or wanted items; the 114-item catalog remains available under All Products. Product cards show cached verified stock summaries before historical snapshots. The stock filter never counts unverified items as out of stock.
+
+Opening the site loads the shared stock-summary cache without triggering a sweep of every retailer for all 114 items. At most two prioritized products (2026 Core and Children of Blood) may be automatically checked once per browser session when no usable cache is available. Campaign details provide a one-click check for that campaign's modern boxes.
+
+**Important:** Render free-tier sleep and ephemeral storage mean automatic checks cannot run continuously while the instance is sleeping. This release does not claim to provide comprehensive, real-time inventory for all products.
