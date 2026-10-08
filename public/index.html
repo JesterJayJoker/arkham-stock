@@ -2591,9 +2591,9 @@ async function loadLiveOffers(p,target){
     if(!r.ok) throw new Error('HTTP '+r.status);
     const data=await r.json();
     const rows=(data.offers||[]).filter(o=>o.stockStatus!=='unknown').sort((a,b)=>{const rank={in_stock:0,delayed:1,used:2,backorder:3,preorder:4,out_of_stock:5};return (rank[a.stockStatus]??9)-(rank[b.stockStatus]??9)||(a.price??9999)-(b.price??9999)});
-    if(!rows.length){target.innerHTML='<div class="live-note">No retailer returned a verified stock state this check.</div><div class="amazon-offer"><span>Amazon US · manual search</span><span>Stock not verified</span><a href="'+esc(marketSearchUrl(p,RETAILER_SOURCES.find(x=>x.id==='amazon')))+'" target="_blank" rel="noopener noreferrer">Search Amazon ↗</a></div>';return;}
+    if(!rows.length){target.innerHTML='<div class="live-note">No retailer returned a verified stock state this check.</div><div class="amazon-offer"><span>eBay · collector search</span><span>Listings unverified</span><a href="'+esc(marketSearchUrl(p,RETAILER_SOURCES.find(x=>x.id==='ebay')))+'" target="_blank" rel="noopener noreferrer">Search eBay Buy It Now ↗</a></div><div class="amazon-offer"><span>Amazon US · manual search</span><span>Stock not verified</span><a href="'+esc(marketSearchUrl(p,RETAILER_SOURCES.find(x=>x.id==='amazon')))+'" target="_blank" rel="noopener noreferrer">Search Amazon ↗</a></div>';return;}
     const cacheText=data.cacheState==='fresh'?'shared cache':data.cacheState==='stale'?'stale shared result; refreshing in background':data.cacheState==='refreshed'?'freshly checked':'shared result';
-    target.innerHTML='<div class="live-offers">'+rows.map(o=>`<div class="offer-row"><span class="retailer">${esc((RETAILER_SOURCES.find(x=>x.id===o.retailerId)||{}).name||o.retailerId)}</span><span class="state ${o.stockStatus}">${stockLabel(o.stockStatus)}${o.fulfillmentNotice?`<small style="display:block;text-transform:none;letter-spacing:0">${esc(o.fulfillmentNotice)}</small>`:''}</span><span>${o.price>0?money(o.price):'Price unknown'}</span><a target="_blank" rel="noopener noreferrer" href="${esc(safeRetailerUrl(o.productUrl,o.retailerId)||marketSearchUrl(p,RETAILER_SOURCES[0]))}">Store ↗</a></div>`).join('')+'</div><div class="amazon-offer"><span>Amazon US · manual search</span><span>Stock not verified</span><a href="'+esc(marketSearchUrl(p,RETAILER_SOURCES.find(x=>x.id==='amazon')))+'" target="_blank" rel="noopener noreferrer">Search Amazon ↗</a></div><div class="live-note">Retailer pages checked '+new Date(data.checkedAt).toLocaleString()+' · '+cacheText+' · Amazon listings are search-only</div>';
+    target.innerHTML='<div class="live-offers">'+rows.map(o=>`<div class="offer-row"><span class="retailer">${esc((RETAILER_SOURCES.find(x=>x.id===o.retailerId)||{}).name||o.retailerId)}</span><span class="state ${o.stockStatus}">${stockLabel(o.stockStatus)}${o.fulfillmentNotice?`<small style="display:block;text-transform:none;letter-spacing:0">${esc(o.fulfillmentNotice)}</small>`:''}</span><span>${o.price>0?money(o.price):'Price unknown'}</span><a target="_blank" rel="noopener noreferrer" href="${esc(safeRetailerUrl(o.productUrl,o.retailerId)||marketSearchUrl(p,RETAILER_SOURCES[0]))}">Store ↗</a></div>`).join('')+'</div><div class="amazon-offer"><span>eBay · collector search</span><span>Listings unverified</span><a href="'+esc(marketSearchUrl(p,RETAILER_SOURCES.find(x=>x.id==='ebay')))+'" target="_blank" rel="noopener noreferrer">Search eBay Buy It Now ↗</a></div><div class="amazon-offer"><span>Amazon US · manual search</span><span>Stock not verified</span><a href="'+esc(marketSearchUrl(p,RETAILER_SOURCES.find(x=>x.id==='amazon')))+'" target="_blank" rel="noopener noreferrer">Search Amazon ↗</a></div><div class="live-note">Retailer pages checked '+new Date(data.checkedAt).toLocaleString()+' · '+cacheText+' · Amazon listings are search-only</div>';
   }catch(e){target.innerHTML='<div class="live-note">Live check failed: '+esc(e.message)+'. Use the source links below as fallback.</div>';}
 }
 
@@ -2614,6 +2614,7 @@ const RETAILER_SOURCES=[
   {id:'nobleknight',name:'Noble Knight',domain:'nobleknight.com',meta:'New + used/OOP inventory'},
   {name:'Target',domain:'target.com',meta:'Useful for current core/decks'},
   {id:'amazon',name:'Amazon US',kind:'amazon',meta:'Search Amazon listings manually; stock and price not verified'},
+  {id:'ebay',name:'eBay collector listings',kind:'ebay',meta:'Search active listings; condition and completeness not verified'},
   {id:'boarding',name:'Boarding School Games',domain:'boardingschoolgames.com',meta:'Independent retailer'},
   {id:'guardtower',name:'The Guardtower',domain:'theguardtower.com',meta:'Independent U.S. retailer'},
   {id:'hauntedgamecafe',name:'The Haunted Game Cafe',domain:'hauntedgamecafe.com',meta:'Independent U.S. retailer'},
@@ -2625,6 +2626,7 @@ function googleSearchUrl(q){ return 'https://www.google.com/search?q='+encodeURI
 function marketSearchUrl(p,source){
   if(source.kind==='bgo') return p.bgoSearch;
   if(source.kind==='amazon') return 'https://www.amazon.com/s?k='+encodeURIComponent('Arkham Horror The Card Game '+marketAlias(p));
+  if(source.kind==='ebay') return 'https://www.ebay.com/sch/i.html?'+new URLSearchParams({_nkw:'Arkham Horror LCG '+marketAlias(p),_sacat:'0',LH_BIN:'1'}).toString();
   const stockTerms=' (\"in stock\" OR \"add to cart\" OR available)';
   return googleSearchUrl(marketTerms(p)+(source.domain?' site:'+source.domain:'')+stockTerms);
 }
@@ -2997,7 +2999,7 @@ function productCard(p){
     ${price}
     ${!own && overlap>0 ? `<div class="no-price">⚠ ${overlap}/${p.units.length} content units already covered by products you own.</div>`:''}
     ${covered && !own ? `<div class="no-price">✓ All modeled content is already covered by other packaging.</div>`:''}
-    ${p.retail ? (marketRegion==='UK'?regionSearchLinks(p):`<button class="live-btn" data-action="live"><span class="live-dot"></span>Check live stock</button><a class="market-link" target="_blank" rel="noopener" href="${marketSearchUrl(p,RETAILER_SOURCES[0])}">Search 14 market sources ↗</a>`):''}
+    ${p.retail ? (marketRegion==='UK'?regionSearchLinks(p):`<button class="live-btn" data-action="live"><span class="live-dot"></span>Check live stock</button><a class="market-link" target="_blank" rel="noopener" href="${marketSearchUrl(p,RETAILER_SOURCES[0])}">Search 15 market sources ↗</a>`):''}
     <div class="product-actions"><button class="own ${own?'active':''}" data-action="own">${own?'Owned ✓':'Mark owned'}</button><button class="want ${want?'active':''}" data-action="want">${want?'Wanted ★':'Want'}</button><button class="detail" data-action="detail" aria-label="Details">•••</button></div>
   </article>`;
 }
