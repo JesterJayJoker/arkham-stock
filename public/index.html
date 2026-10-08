@@ -105,7 +105,7 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
 .catalog-more:hover{background:#294334}
 @media(max-width:1000px){.catalog-section-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.catalog-section-grid{grid-template-columns:1fr}}
-.advisor-panel{grid-template-columns:1fr;gap:14px}.advisor-panel>div:first-child p{max-width:850px;margin-bottom:0}.advice-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.advice{padding:10px 12px}.advice details summary{cursor:pointer}.advice details summary strong{display:inline}.advice details small{margin:9px 0 0 12px}.advice-summary{color:#a8c5b2;font-size:.85rem;margin:0 0 8px}.bulk-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0 14px}.bulk-toolbar button{border:1px solid #4d6b58;border-radius:10px;padding:9px 14px;background:#20392b;color:#e3f6e9;cursor:pointer;font-weight:750}.bulk-toolbar button:disabled{opacity:.5;cursor:not-allowed}.bulk-toolbar small{color:#a7bdad;font-size:.78rem}.region-selector{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 14px}.region-selector label{font-size:.8rem;color:#c1d8c8}.region-selector select{background:#101a16;color:#e1f4e6;border:1px solid #54725f;border-radius:8px;padding:7px 9px}.region-notice{border:1px solid #6c6038;color:#e2d4ad;background:#201d13;padding:10px;border-radius:10px;font-size:.84rem;margin:10px 0}.region-notice[hidden]{display:none}@media(max-width:800px){.advice-list{grid-template-columns:1fr}}
+.advisor-panel{grid-template-columns:1fr;gap:14px}.advisor-panel>div:first-child p{max-width:850px;margin-bottom:0}.advice-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}.advice-list>.advice{align-self:start}.advice{padding:10px 12px}.advice details summary{cursor:pointer}.advice details summary strong{display:inline}.advice details small{margin:9px 0 0 12px}.advice-summary{color:#a8c5b2;font-size:.85rem;margin:0 0 8px}.bulk-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0 14px}.bulk-toolbar button{border:1px solid #4d6b58;border-radius:10px;padding:9px 14px;background:#20392b;color:#e3f6e9;cursor:pointer;font-weight:750}.bulk-toolbar button:disabled{opacity:.5;cursor:not-allowed}.bulk-toolbar small{color:#a7bdad;font-size:.78rem}.region-selector{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 14px}.region-selector label{font-size:.8rem;color:#c1d8c8}.region-selector select{background:#101a16;color:#e1f4e6;border:1px solid #54725f;border-radius:8px;padding:7px 9px}.region-notice{border:1px solid #6c6038;color:#e2d4ad;background:#201d13;padding:10px;border-radius:10px;font-size:.84rem;margin:10px 0}.region-notice[hidden]{display:none}@media(max-width:800px){.advice-list{grid-template-columns:1fr}}
 .chapter-primary{margin:18px 0 8px;padding:4px 0 2px;border-bottom:1px solid var(--line)}
 .chapter-primary .chapter-tab{min-width:130px}
 .chapter-explainer{color:#b7cbbd;font-size:.83rem;margin:2px 0 14px}
@@ -1692,7 +1692,7 @@ window.ARKHAM_PRODUCTS = [
     "name": "The Drowned City Campaign Expansion",
     "category": "Campaign Expansion",
     "cycle": "The Drowned City",
-    "status": "current",
+    "status": "chapter-one",
     "packaging": "Campaign Expansion",
     "year": 2025,
     "units": [
@@ -1709,7 +1709,7 @@ window.ARKHAM_PRODUCTS = [
     "name": "The Drowned City Investigator Expansion",
     "category": "Investigator Expansion",
     "cycle": "The Drowned City",
-    "status": "current",
+    "status": "chapter-one",
     "packaging": "Investigator Expansion",
     "year": 2025,
     "units": [
@@ -2656,8 +2656,8 @@ let collectionChapter='one',setupChapter='one';
 let browseChapter=localStorage.getItem('arkham-stock-browse-chapter')||'all';
 if(!['one','two','all'].includes(browseChapter))browseChapter='all';
 function matchesBrowseChapter(p){return browseChapter==='all'||chapterFor(p)===browseChapter;}
-const CHAPTER_ONE_CYCLES=[...repackCycles,'Edge of the Earth','The Scarlet Keys','The Feast of Hemlock Vale'];
-const CHAPTER_TWO_CYCLES=['The Drowned City','Children of Blood'];
+const CHAPTER_ONE_CYCLES=[...repackCycles,'Edge of the Earth','The Scarlet Keys','The Feast of Hemlock Vale','The Drowned City'];
+const CHAPTER_TWO_CYCLES=['Children of Blood'];
 function mainContentCoverage(title){
   const main=campaignPrimary(title);
   const mine=ownedUnits();

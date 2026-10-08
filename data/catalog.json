@@ -1420,7 +1420,7 @@
     "name": "The Drowned City Campaign Expansion",
     "category": "Campaign Expansion",
     "cycle": "The Drowned City",
-    "status": "current",
+    "status": "chapter-one",
     "packaging": "Campaign Expansion",
     "year": 2025,
     "units": [
@@ -1437,7 +1437,7 @@
     "name": "The Drowned City Investigator Expansion",
     "category": "Investigator Expansion",
     "cycle": "The Drowned City",
-    "status": "current",
+    "status": "chapter-one",
     "packaging": "Investigator Expansion",
     "year": 2025,
     "units": [

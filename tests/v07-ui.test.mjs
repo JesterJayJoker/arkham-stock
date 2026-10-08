@@ -53,7 +53,7 @@ test('Chapter One advisor includes the later Chapter One campaigns and core/stan
 test('Chapter Two advisor and cycle summary are distinct',()=>{
   const {context,el}=mount();
   vm.runInContext("setCollectionChapter('two')",context);
-  assert.match(el('#cycleSummary').innerHTML,/The Drowned City/);
+  assert.doesNotMatch(el('#cycleSummary').innerHTML,/The Drowned City/);
   assert.match(el('#cycleSummary').innerHTML,/Children of Blood/);
   assert.doesNotMatch(el('#cycleSummary').innerHTML,/The Dunwich Legacy/);
   assert.match(el('#advisor').innerHTML,/Investigator decks/);
