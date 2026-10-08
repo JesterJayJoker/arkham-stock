@@ -10,7 +10,7 @@
     "units": [
       "core:chapter1:base"
     ],
-    "notes": "Original 1\u20132 player core. A second copy was historically common for a full playset.",
+    "notes": "Original 1–2 player core. A second copy was historically common for a full playset.",
     "source": null,
     "snapshot": {
       "retailer": "Octagon Board Games",
@@ -247,6 +247,23 @@
     "snapshot": null,
     "retail": true,
     "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Dunwich+Legacy+Investigator+Expansion"
+  },
+  {
+    "id": "return-notz",
+    "name": "Return to the Night of the Zealot",
+    "category": "Return To",
+    "cycle": "Night of the Zealot",
+    "status": "legacy-oop",
+    "packaging": "Return To",
+    "year": 2018,
+    "units": [
+      "notz:return"
+    ],
+    "notes": "Optional Return To expansion for the original core-set campaign. Distinct scenario content, not included in any Core Set.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Return+to+the+Night+of+the+Zealot"
   },
   {
     "id": "return-dunwich",
@@ -1823,7 +1840,7 @@
   },
   {
     "id": "deck-2026-andre",
-    "name": "Andr\u00e9 Patel Investigator Deck",
+    "name": "André Patel Investigator Deck",
     "category": "Investigator Deck",
     "cycle": "Investigator Decks (2026)",
     "status": "current",

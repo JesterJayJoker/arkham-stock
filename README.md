@@ -1,3 +1,5 @@
+> Latest changes: see [v0.8 release notes](V08_RELEASE_NOTES.md).
+
 # Arkham Stock v0.6 — public-release build
 
 Arkham Stock is an independent fan-made Arkham Horror: The Card Game collection and retail-availability tracker inspired by the old Stackham Horror workflow.

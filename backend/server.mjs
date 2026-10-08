@@ -77,7 +77,7 @@ const server=http.createServer(async(req,res)=>{
   try{
     if(!rateLimit(req,res)) return;
     const u=new URL(req.url,'http://localhost');
-    if(u.pathname==='/api/health') return send(res,200,{ok:true,version:'0.6.0',products:PRODUCTS.length,retailers:retailerSummary(),cache:cacheStats(),inFlight:stock.inFlightCount(),rateLimit:limiter.stats(),loginRequired:false,autoStock:autoStock.status()});
+    if(u.pathname==='/api/health') return send(res,200,{ok:true,version:'0.8.0',products:PRODUCTS.length,retailers:retailerSummary(),cache:cacheStats(),inFlight:stock.inFlightCount(),rateLimit:limiter.stats(),loginRequired:false,autoStock:autoStock.status()});
     if(u.pathname==='/api/products') return send(res,200,PRODUCTS);
     if(u.pathname==='/api/retailers') return send(res,200,retailerSummary());
     if(u.pathname==='/api/stock-summary') return send(res,200,{generatedAt:new Date().toISOString(),items:stock.getCachedSummary(PRODUCT_MAP),autoStock:autoStock.status()});

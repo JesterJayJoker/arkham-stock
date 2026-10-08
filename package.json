@@ -1,6 +1,6 @@
 {
   "name": "arkham-stock",
-  "version": "0.5.0",
+  "version": "0.8.0",
   "private": true,
   "type": "module",
   "engines": {

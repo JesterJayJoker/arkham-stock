@@ -46,7 +46,7 @@ test('standalone and investigator modes filter without losing master catalog',()
   assert.match(el('#catalog').innerHTML,/Investigator/);
   assert.doesNotMatch(el('#catalog').innerHTML,/The Essex County Express/);
   vm.runInContext("setView('all')",context);
-  assert.equal(el('#resultsCount').textContent,'114 shown');
+  assert.equal(el('#resultsCount').textContent,'115 matching products');
 });
 
 test('campaign detail starts with modern boxes and collapses legacy products',()=>{
@@ -99,4 +99,41 @@ test('saving quick checklist replaces owned list and preserves unrelated wanted 
   assert.equal(vm.runInContext("Boolean(state.owned['core-revised'])",context),false);
   assert.equal(vm.runInContext("Boolean(state.wanted['core-2026'])",context),true);
   assert.equal(el('#setupDialog').open,false);
+});
+
+test('Return to the Night of the Zealot is cataloged as a Return To box',()=>{
+  const catalog=JSON.parse(fs.readFileSync(new URL('../data/catalog.json',import.meta.url),'utf8'));
+  const p=catalog.find(p=>p.id==='return-notz');
+  assert.ok(p);assert.equal(p.category,'Return To');
+  const {context,el}=mount();
+  vm.runInContext("setView('returns')",context);
+  assert.match(el('#catalog').innerHTML,/Return to the Night of the Zealot/);
+});
+
+test('legacy browsing has Core on its own and collapsed Deluxe and Mythos groups',()=>{
+  const {context,el}=mount();
+  vm.runInContext("setView('rare')",context);
+  const html=el('#catalog').innerHTML;
+  assert.match(html,/Core Sets/);assert.match(html,/Deluxe Expansions/);assert.match(html,/Mythos Packs/);
+  assert.match(html,/data-legacy-group="Mythos Pack"/);
+  assert.doesNotMatch(html,/Return to the Night of the Zealot/);
+});
+
+test('investigator expansions and decks are distinct views',()=>{
+  const {context,el}=mount();
+  vm.runInContext("setView('investigators')",context);
+  assert.match(el('#catalog').innerHTML,/Investigator Expansion/);
+  assert.doesNotMatch(el('#catalog').innerHTML,/Investigator Deck/);
+  vm.runInContext("investigatorType='decks';renderCatalog()",context);
+  assert.match(el('#catalog').innerHTML,/Investigator Deck/);
+  assert.doesNotMatch(el('#catalog').innerHTML,/Investigator Expansion/);
+});
+
+test('large catalog renders only first 24 cards until user requests more',()=>{
+  const {context,el}=mount();
+  vm.runInContext("setView('all')",context);
+  assert.equal((el('#catalog').innerHTML.match(/class="product"/g)||[]).length,24);
+  assert.match(el('#catalog').innerHTML,/Show more products/);
+  vm.runInContext('catalogLimit+=CATALOG_PAGE_SIZE;renderCatalog()',context);
+  assert.equal((el('#catalog').innerHTML.match(/class="product"/g)||[]).length,48);
 });

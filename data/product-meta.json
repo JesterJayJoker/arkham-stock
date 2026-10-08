@@ -67,7 +67,7 @@
     "sku": "AHC103EN",
     "aliases": [
       "Andre Patel Investigator Deck",
-      "André Patel Investigator Deck"
+      "Andr\u00e9 Patel Investigator Deck"
     ]
   },
   "deck-2026-marie": {
@@ -116,6 +116,12 @@
     "upc": "841333125837",
     "aliases": [
       "The Innsmouth Conspiracy Campaign Expansion"
+    ]
+  },
+  "return-notz": {
+    "aliases": [
+      "Return to the Night of the Zealot",
+      "Return to Night of the Zealot"
     ]
   }
 }

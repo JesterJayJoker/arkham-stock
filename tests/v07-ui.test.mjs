@@ -65,7 +65,8 @@ test('Return To has its own view and is excluded from Rare / OOP',()=>{
   assert.match(el('#catalog').innerHTML,/Return to the Dunwich Legacy/i);
   assert.doesNotMatch(el('#catalog').innerHTML,/The Miskatonic Museum/);
   vm.runInContext("setView('rare')",context);
-  assert.match(el('#catalog').innerHTML,/The Miskatonic Museum/);
+  assert.match(el('#catalog').innerHTML,/Mythos Packs/);
+  assert.match(el('#catalog').innerHTML,/Deluxe Expansions/);
   assert.doesNotMatch(el('#catalog').innerHTML,/Return to the Dunwich Legacy/i);
 });
 

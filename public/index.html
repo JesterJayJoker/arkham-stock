@@ -88,6 +88,17 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
 .amazon-offer{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:12px;border:1px solid #5e5030;border-radius:10px;margin-top:10px;color:#dfcda2}
 .amazon-offer a{color:#ffe5a3;text-decoration:underline}
 @media(max-width:640px){.chapter-tab{flex:1}}
+
+/* v0.8 grouped browsing and limited DOM work */
+.legacy-section{border:1px solid var(--line);border-radius:14px;background:#121917;margin:0 0 14px;padding:14px;grid-column:1/-1;min-width:0}
+.legacy-section summary{cursor:pointer;font-weight:750;color:#d9e9dd;padding:6px 4px}
+.legacy-section .section-count{font-weight:500;color:var(--muted);margin-left:8px;font-size:.85rem}
+.legacy-section .catalog-section-grid{margin:14px 0 4px}
+.catalog-section-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.catalog-more{grid-column:1/-1;display:block;margin:16px auto 4px;padding:10px 18px;border-radius:10px;border:1px solid #466451;background:#1b2c22;color:#d3ead9;cursor:pointer}
+.catalog-more:hover{background:#294334}
+@media(max-width:1000px){.catalog-section-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.catalog-section-grid{grid-template-columns:1fr}}
 </style>
 <style>
 .setup-dialog{width:min(800px,calc(100vw - 24px));max-height:90vh;overflow:auto;padding:24px 22px 18px}
@@ -132,7 +143,7 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
         <button class="browse-tab" data-view="investigators" aria-pressed="false">Investigators</button>
         <button class="browse-tab" data-view="standalones" aria-pressed="false">Standalones</button>
         <button class="browse-tab" data-view="returns" aria-pressed="false">Return To</button>
-        <button class="browse-tab" data-view="rare" aria-pressed="false">Rare / OOP</button>
+        <button class="browse-tab" data-view="rare" aria-pressed="false">Legacy releases</button>
         <button class="browse-tab" data-view="collection" aria-pressed="false">My collection</button>
         <button class="browse-tab" data-view="all" aria-pressed="false">All products</button>
       </nav>
@@ -159,6 +170,10 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
       <div id="advisor"></div>
     </section>
 
+    <nav id="investigatorTabs" class="chapter-tabs" aria-label="Investigator product type" hidden>
+      <button class="chapter-tab active" data-investigator-type="expansions" aria-pressed="true">Investigator Expansions</button>
+      <button class="chapter-tab" data-investigator-type="decks" aria-pressed="false">Investigator Decks</button>
+    </nav>
     <section class="toolbar" id="catalogToolbar" aria-label="Catalog filters">
       <input id="searchInput" class="search" type="search" placeholder="Search product, cycle, or category…" />
       <select id="cycleFilter" class="select"><option value="all">All cycles</option></select>
@@ -477,6 +492,23 @@ window.ARKHAM_PRODUCTS = [
     "snapshot": null,
     "retail": true,
     "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=The+Dunwich+Legacy+Investigator+Expansion"
+  },
+  {
+    "id": "return-notz",
+    "name": "Return to the Night of the Zealot",
+    "category": "Return To",
+    "cycle": "Night of the Zealot",
+    "status": "legacy-oop",
+    "packaging": "Return To",
+    "year": 2018,
+    "units": [
+      "notz:return"
+    ],
+    "notes": "Optional Return To expansion for the original core-set campaign. Distinct scenario content, not included in any Core Set.",
+    "source": null,
+    "snapshot": null,
+    "retail": true,
+    "bgoSearch": "https://www.boardgameoracle.com/boardgame/search?q=Return+to+the+Night+of+the+Zealot"
   },
   {
     "id": "return-dunwich",
@@ -2668,7 +2700,7 @@ function filteredProducts(){
     if(avail==='in_stock' && !(stock?.cacheState==='fresh' && stock.inStockCount>0))return false;
     if(avail==='preorder' && !(stock?.cacheState==='fresh' && stock.preorderCount>0))return false;
     if(avail==='unchecked' && stock)return false;
-    if(currentView==='investigators' && !['Investigator Expansion','Investigator Deck'].includes(p.category))return false;
+    if(currentView==='investigators' && p.category!==(investigatorType==='decks'?'Investigator Deck':'Investigator Expansion'))return false;
     if(currentView==='standalones' && p.category!=='Scenario Pack')return false;
     if(currentView==='rare' && !(p.status==='legacy-oop'&&p.category!=='Return To'))return false;
     if(currentView==='returns' && p.category!=='Return To')return false;
@@ -2683,18 +2715,22 @@ function filteredProducts(){
 }
 
 let currentView='campaigns';
+let investigatorType='expansions';
+let catalogLimit=24;
+const CATALOG_PAGE_SIZE=24;
+const openLegacySections=new Set();
 const STOCK_SUMMARIES=new Map();
 const STOCK_LOADING=new Set();
 const CAMPAIGN_CYCLES=['The Dunwich Legacy','The Path to Carcosa','The Forgotten Age','The Circle Undone','The Dream-Eaters','The Innsmouth Conspiracy','Edge of the Earth','The Scarlet Keys','The Feast of Hemlock Vale','The Drowned City','Children of Blood'];
 let selectedCampaign=null;
 const VIEW_INFO={
  campaigns:['CAMPAIGN GUIDE','Choose a campaign','Modern expansion boxes first. Older deluxe boxes and Mythos packs are tucked away inside each campaign.'],
- investigators:['PLAYER CARDS','Investigator expansions & decks','Browse player-card expansions and ready-to-play investigator decks.'],
+ investigators:['PLAYER CARDS','Investigator products','Choose between Investigator Expansions and Investigator Decks.'],
  standalones:['SIDE STORIES','Standalone scenarios','One-off adventures and special scenario packs.'],
  returns:['RETURN TO','Return To expansions','Optional Return To boxes are separate from the main campaign content.'],
- rare:['COLLECTOR SEARCH','Rare & out-of-print products','Discontinued and hard-to-find products, excluding Return To boxes.'],
+ rare:['LEGACY CATALOG','Legacy releases','Original Core, Deluxe Expansions, and Mythos Packs, grouped by product type. Return To boxes are separate.'],
  collection:['YOUR COLLECTION','What do you already own?','Track products locally in your browser. Your ownership never needs an account.'],
- all:['MASTER CATALOG','All 114 catalog entries','Search every retail product, legacy pack, promo and print-and-play entry.']
+ all:['MASTER CATALOG','All catalog entries','Search every retail product, legacy pack, promo and print-and-play entry.']
 };
 function cachedStockHtml(p){
   if(!p.retail) return '<div class="stock-strip unknown"><strong>Not a retail product</strong><small>Print-and-play or reference entry</small></div>';
@@ -2717,10 +2753,15 @@ async function fetchStockSummary(){
     const r=await fetch('/api/stock-summary',{cache:'no-store'});
     if(!r.ok)return;
     const d=await r.json();
-    for(const x of d.items||[]) STOCK_SUMMARIES.set(x.productId,x);
+    let changed=false;
+    for(const x of d.items||[]){
+      const previous=STOCK_SUMMARIES.get(x.productId);
+      if(!previous || previous.checkedAt!==x.checkedAt || previous.cacheState!==x.cacheState || previous.inStockCount!==x.inStockCount || previous.preorderCount!==x.preorderCount || previous.bestPrice!==x.bestPrice)changed=true;
+      STOCK_SUMMARIES.set(x.productId,x);
+    }
     const auto=d.autoStock, el=document.querySelector('#autoStockStatus');
     if(el && auto) el.textContent=`Automatic checks: ${auto.checkedProducts}/${auto.retailProducts} products checked (${auto.freshProducts} recently verified). ${auto.enabled?'Updates continue while the server is awake.':'Automatic checking disabled.'}`;
-    renderBrowse();renderCatalog();
+    if(changed){renderBrowse();renderCatalog();}
   }catch(e){console.warn('Stock summaries unavailable',e);}
 }
 async function checkProductStock(p,{silent=false}={}){
@@ -2793,11 +2834,13 @@ function setView(view){
   document.querySelector('#catalogWrap').hidden=campaign;
   document.querySelector('#catalogToolbar').hidden=campaign;
   document.querySelector('#collectionAdvisor').hidden=!collection;
+  document.querySelector('#investigatorTabs').hidden=currentView!=='investigators';
   document.querySelector('#collectionChapterTabs').hidden=!collection;
   document.querySelector('#collectionCycles').hidden=!collection;
   document.querySelector('#marketNote').hidden=campaign;
   document.querySelector('#catalogToolbar').querySelector('#statusFilter').value='all';
   document.querySelector('#catalogToolbar').querySelector('#cycleFilter').value='all';
+  catalogLimit=CATALOG_PAGE_SIZE;
   renderBrowse();renderCatalog();
 }
 function openProductAction(e){
@@ -2837,6 +2880,17 @@ function productCard(p){
   </article>`;
 }
 
+function legacyGroups(list){
+  return [['Core','Core Sets'],['Deluxe Expansion','Deluxe Expansions'],['Mythos Pack','Mythos Packs'],['Other','Other Legacy Products']].map(([category,title])=>({category,title,items:list.filter(p=>category==='Other'?!['Core','Deluxe Expansion','Mythos Pack'].includes(p.category):p.category===category)})).filter(g=>g.items.length);
+}
+function renderLegacySections(list){
+  return legacyGroups(list).map(g=>{
+    const expanded=g.category==='Core'||openLegacySections.has(g.category);
+    const count=Math.min(catalogLimit,g.items.length);
+    const inner=expanded?`<div class="catalog-section-grid">${g.items.slice(0,count).map(productCard).join('')}</div>${g.items.length>count?`<button class="catalog-more" data-more-legacy="${esc(g.category)}">Show more (${g.items.length-count} remaining)</button>`:''}`:'';
+    return `<details class="legacy-section" data-legacy-group="${esc(g.category)}" ${expanded?'open':''}><summary>${esc(g.title)} <span class="section-count">${g.items.length} products</span></summary><div class="legacy-content">${inner}</div></details>`;
+  }).join('');
+}
 function renderCatalog(){
   if(currentView==='campaigns'){
     document.querySelector('#catalog').innerHTML='';
@@ -2844,8 +2898,13 @@ function renderCatalog(){
     return;
   }
   const list=filteredProducts();
-  document.querySelector('#resultsCount').textContent=`${list.length} shown`;
-  document.querySelector('#catalog').innerHTML=list.length ? list.map(productCard).join('') : `<div class="empty">${currentView==='collection'?'No owned or wanted products yet. Use the other tabs to mark products.':'Nothing matches these filters.'}</div>`;
+  document.querySelector('#resultsCount').textContent=`${list.length} matching products`;
+  if(currentView==='rare'){
+    document.querySelector('#catalog').innerHTML=list.length?renderLegacySections(list):'<div class="empty">No matching legacy products.</div>';
+    return;
+  }
+  const shown=list.slice(0,catalogLimit);
+  document.querySelector('#catalog').innerHTML=list.length?shown.map(productCard).join('')+(list.length>shown.length?`<button class="catalog-more" data-show-more="true">Show more products (${list.length-shown.length} remaining)</button>`:''):`<div class="empty">${currentView==='collection'?'No owned or wanted products yet. Use the other tabs to mark products.':'Nothing matches these filters.'}</div>`;
 }
 
 function showDetail(p){
@@ -2869,8 +2928,38 @@ function rerender(){ renderStats(); renderAdvisor(); renderCycleSummary(); rende
 const cycleSelect=document.querySelector('#cycleFilter');
 [...new Set(PRODUCTS.map(p=>p.cycle))].sort().forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;cycleSelect.appendChild(o)});
 
-['searchInput','cycleFilter','statusFilter','availabilityFilter','missingOnly','wantedOnly'].forEach(id=>document.querySelector('#'+id).addEventListener(id==='searchInput'?'input':'change',renderCatalog));
-document.querySelector('#catalog').addEventListener('click',openProductAction);
+let searchDebounce;
+['searchInput','cycleFilter','statusFilter','availabilityFilter','missingOnly','wantedOnly'].forEach(id=>document.querySelector('#'+id).addEventListener(id==='searchInput'?'input':'change',()=>{
+  catalogLimit=CATALOG_PAGE_SIZE;
+  if(id==='searchInput'){clearTimeout(searchDebounce);searchDebounce=setTimeout(renderCatalog,180);}
+  else renderCatalog();
+}));
+document.querySelector('#investigatorTabs').addEventListener('click',e=>{
+  const btn=e.target.closest('button[data-investigator-type]');if(!btn)return;
+  investigatorType=btn.dataset.investigatorType==='decks'?'decks':'expansions';
+  for(const b of document.querySelectorAll('#investigatorTabs [data-investigator-type]')){
+    const active=b.dataset.investigatorType===investigatorType;
+    b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));
+  }
+  catalogLimit=CATALOG_PAGE_SIZE;renderCatalog();
+});
+document.querySelector('#catalog').addEventListener('toggle',e=>{
+  const group=e.target.closest?.('details[data-legacy-group]');
+  if(!group||e.target!==group)return;
+  const category=group.dataset.legacyGroup;
+  if(group.open){
+    openLegacySections.add(category);
+    const items=legacyGroups(filteredProducts()).find(g=>g.category===category)?.items||[];
+    const count=Math.min(catalogLimit,items.length);
+    const content=group.querySelector('.legacy-content');
+    if(content&&!content.innerHTML)content.innerHTML=`<div class="catalog-section-grid">${items.slice(0,count).map(productCard).join('')}</div>${items.length>count?`<button class="catalog-more" data-more-legacy="${esc(category)}">Show more (${items.length-count} remaining)</button>`:''}`;
+  }else openLegacySections.delete(category);
+},true);
+document.querySelector('#catalog').addEventListener('click',e=>{
+  const more=e.target.closest('button[data-show-more],button[data-more-legacy]');
+  if(more){catalogLimit+=CATALOG_PAGE_SIZE;renderCatalog();return;}
+  openProductAction(e);
+});
 document.querySelector('#campaignDialogContent').addEventListener('click',async e=>{
   const check=e.target.closest('button[data-check-cycle]');
   if(check){
