@@ -25,3 +25,9 @@ services:
         value: "120"
       - key: TRUST_PROXY
         value: "1"
+      - key: AUTO_CHECK_ENABLED
+        value: "1"
+      - key: AUTO_CHECK_INTERVAL_MS
+        value: "180000"
+      - key: AUTO_CHECK_START_DELAY_MS
+        value: "15000"

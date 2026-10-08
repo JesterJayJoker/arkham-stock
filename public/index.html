@@ -79,6 +79,21 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
 @media(max-width:640px){.campaign-grid,.campaign-products,.campaign-dialog .catalog,.legacy-expander .catalog{grid-template-columns:1fr}.browse-intro{display:block}.summary-key{margin-top:10px}.browse-nav{gap:6px}.browse-tab{font-size:.8rem;padding:9px 11px}.welcome-bar{padding:17px}.campaign-dialog{padding:18px}.campaign-overview{min-height:0}.hero-inner{padding-top:38px}.campaign-dialog h2{font-size:1.6rem}}
 
 </style>
+<style>
+.setup-dialog{width:min(800px,calc(100vw - 24px));max-height:90vh;overflow:auto;padding:24px 22px 18px}
+.setup-dialog h2{font-family:Georgia,serif;font-size:1.8rem;margin:10px 0}
+.setup-checklist{display:grid;gap:12px;margin:22px 0;max-height:52vh;overflow:auto;padding-right:4px}
+.setup-group{border:1px solid var(--line);border-radius:13px;padding:12px 14px;background:#111816}
+.setup-group>summary{cursor:pointer;font-weight:800;padding:3px 0}
+.setup-options{display:grid;gap:8px;margin:12px 0}
+.setup-option{display:flex;align-items:flex-start;gap:10px;color:#d7e6dc;font-size:.92rem;cursor:pointer}
+.setup-option input{accent-color:#9bc8ae;margin-top:3px}
+.setup-mini{margin:4px 0 0;border:1px solid #375144;background:#172820;color:#c5e4d3;padding:6px 10px;border-radius:8px;cursor:pointer}
+.setup-legacy{border-top:1px solid var(--line);padding-top:8px;margin-top:8px}
+.setup-legacy summary{cursor:pointer;color:#c4d7cb;font-size:.85rem}
+.setup-footer{position:sticky;bottom:-18px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:16px 0;background:#121817;border-top:1px solid var(--line)}
+.setup-footer span{margin-right:auto;font-size:.85rem;color:#b6c8bc}
+</style>
 </head>
 <body>
   <header class="hero">
@@ -87,8 +102,9 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
       <h1>Arkham Stock</h1>
       <p class="lede">Track every product, understand legacy-vs-repackaged overlap, and find the cheapest sensible path to completion. <strong>No login required.</strong></p>
       <div class="hero-actions">
-        <button id="exportBtn" class="button primary">Export collection</button>
-        <label class="button ghost file-label">Import collection<input id="importInput" type="file" accept="application/json" hidden /></label>
+        <button id="setupBtn" class="button primary">Set up my collection</button>
+        <button id="exportBtn" class="button">Export backup (JSON)</button>
+        <label class="button ghost file-label">Restore backup<input id="importInput" type="file" accept="application/json" hidden /></label>
         <button id="resetBtn" class="button ghost danger">Reset</button>
       </div>
     </div>
@@ -114,7 +130,7 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
       <div><div class="eyebrow" id="browseEyebrow">CAMPAIGN GUIDE</div>
         <h2 id="browseTitle">Choose a campaign</h2>
         <p id="browseDescription">Modern boxes first; older deluxe boxes and Mythos packs are tucked away inside each campaign.</p></div>
-      <div class="summary-key">Stock badges show only previously checked retailer results. Unchecked ≠ sold out.</div>
+      <div class="summary-key"><span id="autoStockStatus">Automatic stock checking runs while the server is active. Loading progress…</span> Unchecked ≠ sold out.</div>
     </section>
     <section id="campaignExplorer" class="campaign-explorer" aria-label="Campaigns">
       <div id="starterSpotlight" class="starter-spotlight"></div>
@@ -183,6 +199,14 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
   <dialog id="detailDialog" class="dialog">
     <button class="dialog-close" id="dialogClose" aria-label="Close">×</button>
     <div id="dialogContent"></div>
+  </dialog>
+  <dialog id="setupDialog" class="dialog setup-dialog" aria-label="Set up your Arkham collection">
+    <button id="setupClose" class="dialog-close" aria-label="Close collection setup">×</button>
+    <div class="eyebrow">QUICK COLLECTION CHECKLIST</div>
+    <h2>What do you own?</h2>
+    <p class="muted">Select physical products you own. Campaign and Investigator boxes are separate. Legacy packs are optional. Saving replaces your owned selections but keeps your wishlist.</p>
+    <div id="setupChecklist" class="setup-checklist"></div>
+    <div class="setup-footer"><span id="setupCount" aria-live="polite"></span><button id="setupCancel" class="button">Cancel</button><button id="setupSave" class="button primary">Save my collection</button></div>
   </dialog>
 
   <footer>
@@ -2471,6 +2495,7 @@ const RETAILER_SOURCES=[
   {id:'asmodee',name:'Asmodee US',domain:'store.asmodee.com',meta:'Publisher/distributor storefront'},
   {id:'nobleknight',name:'Noble Knight',domain:'nobleknight.com',meta:'New + used/OOP inventory'},
   {name:'Target',domain:'target.com',meta:'Useful for current core/decks'},
+  {id:'amazon',name:'Amazon US',kind:'amazon',meta:'Search Amazon listings; stock and price not automatically verified'},
   {id:'boarding',name:'Boarding School Games',domain:'boardingschoolgames.com',meta:'Independent retailer'},
   {id:'guardtower',name:'The Guardtower',domain:'theguardtower.com',meta:'Independent U.S. retailer'},
   {id:'hauntedgamecafe',name:'The Haunted Game Cafe',domain:'hauntedgamecafe.com',meta:'Independent U.S. retailer'},
@@ -2481,6 +2506,7 @@ function marketTerms(p){ return `Arkham Horror LCG \"${marketAlias(p)}\"`; }
 function googleSearchUrl(q){ return 'https://www.google.com/search?q='+encodeURIComponent(q); }
 function marketSearchUrl(p,source){
   if(source.kind==='bgo') return p.bgoSearch;
+  if(source.kind==='amazon') return 'https://www.amazon.com/s?k='+encodeURIComponent('Arkham Horror The Card Game '+marketAlias(p));
   const stockTerms=' (\"in stock\" OR \"add to cart\" OR available)';
   return googleSearchUrl(marketTerms(p)+(source.domain?' site:'+source.domain:'')+stockTerms);
 }
@@ -2638,6 +2664,8 @@ async function fetchStockSummary(){
     if(!r.ok)return;
     const d=await r.json();
     for(const x of d.items||[]) STOCK_SUMMARIES.set(x.productId,x);
+    const auto=d.autoStock, el=document.querySelector('#autoStockStatus');
+    if(el && auto) el.textContent=`Automatic checks: ${auto.checkedProducts}/${auto.retailProducts} products checked (${auto.freshProducts} recently verified). ${auto.enabled?'Updates continue while the server is awake.':'Automatic checking disabled.'}`;
     renderBrowse();renderCatalog();
   }catch(e){console.warn('Stock summaries unavailable',e);}
 }
@@ -2749,7 +2777,7 @@ function productCard(p){
     ${price}
     ${!own && overlap>0 ? `<div class="no-price">⚠ ${overlap}/${p.units.length} content units already covered by products you own.</div>`:''}
     ${covered && !own ? `<div class="no-price">✓ All modeled content is already covered by other packaging.</div>`:''}
-    ${p.retail ? `<button class="live-btn" data-action="live"><span class="live-dot"></span>Check live stock</button><a class="market-link" target="_blank" rel="noopener" href="${marketSearchUrl(p,RETAILER_SOURCES[0])}">Search 13 market sources ↗</a>`:''}
+    ${p.retail ? `<button class="live-btn" data-action="live"><span class="live-dot"></span>Check live stock</button><a class="market-link" target="_blank" rel="noopener" href="${marketSearchUrl(p,RETAILER_SOURCES[0])}">Search 14 market sources ↗</a>`:''}
     <div class="product-actions"><button class="own ${own?'active':''}" data-action="own">${own?'Owned ✓':'Mark owned'}</button><button class="want ${want?'active':''}" data-action="want">${want?'Wanted ★':'Want'}</button><button class="detail" data-action="detail" aria-label="Details">•••</button></div>
   </article>`;
 }
@@ -2813,6 +2841,60 @@ document.querySelector('#browseNav').addEventListener('click',e=>{
 document.querySelector('#campaignSearch').addEventListener('input',renderBrowse);
 document.querySelector('#dialogClose').addEventListener('click',()=>document.querySelector('#detailDialog').close());
 
+// Guided physical-product checklist; no ArkhamDB/JSON import required.
+let setupSelection=new Set();
+function setupOption(p){
+  const checked=setupSelection.has(p.id)?' checked':'';
+  return `<label class="setup-option"><input type="checkbox" data-setup-product="${esc(p.id)}"${checked}/><span>${esc(p.name)}</span></label>`;
+}
+function renderSetupChecklist(){
+  const root=document.querySelector('#setupChecklist');
+  const campaigns=CAMPAIGN_CYCLES.map(c=>{
+    const products=campaignProducts(c);
+    const modern=products.filter(p=>['Campaign Expansion','Investigator Expansion'].includes(p.category));
+    const legacy=products.filter(p=>['Deluxe Expansion','Mythos Pack'].includes(p.category));
+    const returns=products.filter(p=>p.category==='Return To');
+    return `<details class="setup-group"><summary>${esc(c)}</summary><div class="setup-options">${modern.map(setupOption).join('')}${modern.length>1?`<button type="button" class="setup-mini" data-setup-pair="${esc(c)}">Select both modern boxes</button>`:''}</div>${legacy.length?`<details class="setup-legacy"><summary>Original deluxe + Mythos packs (${legacy.length})</summary><div class="setup-options">${legacy.map(setupOption).join('')}</div></details>`:''}${returns.length?`<details class="setup-legacy"><summary>Return To (${returns.length})</summary><div class="setup-options">${returns.map(setupOption).join('')}</div></details>`:''}</details>`;
+  }).join('');
+  const covered=new Set(CAMPAIGN_CYCLES);
+  const extras=PRODUCTS.filter(p=>!covered.has(p.cycle));
+  const byGroup=new Map();
+  for(const p of extras){
+    const group=p.cycle==='Core'?'Core sets':p.category.includes('Standalone')?'Standalone scenarios':p.category.includes('Investigator')?'Investigator decks':p.category==='Return To'?'Return To boxes':'Other products';
+    if(!byGroup.has(group))byGroup.set(group,[]);
+    byGroup.get(group).push(p);
+  }
+  const groups=[...byGroup].map(([label,items])=>`<details class="setup-group"><summary>${esc(label)} (${items.length})</summary><div class="setup-options">${items.map(setupOption).join('')}</div></details>`).join('');
+  root.innerHTML=campaigns+groups;
+  document.querySelector('#setupCount').textContent=setupSelection.size+' products selected';
+}
+function openSetup(){
+  setupSelection=new Set(Object.keys(state.owned).filter(k=>state.owned[k]));
+  renderSetupChecklist();document.querySelector('#setupDialog').showModal();
+}
+document.querySelector('#setupBtn').addEventListener('click',openSetup);
+document.querySelector('#setupClose').addEventListener('click',()=>document.querySelector('#setupDialog').close());
+document.querySelector('#setupCancel').addEventListener('click',()=>document.querySelector('#setupDialog').close());
+document.querySelector('#setupChecklist').addEventListener('change',e=>{
+  const id=e.target.dataset?.setupProduct;if(!id)return;
+  if(e.target.checked)setupSelection.add(id);else setupSelection.delete(id);
+  document.querySelector('#setupCount').textContent=setupSelection.size+' products selected';
+});
+document.querySelector('#setupChecklist').addEventListener('click',e=>{
+  const btn=e.target.closest('button[data-setup-pair]');if(!btn)return;
+  const pair=campaignPrimary(btn.dataset.setupPair);
+  for(const p of pair)setupSelection.add(p.id);
+  renderSetupChecklist();
+  // Restore the campaign panel after re-rendering the checkboxes.
+  const groups=document.querySelectorAll('#setupChecklist details.setup-group');
+  for(const group of groups)if(group.querySelector('summary')?.textContent===btn.dataset.setupPair)group.open=true;
+});
+document.querySelector('#setupSave').addEventListener('click',()=>{
+  state.owned=Object.fromEntries([...setupSelection].map(id=>[id,true]));
+  for(const id of setupSelection)delete state.wanted[id];
+  saveState();rerender();document.querySelector('#setupDialog').close();
+});
+
 document.querySelector('#exportBtn').addEventListener('click',()=>{
   const payload={version:1,exportedAt:new Date().toISOString(),owned:Object.keys(state.owned).filter(k=>state.owned[k]),wanted:Object.keys(state.wanted).filter(k=>state.wanted[k])};
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}); const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='arkham-stock-collection.json';a.click();URL.revokeObjectURL(a.href);
@@ -2827,11 +2909,9 @@ document.querySelector('#resetBtn').addEventListener('click',()=>{if(confirm('Cl
 
 rerender();
 setView('campaigns');
-fetchStockSummary().then(()=>{
-  // Only two prioritized products are checked automatically per browser session.
-  // The server shares and caches these results for everyone; other products are on-demand.
-  setTimeout(warmPopularStock,2500);
-});
+fetchStockSummary();
+// Poll the shared cache only; background retailer sweeps are server-side.
+setInterval(()=>{if(document.visibilityState==='visible')fetchStockSummary();},45000);
 
 </script>
 </body>

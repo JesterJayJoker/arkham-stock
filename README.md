@@ -1,4 +1,4 @@
-# Arkham Stock v0.5 — public-release build
+# Arkham Stock v0.6 — public-release build
 
 Arkham Stock is an independent fan-made Arkham Horror: The Card Game collection and retail-availability tracker inspired by the old Stackham Horror workflow.
 
@@ -29,7 +29,7 @@ docker compose up --build
 
 ## Public traffic protections
 
-v0.4 and v0.5 include:
+v0.4–v0.6 include:
 
 - persistent shared offer cache
 - stale-while-revalidate behavior
@@ -79,7 +79,7 @@ Send the key as `Authorization: Bearer <key>` or `X-Admin-Key: <key>`.
 npm test
 ```
 
-The current release passes **23/23 automated tests**, covering product matching, Shopify stock parsing, persistent cache behavior, rate limiting, request coalescing, fresh-cache reuse, stale-while-revalidate behavior, and bounded retailer timeouts.
+The current release passes **29/29 automated tests**, covering product matching, Shopify stock parsing, persistent cache behavior, rate limiting, request coalescing, fresh-cache reuse, stale-while-revalidate behavior, and bounded retailer timeouts.
 
 ## Collection privacy
 
@@ -102,3 +102,11 @@ Visitors can switch between Campaigns, Investigators, Standalones, Rare/OOP, My 
 Opening the site loads the shared stock-summary cache without triggering a sweep of every retailer for all 114 items. At most two prioritized products (2026 Core and Children of Blood) may be automatically checked once per browser session when no usable cache is available. Campaign details provide a one-click check for that campaign's modern boxes.
 
 **Important:** Render free-tier sleep and ephemeral storage mean automatic checks cannot run continuously while the instance is sleeping. This release does not claim to provide comprehensive, real-time inventory for all products.
+
+## v0.6: Automatic checking, Amazon, and quick collection setup
+
+The server checks one retail product per three minutes (configurable) while active. Shared summaries refresh in the browser without generating a full retailer sweep per visitor. Render's free tier sleeps, so these checks are **not** guaranteed to run continuously. `GET /api/health` and `GET /api/stock-summary` include `autoStock` progress. See `V06_RELEASE_NOTES.md`.
+
+Amazon US appears as a manual product search link. Amazon is **not** a verified automatic stock source without authorized access to product and offer data. The site's live stock counts and lowest prices still come from supported direct retailer checks only.
+
+**Set up my collection** opens a guided ownership checklist. Legacy packs and Return To products are separate from modern campaign/investigator boxes; marking one never silently marks another. JSON export/restore remains for backups.

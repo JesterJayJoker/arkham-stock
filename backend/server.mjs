@@ -7,6 +7,7 @@ import { PRODUCTS, PRODUCT_MAP } from './catalog.mjs';
 import { RETAILERS, fetchOffer, retailerSummary } from './retailers.mjs';
 import { initCache, clearCache, cacheStats } from './cache.mjs';
 import { createStockService } from './stock.mjs';
+import { createAutoStockScheduler } from './auto-stock.mjs';
 import { createRateLimiter } from './rate-limit.mjs';
 
 const __dirname=path.dirname(fileURLToPath(import.meta.url));
@@ -24,6 +25,7 @@ const TRUST_PROXY=process.env.TRUST_PROXY==='1';
 
 initCache(CACHE_FILE);
 const stock=createStockService({retailers:RETAILERS,fetchOffer,freshMs:CACHE_MS,staleMs:STALE_MS,maxParallel:MAX_PARALLEL,retailerBudgetMs:RETAILER_BUDGET_MS});
+const autoStock=createAutoStockScheduler({products:PRODUCTS,stock,productMap:PRODUCT_MAP,freshMs:CACHE_MS,intervalMs:Math.max(60000,Number(process.env.AUTO_CHECK_INTERVAL_MS||180000)),startDelayMs:Math.max(5000,Number(process.env.AUTO_CHECK_START_DELAY_MS||15000))});
 const limiter=createRateLimiter({windowMs:RATE_LIMIT_WINDOW_MS,max:RATE_LIMIT_MAX});
 
 const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.ico':'image/x-icon'};
@@ -75,10 +77,10 @@ const server=http.createServer(async(req,res)=>{
   try{
     if(!rateLimit(req,res)) return;
     const u=new URL(req.url,'http://localhost');
-    if(u.pathname==='/api/health') return send(res,200,{ok:true,version:'0.5.0',products:PRODUCTS.length,retailers:retailerSummary(),cache:cacheStats(),inFlight:stock.inFlightCount(),rateLimit:limiter.stats(),loginRequired:false});
+    if(u.pathname==='/api/health') return send(res,200,{ok:true,version:'0.6.0',products:PRODUCTS.length,retailers:retailerSummary(),cache:cacheStats(),inFlight:stock.inFlightCount(),rateLimit:limiter.stats(),loginRequired:false,autoStock:autoStock.status()});
     if(u.pathname==='/api/products') return send(res,200,PRODUCTS);
     if(u.pathname==='/api/retailers') return send(res,200,retailerSummary());
-    if(u.pathname==='/api/stock-summary') return send(res,200,{generatedAt:new Date().toISOString(),items:stock.getCachedSummary(PRODUCT_MAP)});
+    if(u.pathname==='/api/stock-summary') return send(res,200,{generatedAt:new Date().toISOString(),items:stock.getCachedSummary(PRODUCT_MAP),autoStock:autoStock.status()});
 
     const offerMatch=u.pathname.match(/^\/api\/offers\/([^/]+)$/);
     if(offerMatch){
@@ -113,5 +115,5 @@ const server=http.createServer(async(req,res)=>{
   }catch(e){send(res,500,{error:'Internal server error',detail:process.env.NODE_ENV==='development'?e.message:undefined});}
 });
 
-if(process.env.NODE_ENV!=='test') server.listen(PORT,()=>console.log(`Arkham Stock v0.5 running at http://localhost:${PORT}`));
+if(process.env.NODE_ENV!=='test') server.listen(PORT,()=>{console.log(`Arkham Stock v0.6 running at http://localhost:${PORT}`);if(process.env.AUTO_CHECK_ENABLED!=='0')autoStock.start();});
 export {server};
