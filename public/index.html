@@ -105,6 +105,7 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
 .catalog-more:hover{background:#294334}
 @media(max-width:1000px){.catalog-section-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.catalog-section-grid{grid-template-columns:1fr}}
+.advisor-panel{grid-template-columns:1fr;gap:14px}.advisor-panel>div:first-child p{max-width:850px;margin-bottom:0}.advice-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.advice{padding:10px 12px}.advice details summary{cursor:pointer}.advice details summary strong{display:inline}.advice details small{margin:9px 0 0 12px}.advice-summary{color:#a8c5b2;font-size:.85rem;margin:0 0 8px}.bulk-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0 14px}.bulk-toolbar button{border:1px solid #4d6b58;border-radius:10px;padding:9px 14px;background:#20392b;color:#e3f6e9;cursor:pointer;font-weight:750}.bulk-toolbar button:disabled{opacity:.5;cursor:not-allowed}.bulk-toolbar small{color:#a7bdad;font-size:.78rem}.region-selector{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 14px}.region-selector label{font-size:.8rem;color:#c1d8c8}.region-selector select{background:#101a16;color:#e1f4e6;border:1px solid #54725f;border-radius:8px;padding:7px 9px}.region-notice{border:1px solid #6c6038;color:#e2d4ad;background:#201d13;padding:10px;border-radius:10px;font-size:.84rem;margin:10px 0}.region-notice[hidden]{display:none}@media(max-width:800px){.advice-list{grid-template-columns:1fr}}
 </style>
 <style>
 .setup-dialog{width:min(800px,calc(100vw - 24px));max-height:90vh;overflow:auto;padding:24px 22px 18px}
@@ -126,7 +127,7 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
   <header class="hero">
     <div class="hero-inner">
       <div class="eyebrow">ARKHAM HORROR LCG COLLECTION + STOCK TRACKER</div>
-      <h1>Arkham Stock</h1>
+      <h1>Arkham Stock</h1><div class="region-selector"><label for="marketRegion">Shopping region</label><select id="marketRegion"><option value="US">US · English</option><option value="UK">UK · English (search preview)</option></select><small style="color:#b1c8b7">More countries and translated editions planned</small></div>
       <p class="lede">Track every product, understand legacy-vs-repackaged overlap, and find the cheapest sensible path to completion. <strong>No login required.</strong></p>
       <div class="hero-actions">
         <button id="setupBtn" class="button primary">Set up my collection</button>
@@ -138,7 +139,7 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
   </header>
 
   <main>
-    <section class="stats" id="stats"></section>
+    <section class="stats" id="stats"></section><div class="region-notice" id="regionNotice" hidden>UK preview: marketplace search links only. Verified live stock and USD prices are US-only until UK retailer integrations and English-edition matching are ready.</div>
 
     <section class="welcome-bar" aria-label="Browse Arkham Stock">
       <div class="eyebrow">EXPLORE ARKHAM</div>
@@ -215,7 +216,7 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
 
     <div class="market-note" id="marketNote"><strong>Public stock engine:</strong> live checks use direct retailer product pages and a shared server cache. One visitor can populate a result for everyone else, reducing repeated retailer traffic. Board Game Oracle remains only a fallback search source, not the authority for stock.</div>
 
-    <section class="catalog-wrap" id="catalogWrap">
+    <section class="catalog-wrap" id="catalogWrap"><div class="bulk-toolbar" id="catalogBulk" hidden><button type="button" id="checkAllCurrent">Check all in this category</button><button type="button" id="stopCurrentChecks" hidden>Stop</button><small id="catalogBulkStatus">Checks products one at a time, reusing recent results. Leave this tab open.</small></div>
       <div class="section-head">
         <div>
           <div class="eyebrow">MASTER CATALOG</div>
@@ -2506,6 +2507,11 @@ function loadState(){
 }
 function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
 const money = v => new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(v);
+let marketRegion=localStorage.getItem('arkham-stock-market-region')==='UK'?'UK':'US';
+function regionSearchLinks(p){
+  const q=marketAlias(p);
+  return `<div class="region-notice">UK availability is not automatically verified. <a href="${esc(googleSearchUrl('site:boardgameprices.co.uk '+q))}" target="_blank" rel="noopener noreferrer" style="color:#d7f5d9">Search BoardGamePrices.co.uk ↗</a> · <a href="https://www.amazon.co.uk/s?k=${encodeURIComponent('Arkham Horror The Card Game '+q)}" target="_blank" rel="noopener noreferrer" style="color:#d7f5d9">Search Amazon UK ↗</a>. Confirm English edition and shipping before purchase.</div>`;
+}
 let API_AVAILABLE=null;
 async function apiAvailable(){
   if(API_AVAILABLE!==null) return API_AVAILABLE;
@@ -2514,6 +2520,7 @@ async function apiAvailable(){
 }
 function stockLabel(s){return ({in_stock:'In stock',out_of_stock:'Out of stock',preorder:'Pre-order',unknown:'Unknown'})[s]||s;}
 async function loadLiveOffers(p,target){
+  if(marketRegion==='UK'){target.innerHTML=regionSearchLinks(p);return;}
   target.innerHTML='<div class="live-loading">Checking retailer product pages…</div>';
   if(!await apiAvailable()){target.innerHTML='<div class="live-note">Live backend is not running. Start Arkham Stock with <code>npm start</code> and open the localhost address. The multi-source search links still work without it.</div>';return;}
   try{
@@ -2564,6 +2571,7 @@ function marketSearchUrl(p,source){
   return googleSearchUrl(marketTerms(p)+(source.domain?' site:'+source.domain:'')+stockTerms);
 }
 function sourceLinksHtml(p){
+  if(marketRegion==='UK')return regionSearchLinks(p);
   if(!p.retail) return '';
   return RETAILER_SOURCES.map(s=>`<a class="${s.primary?'primary-source':''}" target="_blank" rel="noopener" href="${marketSearchUrl(p,s)}">${esc(s.name)} ↗<span class="source-meta">${esc(s.meta)}</span></a>`).join('');
 }
@@ -2576,7 +2584,9 @@ function safeRetailerUrl(value,retailerId){
     const source=RETAILER_SOURCES.find(s=>s.id===retailerId);
     if(url.protocol!=='https:' || !source?.domain)return null;
     const host=url.hostname.toLowerCase(),domain=source.domain.toLowerCase();
-    return host===domain || host.endsWith('.'+domain) ? url.href : null;
+    if(!(host===domain || host.endsWith('.'+domain)))return null;
+    if(retailerId==='cardhaus' && (!/^\/[^/]+\/?$/.test(url.pathname)||/^\/(?:board-games|search|shop|categories?|brands?|collections?|cart|account|pages?|blog)\/?$/i.test(url.pathname)))return null;
+    return url.href;
   }catch{return null;}
 }
 
@@ -2638,18 +2648,16 @@ function renderAdvisor(){
   const chapter=collectionChapter;
   const cycles=chapter==='one'?CHAPTER_ONE_CYCLES:CHAPTER_TWO_CYCLES;
   const rows=[];
+  let complete=0,missingCycles=0;
   for(const title of cycles){
     const main=campaignPrimary(title);
     if(!main.length)continue;
     const missing=main.filter(p=>!productCovered(p));
-    if(!missing.length){
-      rows.push(`<div class="advice good"><strong>${esc(title)}: main content complete</strong><small>All main campaign/investigator content covered. Optional Return To content is tracked separately.</small></div>`);
-      continue;
-    }
+    if(!missing.length){complete++;continue;}
+    missingCycles++;
     const details=missing.map(p=>`${esc(p.category)}: ${pct(productOverlap(p),p.units.length)}% covered → ${esc(p.name)}`).join('<br>');
-    rows.push(`<div class="advice warn"><strong>${esc(title)}</strong><small>${details}</small></div>`);
+    rows.push(`<div class="advice warn"><details><summary><strong>${esc(title)}</strong> · ${missing.length} missing</summary><small>${details}</small></details></div>`);
   }
-  // The old advisor omitted Edge of the Earth, Scarlet Keys, Hemlock Vale, and non-campaign products.
   const other=PRODUCTS.filter(p=>chapterFor(p)===chapter && !cycles.includes(p.cycle) && p.retail && p.category!=='Return To');
   const groups=new Map();
   for(const p of other){
@@ -2660,14 +2668,14 @@ function renderAdvisor(){
   for(const [label,items] of groups){
     const missing=items.filter(p=>!productCovered(p));
     if(!missing.length)continue;
-    rows.push(`<div class="advice"><strong>${esc(label)}: ${missing.length} entries not covered</strong><small>${missing.slice(0,5).map(p=>esc(p.name)).join(' · ')}${missing.length>5?' · …':''}</small></div>`);
+    rows.push(`<div class="advice"><details><summary><strong>${esc(label)}</strong> · ${missing.length} missing</summary><small>${missing.map(p=>esc(p.name)).join('<br>')}</small></details></div>`);
   }
   const returns=PRODUCTS.filter(p=>chapterFor(p)===chapter&&p.category==='Return To');
   if(returns.length){
     const missing=returns.filter(p=>!state.owned[p.id]);
-    rows.push(`<div class="advice"><strong>Optional Return To boxes: ${returns.length-missing.length}/${returns.length} physically owned</strong><small>These are bonus products and do not reduce main campaign completion.</small></div>`);
+    rows.push(`<div class="advice"><details><summary><strong>Optional Return To</strong> · ${returns.length-missing.length}/${returns.length} owned</summary><small>${missing.length?missing.map(p=>esc(p.name)).join('<br>'):'All owned'} · Does not affect main campaign completion.</small></details></div>`);
   }
-  document.querySelector('#advisor').innerHTML=`<div class="advice-list">${rows.join('')||'<div class="advice good">No missing content in this chapter.</div>'}</div>`;
+  document.querySelector('#advisor').innerHTML=`<div class="advice-summary">${complete} main campaigns complete · ${missingCycles} campaigns with missing content. Expand the sections you want to review.</div><div class="advice-list">${rows.join('')||'<div class="advice good">No missing content in this chapter.</div>'}</div>`;
 }
 function renderCycleSummary(){
   const cycles=collectionChapter==='one'?CHAPTER_ONE_CYCLES:CHAPTER_TWO_CYCLES;
@@ -2705,9 +2713,9 @@ function filteredProducts(){
   const avail=document.querySelector('#availabilityFilter').value;
   return PRODUCTS.filter(p=>{
     const stock=STOCK_SUMMARIES.get(p.id);
-    if(avail==='in_stock' && !(stock?.cacheState==='fresh' && stock.inStockCount>0))return false;
-    if(avail==='preorder' && !(stock?.cacheState==='fresh' && stock.preorderCount>0))return false;
-    if(avail==='unchecked' && stock)return false;
+    if(marketRegion==='US' && avail==='in_stock' && !(stock?.cacheState==='fresh' && stock.inStockCount>0))return false;
+    if(marketRegion==='US' && avail==='preorder' && !(stock?.cacheState==='fresh' && stock.preorderCount>0))return false;
+    if(marketRegion==='US' && avail==='unchecked' && stock)return false;
     if(currentView==='investigators' && p.category!==(investigatorType==='decks'?'Investigator Deck':'Investigator Expansion'))return false;
     if(currentView==='standalones' && p.category!=='Scenario Pack')return false;
     if(currentView==='rare' && !(p.status==='legacy-oop'&&p.category!=='Return To'))return false;
@@ -2741,6 +2749,7 @@ const VIEW_INFO={
  all:['MASTER CATALOG','All catalog entries','Search every retail product, legacy pack, promo and print-and-play entry.']
 };
 function cachedStockHtml(p){
+  if(marketRegion==='UK')return '<div class="stock-strip unknown"><strong>UK stock: not verified</strong><small>Use UK search links; US results are hidden.</small></div>';
   if(!p.retail) return '<div class="stock-strip unknown"><strong>Not a retail product</strong><small>Print-and-play or reference entry</small></div>';
   if(STOCK_LOADING.has(p.id)) return '<div class="stock-strip loading"><strong>Checking retailer pages…</strong><small>Shared results will appear when verification completes.</small></div>';
   const x=STOCK_SUMMARIES.get(p.id);
@@ -2768,11 +2777,12 @@ async function fetchStockSummary(){
       STOCK_SUMMARIES.set(x.productId,x);
     }
     const auto=d.autoStock, el=document.querySelector('#autoStockStatus');
-    if(el && auto) el.textContent=`Automatic checks: ${auto.checkedProducts}/${auto.retailProducts} products checked (${auto.freshProducts} recently verified). ${auto.enabled?'Updates continue while the server is awake.':'Automatic checking disabled.'}`;
+    if(el && auto && marketRegion==='US') el.textContent=`Automatic checks: ${auto.checkedProducts}/${auto.retailProducts} products checked (${auto.freshProducts} recently verified). ${auto.enabled?'Updates continue while the server is awake.':'Automatic checking disabled.'}`;
     if(changed){renderBrowse();renderCatalog();}
   }catch(e){console.warn('Stock summaries unavailable',e);}
 }
 async function checkProductStock(p,{silent=false,render=true}={}){
+  if(marketRegion==='UK')return;
   if(!p?.retail||STOCK_LOADING.has(p.id))return;
   STOCK_LOADING.add(p.id);if(render){renderBrowse();renderCatalog();}
   try{
@@ -2792,7 +2802,9 @@ async function checkProductStock(p,{silent=false,render=true}={}){
 function campaignProducts(cycle){return PRODUCTS.filter(p=>p.cycle===cycle);}
 function campaignPrimary(cycle){return campaignProducts(cycle).filter(p=>['Campaign Expansion','Investigator Expansion'].includes(p.category));}
 function campaignStockLabel(p){
+  if(marketRegion==='UK')return 'UK search only';
   const x=STOCK_SUMMARIES.get(p.id);
+  if(marketRegion==='UK')return 'UK search only';
   if(STOCK_LOADING.has(p.id))return 'Checking…';
   if(!x)return 'Not yet checked';
   if(x.cacheState!=='fresh')return 'Previous check';
@@ -2824,10 +2836,10 @@ function showCampaign(cycle){
   const original=[...legacy,...returns];
   const extra=campaignProducts(cycle).filter(p=>!primary.includes(p)&&!original.includes(p));
   document.querySelector('#campaignDialogContent').innerHTML=`<div class="eyebrow">CAMPAIGN GUIDE</div><h2>${esc(cycle)}</h2><p class="campaign-detail-note">Choose modern expansions for the simplest purchase. Legacy packaging is shown separately so you can compare it without accidentally buying duplicate content.</p>
-    <button class="button primary" data-check-cycle="${esc(cycle)}">Check this campaign's modern boxes</button>
+    ${marketRegion==='US'?`<button class="button primary" data-check-cycle="${esc(cycle)}">Check this campaign's modern boxes</button>`:regionSearchLinks(primary[0]||campaignProducts(cycle)[0])}
     <div class="campaign-products">${primary.map(productCard).join('')}</div>
     ${extra.length?`<h3>Additional products</h3><div class="campaign-products">${extra.map(productCard).join('')}</div>`:''}
-    ${original.length?`<details class="legacy-expander"><summary>Original releases &amp; Return To (${original.length})</summary><p class="campaign-detail-note">Original deluxe and Mythos packs overlap with modern expansions. Return To is optional, distinct content not included in either modern box.</p><button type="button" class="button primary" data-check-legacy="${esc(cycle)}">Check original releases &amp; Return To (${original.length})</button>${legacy.length?`<h3>Deluxe &amp; Mythos packs (${legacy.length})</h3><div class="catalog">${legacy.map(productCard).join('')}</div>`:''}${returns.length?`<h3>Optional Return To (${returns.length})</h3><div class="catalog">${returns.map(productCard).join('')}</div>`:''}</details>`:''}`;
+    ${original.length?`<details class="legacy-expander"><summary>Original releases &amp; Return To (${original.length})</summary><p class="campaign-detail-note">Original deluxe and Mythos packs overlap with modern expansions. Return To is optional, distinct content not included in either modern box.</p>${marketRegion==='US'?`<button type="button" class="button primary" data-check-legacy="${esc(cycle)}">Check original releases &amp; Return To (${original.length})</button>`:''}${legacy.length?`<h3>Deluxe &amp; Mythos packs (${legacy.length})</h3><div class="catalog">${legacy.map(productCard).join('')}</div>`:''}${returns.length?`<h3>Optional Return To (${returns.length})</h3><div class="catalog">${returns.map(productCard).join('')}</div>`:''}</details>`:''}`;
   if(!document.querySelector('#campaignDialog').open) document.querySelector('#campaignDialog').showModal();
 }
 function setView(view){
@@ -2847,12 +2859,28 @@ function setView(view){
   document.querySelector('#investigatorTabs').hidden=currentView!=='investigators';
   document.querySelector('#collectionChapterTabs').hidden=!collection;
   document.querySelector('#collectionCycles').hidden=!collection;
-  document.querySelector('#marketNote').hidden=campaign;
+  document.querySelector('#marketNote').hidden=campaign || marketRegion==='UK';
+  document.querySelector('#availabilityFilter').disabled=marketRegion==='UK';
+  if(marketRegion==='UK')document.querySelector('#availabilityFilter').value='all';
+  document.querySelector('#catalogBulk').hidden=campaign||collection;
+  document.querySelector('#checkAllCampaigns').disabled=marketRegion==='UK';
+  document.querySelector('#checkAllCurrent').disabled=marketRegion==='UK';
   document.querySelector('#catalogToolbar').querySelector('#statusFilter').value='all';
   document.querySelector('#catalogToolbar').querySelector('#cycleFilter').value='all';
   catalogLimit=CATALOG_PAGE_SIZE;
   renderBrowse();renderCatalog();
+  if(!campaign && !collection)document.querySelector('#checkAllCurrent').textContent='Check all '+(currentView==='investigators'?(investigatorType==='decks'?'investigator decks':'investigator expansions'):currentView==='returns'?'Return To products':currentView==='rare'?'legacy releases':currentView==='standalones'?'standalones':'products');
 }
+document.querySelector('#marketRegion').value=marketRegion;
+document.querySelector('#marketRegion').addEventListener('change',e=>{
+  marketRegion=e.target.value==='UK'?'UK':'US';
+  if(marketRegion==='UK'){categoryBatchStop=true;campaignBatchStop=true;}
+  localStorage.setItem('arkham-stock-market-region',marketRegion);
+  document.querySelector('#regionNotice').hidden=marketRegion!=='UK';
+  document.querySelector('#autoStockStatus').textContent=marketRegion==='UK'?'UK stock verification not yet supported. Use UK marketplace searches.':'Automatic US stock checking runs while the server is active.';
+  setView(currentView);
+});
+if(marketRegion==='UK')document.querySelector('#regionNotice').hidden=false;
 function openProductAction(e){
   const btn=e.target.closest('button[data-action]');if(!btn)return;
   const card=btn.closest('.product');const p=PRODUCTS.find(x=>x.id===card?.dataset.id);if(!p)return;
@@ -2878,14 +2906,14 @@ async function warmPopularStock(){
 function productCard(p){
   const own=!!state.owned[p.id], want=!!state.wanted[p.id];
   const overlap=productOverlap(p), covered=productCovered(p);
-  const price=cachedStockHtml(p)+(p.snapshot?`<div class="market-snapshot-muted">Historical snapshot: ${money(p.snapshot.price)} · not live</div>`:'');
+  const price=cachedStockHtml(p)+(marketRegion==='US'&&p.snapshot?`<div class="market-snapshot-muted">Historical snapshot: ${money(p.snapshot.price)} · not live</div>`:'');
   return `<article class="product" data-id="${p.id}">
     <div class="product-top"><div class="badges"><span class="badge ${p.status}">${esc(statusLabel[p.status]||p.status)}</span><span class="badge">${esc(p.category)}</span></div><span class="cycle">${p.year||''}</span></div>
     <h3>${esc(p.name)}</h3><div class="cycle">${esc(p.cycle)}</div>
     ${price}
     ${!own && overlap>0 ? `<div class="no-price">⚠ ${overlap}/${p.units.length} content units already covered by products you own.</div>`:''}
     ${covered && !own ? `<div class="no-price">✓ All modeled content is already covered by other packaging.</div>`:''}
-    ${p.retail ? `<button class="live-btn" data-action="live"><span class="live-dot"></span>Check live stock</button><a class="market-link" target="_blank" rel="noopener" href="${marketSearchUrl(p,RETAILER_SOURCES[0])}">Search 14 market sources ↗</a>`:''}
+    ${p.retail ? (marketRegion==='UK'?regionSearchLinks(p):`<button class="live-btn" data-action="live"><span class="live-dot"></span>Check live stock</button><a class="market-link" target="_blank" rel="noopener" href="${marketSearchUrl(p,RETAILER_SOURCES[0])}">Search 14 market sources ↗</a>`):''}
     <div class="product-actions"><button class="own ${own?'active':''}" data-action="own">${own?'Owned ✓':'Mark owned'}</button><button class="want ${want?'active':''}" data-action="want">${want?'Wanted ★':'Want'}</button><button class="detail" data-action="detail" aria-label="Details">•••</button></div>
   </article>`;
 }
@@ -2927,7 +2955,7 @@ function showDetail(p){
     <div class="detail-grid"><div class="detail-box"><strong>Status</strong>${esc(statusLabel[p.status]||p.status)}</div><div class="detail-box"><strong>Modeled content</strong>${p.units.length} unit${p.units.length===1?'':'s'}</div><div class="detail-box"><strong>Already covered</strong>${overlap}/${p.units.length}</div><div class="detail-box"><strong>Still missing</strong>${missing}/${p.units.length}</div></div>
     ${overlap && !state.owned[p.id] ? `<div class="overlap">You already own packaging that covers ${overlap} of this product’s ${p.units.length} modeled content units. Check overlap before buying.</div>`:''}
     ${p.snapshot?`<p><strong>Stored market snapshot:</strong> ${money(p.snapshot.price)} at ${esc(p.snapshot.retailer)}. Observed ${esc(p.snapshot.observedOn)}; ${esc(p.snapshot.freshness)}.</p>`:''}
-    ${p.retail?`<p class="muted"><strong>Live retailer check:</strong> the backend verifies retailer product pages; search links remain as fallback.</p><button id="detailLiveBtn" class="live-btn"><span class="live-dot"></span>Check live stock now</button><div id="liveOfferPanel"></div><div class="source-links">${sourceLinksHtml(p)}</div>`:''}${p.source?`<div class="source-links"><a target="_blank" rel="noopener" href="${p.source}">Official / source page ↗<span class="source-meta">Catalog/reference source</span></a></div>`:''}`;
+    ${p.retail?(marketRegion==='UK'?regionSearchLinks(p):`<p class="muted"><strong>Live retailer check:</strong> the backend verifies retailer product pages; search links remain as fallback.</p><button id="detailLiveBtn" class="live-btn"><span class="live-dot"></span>Check live stock now</button><div id="liveOfferPanel"></div><div class="source-links">${sourceLinksHtml(p)}</div>`):''}${p.source?`<div class="source-links"><a target="_blank" rel="noopener" href="${p.source}">Official / source page ↗<span class="source-meta">Catalog/reference source</span></a></div>`:''}`;
   document.querySelector('#detailDialog').showModal();
   if(p.retail){ const btn=document.querySelector('#detailLiveBtn'), panel=document.querySelector('#liveOfferPanel'); if(btn&&panel) btn.addEventListener('click',()=>loadLiveOffers(p,panel)); }
 }
@@ -2952,6 +2980,7 @@ document.querySelector('#investigatorTabs').addEventListener('click',e=>{
     b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));
   }
   catalogLimit=CATALOG_PAGE_SIZE;renderCatalog();
+  document.querySelector('#checkAllCurrent').textContent='Check all '+(investigatorType==='decks'?'investigator decks':'investigator expansions');
 });
 document.querySelector('#catalog').addEventListener('toggle',e=>{
   const group=e.target.closest?.('details[data-legacy-group]');
@@ -3021,6 +3050,30 @@ document.querySelector('#checkAllCampaigns').addEventListener('click',async()=>{
   }finally{campaignBatchRunning=false;start.disabled=false;stop.hidden=true;campaignBatchStop=false;}
 });
 document.querySelector('#stopCampaignChecks').addEventListener('click',()=>{campaignBatchStop=true;campaignBatchStatus('Stopping after the current retailer check finishes…');});
+let categoryBatchRunning=false,categoryBatchStop=false;
+function categoryBatchStatus(msg){document.querySelector('#catalogBulkStatus').textContent=msg;}
+document.querySelector('#checkAllCurrent').addEventListener('click',async()=>{
+  if(categoryBatchRunning||marketRegion!=='US')return;
+  const list=filteredProducts().filter(p=>p.retail);
+  const unique=[...new Map(list.map(p=>[p.id,p])).values()];
+  const needed=unique.filter(p=>STOCK_SUMMARIES.get(p.id)?.cacheState!=='fresh');
+  const skipped=unique.length-needed.length;
+  categoryBatchRunning=true;categoryBatchStop=false;
+  const start=document.querySelector('#checkAllCurrent'),stop=document.querySelector('#stopCurrentChecks');
+  start.disabled=true;stop.hidden=false;
+  let done=0;
+  try{
+    if(!needed.length)categoryBatchStatus(`All ${unique.length} matching products already have recent checks.`);
+    for(const p of needed){
+      if(categoryBatchStop)break;
+      categoryBatchStatus(`Checking ${done+1}/${needed.length}: ${p.name}. ${skipped} recent checks reused. This may take several minutes.`);
+      await checkProductStock(p,{silent:true,render:false});done++;
+      if(done%3===0)renderCatalog();
+    }
+    if(needed.length)categoryBatchStatus(categoryBatchStop?`Stopped after ${done}/${needed.length} checks.`:`Finished ${done} checks; ${skipped} recent checks reused. Unknown does not mean sold out.`);
+  }finally{categoryBatchRunning=false;start.disabled=marketRegion!=='US';stop.hidden=true;categoryBatchStop=false;renderCatalog();}
+});
+document.querySelector('#stopCurrentChecks').addEventListener('click',()=>{categoryBatchStop=true;categoryBatchStatus('Stopping after the current retailer check…');});
 document.querySelector('#campaignCards').addEventListener('click',e=>{
   const btn=e.target.closest('button[data-cycle]');if(btn)showCampaign(btn.dataset.cycle);
 });

@@ -112,3 +112,7 @@ The server checks one retail product per three minutes (configurable) while acti
 Amazon US appears as a manual product search link. Amazon is **not** a verified automatic stock source without authorized access to product and offer data. The site's live stock counts and lowest prices still come from supported direct retailer checks only.
 
 **Set up my collection** opens a guided ownership checklist. Legacy packs and Return To products are separate from modern campaign/investigator boxes; marking one never silently marks another. JSON export/restore remains for backups.
+
+## v0.10 updates
+
+See [V10_RELEASE_NOTES.md](V10_RELEASE_NOTES.md) for category bulk checks, Cardhaus category-page rejection, compact advisor, and UK search preview.

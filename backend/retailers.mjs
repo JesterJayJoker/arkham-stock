@@ -27,6 +27,17 @@ async function get(url, accept='text/html,application/xhtml+xml', externalSignal
   }
 }
 
+// Reject category, search, and editorial URLs before reading inventory.
+export function isProductDetailUrl(value, retailerId) {
+  try {
+    const path=new URL(value).pathname;
+    if(retailerId==='cardhaus')return /^\/[^/]+\/?$/.test(path) && !/^\/(?:board-games|search|shop|categories?|brands?|collections?|cart|account|pages?|blog|new-releases|preorders?)\/?$/i.test(path);
+    if(retailerId==='nobleknight')return /^\/P\/\d+\//.test(path);
+    if(retailerId==='miniaturemarket')return /\.html?$|\/product\//i.test(path);
+    if(retailerId==='atomicempire')return /^\/Item\/\d+/.test(path);
+    return /^\/products\/[^/]+\/?$/.test(path);
+  }catch{return false;}
+}
 function extractAnchors(html, base, pathRx) {
   const out=[];
   const rx=/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
@@ -86,7 +97,9 @@ function parseMoney(v) {
 }
 
 async function parseGenericProductPage(url, retailerId, productId, confidence=0.75, signal=null) {
-  const r=await get(url,'text/html,application/xhtml+xml',signal); const html=await r.text();
+  const r=await get(url,'text/html,application/xhtml+xml',signal);
+  if(!isProductDetailUrl(r.url,retailerId))throw new Error('Redirected to a category or non-product page');
+  const html=await r.text();
   const ld=jsonLdProducts(html)[0] || {};
   const offer=Array.isArray(ld.offers)?ld.offers[0]:(ld.offers||{});
   const body=stripTags(html);
@@ -97,7 +110,7 @@ async function parseGenericProductPage(url, retailerId, productId, confidence=0.
   else if(avail.includes('outofstock') || avail.includes('soldout')) stock='out_of_stock';
   else if(avail.includes('preorder') || avail.includes('presale')) stock='preorder';
   let evidence='Structured availability metadata';
-  if(stock==='unknown') { const cls=stockFromText(body); stock=cls.status; evidence=cls.evidence; }
+  if(stock==='unknown'){stock='unknown';evidence='No product-specific structured availability; site-wide text is not stock proof';}
   const price=parseMoney(offer.price ?? findMeta(html,'product:price:amount') ?? ((body.match(/(?:Price|Our Price)\s*[: ]\s*\$([0-9]+(?:\.[0-9]{2})?)/i)||[])[1]) ?? ((body.match(/\$([0-9]+(?:\.[0-9]{2})?)/)||[])[1]));
   const sku=ld.sku || (body.match(/\bSKU\s*[:#]?\s*([A-Z0-9-]{4,})/i)||[])[1] || null;
   const upc=ld.gtin13 || ld.gtin12 || (body.match(/\bUPC\s*[:#]?\s*(\d{10,14})/i)||[])[1] || null;
@@ -181,7 +194,7 @@ export const RETAILERS = [
   {id:'gamezenter',name:'Gamezenter',base:'https://gamezenter.com',kind:'shopify',pathRx:/^\/products\//},
   {id:'asmodee',name:'Asmodee US',base:'https://store.asmodee.com',kind:'shopify',pathRx:/^\/products\//},
   {id:'boarding',name:'Boarding School Games',base:'https://www.boardingschoolgames.com',kind:'shopify',pathRx:/^\/products\//},
-  {id:'cardhaus',name:'Cardhaus',base:'https://www.cardhaus.com',kind:'bigcommerce',pathRx:/^\/(?!search|cart|account|categories?\/)[^?#]+\/?$/},
+  {id:'cardhaus',name:'Cardhaus',base:'https://www.cardhaus.com',kind:'bigcommerce',pathRx:/^\/(?!board-games|search|shop|cart|account|categories?|brands?|collections?|pages?|blog)[^/]+\/?$/i},
   {id:'miniaturemarket',name:'Miniature Market',base:'https://www.miniaturemarket.com',kind:'html',pathRx:/\.(html?)$|\/product\//},
   {id:'nobleknight',name:'Noble Knight Games',base:'https://www.nobleknight.com',kind:'html',pathRx:/\/P\//},
   {id:'guardtower',name:'The Guardtower',base:'https://theguardtower.com',kind:'shopify',pathRx:/^\/products\//},
@@ -203,10 +216,12 @@ export async function fetchOffer(product,cfg,{signal=null}={}) {
       all.push(...candidates);
       const chosen=chooseBestCandidate(product,all,product.sku?0.45:0.58);
       if(chosen) {
+        if(!isProductDetailUrl(chosen.url,cfg.id)){lastError=new Error('Category page, not a product');all=all.filter(x=>x.url!==chosen.url);continue;}
         const conf=Math.max(0.55,chosen.matchScore);
         const offer = cfg.kind==='shopify' && /\/products\//.test(new URL(chosen.url).pathname)
           ? await shopifyProductJson(chosen.url,cfg.id,product.id,conf,signal)
           : await parseGenericProductPage(chosen.url,cfg.id,product.id,conf,signal);
+        if(!isProductDetailUrl(offer.productUrl,cfg.id)){lastError=new Error('Final URL is not a product page');continue;}
         const identity = verifyOfferIdentity(product,offer);
         if (!identity.valid) {
           lastError=new Error(identity.reason);
