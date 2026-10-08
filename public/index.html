@@ -78,6 +78,16 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
 @media(max-width:900px){.campaign-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.campaign-grid,.campaign-products,.campaign-dialog .catalog,.legacy-expander .catalog{grid-template-columns:1fr}.browse-intro{display:block}.summary-key{margin-top:10px}.browse-nav{gap:6px}.browse-tab{font-size:.8rem;padding:9px 11px}.welcome-bar{padding:17px}.campaign-dialog{padding:18px}.campaign-overview{min-height:0}.hero-inner{padding-top:38px}.campaign-dialog h2{font-size:1.6rem}}
 
+.chapter-tabs{display:flex;gap:8px;margin:12px 0 20px;flex-wrap:wrap}
+.chapter-tab{background:#101a15;color:#d7e9df;border:1px solid #3d5548;border-radius:11px;padding:11px 20px;cursor:pointer;font-weight:750}
+.chapter-tab.active{background:#a8d3b7;color:#0c1b13;border-color:#a8d3b7}
+.chapter-tabs[hidden]{display:none}
+.cycle-extra{font-size:.75rem;color:#aabeb1;margin-top:5px}
+.stock-store-link{color:#a8e9c3;text-decoration:underline;text-underline-offset:2px;font-weight:700}
+.stock-store-link:hover{color:#e4fff0}
+.amazon-offer{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:12px;border:1px solid #5e5030;border-radius:10px;margin-top:10px;color:#dfcda2}
+.amazon-offer a{color:#ffe5a3;text-decoration:underline}
+@media(max-width:640px){.chapter-tab{flex:1}}
 </style>
 <style>
 .setup-dialog{width:min(800px,calc(100vw - 24px));max-height:90vh;overflow:auto;padding:24px 22px 18px}
@@ -121,6 +131,7 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
         <button class="browse-tab active" data-view="campaigns" aria-pressed="true">Campaigns</button>
         <button class="browse-tab" data-view="investigators" aria-pressed="false">Investigators</button>
         <button class="browse-tab" data-view="standalones" aria-pressed="false">Standalones</button>
+        <button class="browse-tab" data-view="returns" aria-pressed="false">Return To</button>
         <button class="browse-tab" data-view="rare" aria-pressed="false">Rare / OOP</button>
         <button class="browse-tab" data-view="collection" aria-pressed="false">My collection</button>
         <button class="browse-tab" data-view="all" aria-pressed="false">All products</button>
@@ -138,6 +149,7 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
       <input class="search campaign-search" type="search" id="campaignSearch" placeholder="Find a campaign…" />
       <div id="campaignCards" class="campaign-grid"></div>
     </section>
+    <nav class="chapter-tabs" id="collectionChapterTabs" aria-label="Collection chapter"><button type="button" class="chapter-tab active" data-chapter="one" aria-pressed="true">Chapter One</button><button type="button" class="chapter-tab" data-chapter="two" aria-pressed="false">Chapter Two</button></nav>
     <section class="advisor-panel" id="collectionAdvisor">
       <div>
         <div class="eyebrow">SMART COMPLETION</div>
@@ -205,6 +217,7 @@ footer{max-width:1260px;margin:auto;padding:0 24px 50px;color:#9badA5;font-size:
     <div class="eyebrow">QUICK COLLECTION CHECKLIST</div>
     <h2>What do you own?</h2>
     <p class="muted">Select physical products you own. Campaign and Investigator boxes are separate. Legacy packs are optional. Saving replaces your owned selections but keeps your wishlist.</p>
+    <nav class="chapter-tabs" id="setupChapterTabs" aria-label="Choose collection chapter"><button type="button" class="chapter-tab active" data-chapter="one" aria-pressed="true">Chapter One</button><button type="button" class="chapter-tab" data-chapter="two" aria-pressed="false">Chapter Two</button></nav>
     <div id="setupChecklist" class="setup-checklist"></div>
     <div class="setup-footer"><span id="setupCount" aria-live="polite"></span><button id="setupCancel" class="button">Cancel</button><button id="setupSave" class="button primary">Save my collection</button></div>
   </dialog>
@@ -2473,9 +2486,9 @@ async function loadLiveOffers(p,target){
     if(!r.ok) throw new Error('HTTP '+r.status);
     const data=await r.json();
     const rows=(data.offers||[]).filter(o=>o.stockStatus!=='unknown').sort((a,b)=>{const rank={in_stock:0,preorder:1,out_of_stock:2};return (rank[a.stockStatus]??9)-(rank[b.stockStatus]??9)||(a.price??9999)-(b.price??9999)});
-    if(!rows.length){target.innerHTML='<div class="live-note">No retailer returned a verified stock state this check. Use the source links below as fallback.</div>';return;}
+    if(!rows.length){target.innerHTML='<div class="live-note">No retailer returned a verified stock state this check.</div><div class="amazon-offer"><span>Amazon US</span><span>Not automatically verified</span><a href="'+esc(marketSearchUrl(p,RETAILER_SOURCES.find(x=>x.id==='amazon')))+'" target="_blank" rel="noopener noreferrer">Check Amazon ↗</a></div>';return;}
     const cacheText=data.cacheState==='fresh'?'shared cache':data.cacheState==='stale'?'stale shared result; refreshing in background':data.cacheState==='refreshed'?'freshly checked':'shared result';
-    target.innerHTML='<div class="live-offers">'+rows.map(o=>`<div class="offer-row"><span class="retailer">${esc((RETAILER_SOURCES.find(x=>x.id===o.retailerId)||{}).name||o.retailerId)}</span><span class="state ${o.stockStatus}">${stockLabel(o.stockStatus)}</span><span>${o.price>0?money(o.price):'Price unknown'}</span><a target="_blank" rel="noopener" href="${esc(o.productUrl)}">Store ↗</a></div>`).join('')+'</div><div class="live-note">Verified from retailer pages · checked '+new Date(data.checkedAt).toLocaleString()+' · '+cacheText+'</div>';
+    target.innerHTML='<div class="live-offers">'+rows.map(o=>`<div class="offer-row"><span class="retailer">${esc((RETAILER_SOURCES.find(x=>x.id===o.retailerId)||{}).name||o.retailerId)}</span><span class="state ${o.stockStatus}">${stockLabel(o.stockStatus)}</span><span>${o.price>0?money(o.price):'Price unknown'}</span><a target="_blank" rel="noopener noreferrer" href="${esc(safeRetailerUrl(o.productUrl,o.retailerId)||marketSearchUrl(p,RETAILER_SOURCES[0]))}">Store ↗</a></div>`).join('')+'</div><div class="amazon-offer"><span>Amazon US</span><span>Not automatically verified</span><a href="'+esc(marketSearchUrl(p,RETAILER_SOURCES.find(x=>x.id==='amazon')))+'" target="_blank" rel="noopener noreferrer">Check Amazon ↗</a></div><div class="live-note">Retailer pages checked '+new Date(data.checkedAt).toLocaleString()+' · '+cacheText+' · Amazon requires manual verification</div>';
   }catch(e){target.innerHTML='<div class="live-note">Live check failed: '+esc(e.message)+'. Use the source links below as fallback.</div>';}
 }
 
@@ -2516,6 +2529,16 @@ function sourceLinksHtml(p){
 }
 
 const esc = s => String(s ?? '').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function safeRetailerUrl(value,retailerId){
+  try {
+    const url=new URL(value);
+    const source=RETAILER_SOURCES.find(s=>s.id===retailerId);
+    if(url.protocol!=='https:' || !source?.domain)return null;
+    const host=url.hostname.toLowerCase(),domain=source.domain.toLowerCase();
+    return host===domain || host.endsWith('.'+domain) ? url.href : null;
+  }catch{return null;}
+}
 
 const statusLabel = {
   current:'Current Chapter Two', 'chapter-one':'Chapter One retail', 'legacy-oop':'Legacy / OOP', promo:'Promo / novella', pnp:'Print-and-play'
@@ -2559,51 +2582,78 @@ function unitPctFor(prefix,type){
   return {have:targets.filter(u=>mine.has(u)).length,total:targets.length,pct:pct(targets.filter(u=>mine.has(u)).length,targets.length)};
 }
 
+// Chapter grouping follows the product release line, not the calendar year.
+function chapterFor(p){return p.status==='current'?'two':'one';}
+let collectionChapter='one',setupChapter='one';
+const CHAPTER_ONE_CYCLES=[...repackCycles,'Edge of the Earth','The Scarlet Keys','The Feast of Hemlock Vale'];
+const CHAPTER_TWO_CYCLES=['The Drowned City','Children of Blood'];
+function mainContentCoverage(title){
+  const main=campaignPrimary(title);
+  const mine=ownedUnits();
+  const targets=[...new Set(main.flatMap(p=>p.units))];
+  const have=targets.filter(u=>mine.has(u)).length;
+  return {have,total:targets.length,pct:pct(have,targets.length),covered:main.filter(p=>productCovered(p)).length,main};
+}
 function renderAdvisor(){
+  const chapter=collectionChapter;
+  const cycles=chapter==='one'?CHAPTER_ONE_CYCLES:CHAPTER_TWO_CYCLES;
   const rows=[];
-  for(const title of repackCycles){
-    const key=cycleKey(title); if(!key) continue;
-    const c=unitPctFor(key,'campaign'), pl=unitPctFor(key,'player');
-    const campaign=PRODUCTS.find(p=>p.id===key+'-campaign');
-    const investigator=PRODUCTS.find(p=>p.id===key+'-investigator');
-    if(c.pct===100 && pl.pct===100){
-      rows.push(`<div class="advice good"><strong>${esc(title)}: complete</strong><small>You already cover the campaign and player-card content. The modern two-box repack would be duplicate content unless you want the packaging.</small></div>`);
+  for(const title of cycles){
+    const main=campaignPrimary(title);
+    if(!main.length)continue;
+    const missing=main.filter(p=>!productCovered(p));
+    if(!missing.length){
+      rows.push(`<div class="advice good"><strong>${esc(title)}: main content complete</strong><small>All main campaign/investigator content covered. Optional Return To content is tracked separately.</small></div>`);
       continue;
     }
-    const advice=[];
-    if(c.pct<100) advice.push(`${c.pct}% campaign content covered → ${esc(campaign.name)} is the cleanest completion option.`);
-    if(pl.pct<100) advice.push(`${pl.pct}% player content covered → ${esc(investigator.name)} completes the player-card side.`);
-    rows.push(`<div class="advice warn"><strong>${esc(title)}</strong><small>${advice.join('<br>')}</small></div>`);
+    const details=missing.map(p=>`${esc(p.category)}: ${pct(productOverlap(p),p.units.length)}% covered → ${esc(p.name)}`).join('<br>');
+    rows.push(`<div class="advice warn"><strong>${esc(title)}</strong><small>${details}</small></div>`);
   }
-  const missingCurrent = PRODUCTS.filter(p=>p.status==='current' && !productCovered(p));
-  if(missingCurrent.length) rows.unshift(`<div class="advice"><strong>Current line: ${missingCurrent.length} content items not covered</strong><small>${missingCurrent.slice(0,4).map(p=>esc(p.name)).join(' · ')}${missingCurrent.length>4?' · …':''}</small></div>`);
-  document.querySelector('#advisor').innerHTML=`<div class="advice-list">${rows.slice(0,7).join('')}</div>`;
+  // The old advisor omitted Edge of the Earth, Scarlet Keys, Hemlock Vale, and non-campaign products.
+  const other=PRODUCTS.filter(p=>chapterFor(p)===chapter && !cycles.includes(p.cycle) && p.retail && p.category!=='Return To');
+  const groups=new Map();
+  for(const p of other){
+    const label=p.cycle==='Core'?'Core sets':p.category==='Scenario Pack'?'Standalone scenarios':p.category==='Investigator Deck'?'Investigator decks':'Other releases';
+    if(!groups.has(label))groups.set(label,[]);
+    groups.get(label).push(p);
+  }
+  for(const [label,items] of groups){
+    const missing=items.filter(p=>!productCovered(p));
+    if(!missing.length)continue;
+    rows.push(`<div class="advice"><strong>${esc(label)}: ${missing.length} entries not covered</strong><small>${missing.slice(0,5).map(p=>esc(p.name)).join(' · ')}${missing.length>5?' · …':''}</small></div>`);
+  }
+  const returns=PRODUCTS.filter(p=>chapterFor(p)===chapter&&p.category==='Return To');
+  if(returns.length){
+    const missing=returns.filter(p=>!state.owned[p.id]);
+    rows.push(`<div class="advice"><strong>Optional Return To boxes: ${returns.length-missing.length}/${returns.length} physically owned</strong><small>These are bonus products and do not reduce main campaign completion.</small></div>`);
+  }
+  document.querySelector('#advisor').innerHTML=`<div class="advice-list">${rows.join('')||'<div class="advice good">No missing content in this chapter.</div>'}</div>`;
 }
-
 function renderCycleSummary(){
-  const cycles=[...repackCycles,'Edge of the Earth','The Scarlet Keys','The Feast of Hemlock Vale','The Drowned City','Children of Blood'];
-  const mine=ownedUnits();
+  const cycles=collectionChapter==='one'?CHAPTER_ONE_CYCLES:CHAPTER_TWO_CYCLES;
   document.querySelector('#cycleSummary').innerHTML=cycles.map(title=>{
-    const prods=PRODUCTS.filter(p=>p.cycle===title);
-    const units=new Set(prods.flatMap(p=>p.units));
-    const have=[...units].filter(u=>mine.has(u)).length;
-    const retailOwned=prods.filter(p=>state.owned[p.id]).length;
-    let campaignPct=0, playerPct=0;
-    const key=cycleKey(title);
-    if(key && repackCycles.includes(title)){
-      campaignPct=unitPctFor(key,'campaign').pct; playerPct=unitPctFor(key,'player').pct;
-    } else {
-      const cp=prods.find(p=>p.category==='Campaign Expansion');
-      const ip=prods.find(p=>p.category==='Investigator Expansion');
-      campaignPct=cp ? pct(cp.units.filter(u=>mine.has(u)).length,cp.units.length) : pct(have,units.size);
-      playerPct=ip ? pct(ip.units.filter(u=>mine.has(u)).length,ip.units.length) : 0;
-    }
+    const prods=campaignProducts(title);
+    const main=mainContentCoverage(title);
+    const cp=main.main.find(p=>p.category==='Campaign Expansion');
+    const ip=main.main.find(p=>p.category==='Investigator Expansion');
+    const campaignPct=cp?pct(productOverlap(cp),cp.units.length):0;
+    const playerPct=ip?pct(productOverlap(ip),ip.units.length):null;
+    const returns=prods.filter(p=>p.category==='Return To');
     return `<article class="cycle-card"><h3>${esc(title)}</h3><div class="cycle-lines">
       <div class="cycle-line"><span>Campaign</span><div class="meter"><span style="width:${campaignPct}%"></span></div><b>${campaignPct}%</b></div>
-      ${playerPct || prods.some(p=>p.category==='Investigator Expansion') ? `<div class="cycle-line"><span>Investigators</span><div class="meter"><span style="width:${playerPct}%"></span></div><b>${playerPct}%</b></div>`:''}
-      <div class="cycle-line"><span>Products owned</span><div class="meter"><span style="width:${pct(retailOwned,prods.length)}%"></span></div><b>${retailOwned}/${prods.length}</b></div>
+      ${playerPct!==null?`<div class="cycle-line"><span>Investigators</span><div class="meter"><span style="width:${playerPct}%"></span></div><b>${playerPct}%</b></div>`:''}
+      <div class="cycle-line"><span>Main content covered</span><div class="meter"><span style="width:${main.pct}%"></span></div><b>${main.covered}/${main.main.length}</b></div>
+      ${returns.length?`<div class="cycle-extra">Return To: ${returns.filter(p=>state.owned[p.id]).length}/${returns.length} owned (optional)</div>`:''}
     </div></article>`;
   }).join('');
+}
+function setCollectionChapter(chapter){
+  collectionChapter=chapter==='two'?'two':'one';
+  for(const btn of document.querySelectorAll('#collectionChapterTabs [data-chapter]')){
+    const active=btn.dataset.chapter===collectionChapter;
+    btn.classList.toggle('active',active);btn.setAttribute('aria-pressed',String(active));
+  }
+  renderAdvisor();renderCycleSummary();
 }
 
 function filteredProducts(){
@@ -2620,7 +2670,8 @@ function filteredProducts(){
     if(avail==='unchecked' && stock)return false;
     if(currentView==='investigators' && !['Investigator Expansion','Investigator Deck'].includes(p.category))return false;
     if(currentView==='standalones' && p.category!=='Scenario Pack')return false;
-    if(currentView==='rare' && !(p.status==='legacy-oop'||p.category==='Return To'))return false;
+    if(currentView==='rare' && !(p.status==='legacy-oop'&&p.category!=='Return To'))return false;
+    if(currentView==='returns' && p.category!=='Return To')return false;
     if(currentView==='collection' && !(state.owned[p.id]||state.wanted[p.id]))return false;
     if(q && ![p.name,p.cycle,p.category,p.packaging].join(' ').toLowerCase().includes(q)) return false;
     if(cycle!=='all' && p.cycle!==cycle) return false;
@@ -2640,7 +2691,8 @@ const VIEW_INFO={
  campaigns:['CAMPAIGN GUIDE','Choose a campaign','Modern expansion boxes first. Older deluxe boxes and Mythos packs are tucked away inside each campaign.'],
  investigators:['PLAYER CARDS','Investigator expansions & decks','Browse player-card expansions and ready-to-play investigator decks.'],
  standalones:['SIDE STORIES','Standalone scenarios','One-off adventures and special scenario packs.'],
- rare:['COLLECTOR SEARCH','Rare & out-of-print products','Older packaging, Return To boxes, and other hard-to-find retail products.'],
+ returns:['RETURN TO','Return To expansions','Optional Return To boxes are separate from the main campaign content.'],
+ rare:['COLLECTOR SEARCH','Rare & out-of-print products','Discontinued and hard-to-find products, excluding Return To boxes.'],
  collection:['YOUR COLLECTION','What do you already own?','Track products locally in your browser. Your ownership never needs an account.'],
  all:['MASTER CATALOG','All 114 catalog entries','Search every retail product, legacy pack, promo and print-and-play entry.']
 };
@@ -2655,8 +2707,10 @@ function cachedStockHtml(p){
   const best=x.bestPrice>0 ? money(x.bestPrice) : 'Price unknown';
   const shop=x.bestOffer?.retailerId;
   const store=RETAILER_SOURCES.find(y=>y.id===shop)?.name||shop||'';
+  const storeUrl=safeRetailerUrl(x.bestOffer?.productUrl,shop);
+  const storeLink=storeUrl?`<a class="stock-store-link" href="${esc(storeUrl)}" target="_blank" rel="noopener noreferrer">${esc(store)} ↗</a>`:esc(store);
   const when=x.checkedAt?new Date(x.checkedAt).toLocaleString():'unknown';
-  return `<div class="stock-strip ${cls}"><strong>${esc(label)}${!stale && x.inStockCount ? ` · ${x.inStockCount} store${x.inStockCount===1?'':'s'}`:''}</strong>${x.inStockCount ? `<span class="store-price">${esc(best)}${store?' · '+esc(store):''}</span>`:''}<small>Checked ${esc(when)}${stale?' · Recheck recommended':''}</small></div>`;
+  return `<div class="stock-strip ${cls}"><strong>${esc(label)}${!stale && x.inStockCount ? ` · ${x.inStockCount} store${x.inStockCount===1?'':'s'}`:''}</strong>${x.inStockCount ? `<span class="store-price">${esc(best)}${store?' · '+storeLink:''}</span>`:''}<small>Checked ${esc(when)}${stale?' · Recheck recommended':''}</small></div>`;
 }
 async function fetchStockSummary(){
   try{
@@ -2709,20 +2763,20 @@ function renderBrowse(){
   const starter=PRODUCTS.find(p=>p.id==='core-2026');
   document.querySelector('#starterSpotlight').innerHTML=starter?`<div class="starter-content"><div class="eyebrow">NEW TO ARKHAM?</div><h3>Start with the Core Set</h3><p>The current Core Set is the simplest starting point for new players.</p></div><div class="starter-stock">${cachedStockHtml(starter)}<button class="campaign-open" data-product="${starter.id}">View Core Set →</button></div>`:'';
   document.querySelector('#campaignCards').innerHTML=cycles.map(c=>{
-    const primary=campaignPrimary(c),legacy=campaignProducts(c).filter(p=>p.status==='legacy-oop').length;
+    const primary=campaignPrimary(c),legacy=campaignProducts(c).filter(p=>['Deluxe Expansion','Mythos Pack'].includes(p.category)).length;
     const owned=primary.filter(p=>productCovered(p)).length;
     return `<article class="campaign-overview"><div class="eyebrow">${primary.length>1?'CAMPAIGN + INVESTIGATORS':'CAMPAIGN'}</div><h3>${esc(c)}</h3><div class="cycle-sub">${owned}/${primary.length} modern boxes' content covered${legacy?' · '+legacy+' legacy items':''}</div><div class="cycle-statuses">${primary.map(p=>campaignStockRow(p,p.category==='Campaign Expansion'?'Campaign':'Investigators')).join('')}</div><button class="campaign-open" data-cycle="${esc(c)}">Explore campaign →</button></article>`;
   }).join('')||'<div class="view-empty">No matching campaigns.</div>';
 }
 function showCampaign(cycle){
   selectedCampaign=cycle;
-  const primary=campaignPrimary(cycle),legacy=campaignProducts(cycle).filter(p=>p.status==='legacy-oop'||p.category==='Deluxe Expansion'||p.category==='Mythos Pack');
+  const primary=campaignPrimary(cycle),legacy=campaignProducts(cycle).filter(p=>['Deluxe Expansion','Mythos Pack'].includes(p.category));
   const extra=campaignProducts(cycle).filter(p=>!primary.includes(p)&&!legacy.includes(p));
   document.querySelector('#campaignDialogContent').innerHTML=`<div class="eyebrow">CAMPAIGN GUIDE</div><h2>${esc(cycle)}</h2><p class="campaign-detail-note">Choose modern expansions for the simplest purchase. Legacy packaging is shown separately so you can compare it without accidentally buying duplicate content.</p>
     <button class="button primary" data-check-cycle="${esc(cycle)}">Check this campaign's modern boxes</button>
     <div class="campaign-products">${primary.map(productCard).join('')}</div>
     ${extra.length?`<h3>Additional products</h3><div class="campaign-products">${extra.map(productCard).join('')}</div>`:''}
-    ${legacy.length?`<details class="legacy-expander"><summary>Legacy deluxe & Mythos packs (${legacy.length})</summary><p class="campaign-detail-note">Original packaging may overlap with modern expansions.</p><div class="catalog">${legacy.map(productCard).join('')}</div></details>`:''}`;
+    ${legacy.length?`<details class="legacy-expander"><summary>Legacy deluxe & Mythos packs (${legacy.length})</summary><p class="campaign-detail-note">Original packaging may overlap with modern expansions. Return To boxes are separate optional products.</p><button type="button" class="button primary" data-check-legacy="${esc(cycle)}">Check legacy deluxe & Mythos packs (${legacy.length})</button><div class="catalog">${legacy.map(productCard).join('')}</div></details>`:''}`;
   if(!document.querySelector('#campaignDialog').open) document.querySelector('#campaignDialog').showModal();
 }
 function setView(view){
@@ -2739,6 +2793,7 @@ function setView(view){
   document.querySelector('#catalogWrap').hidden=campaign;
   document.querySelector('#catalogToolbar').hidden=campaign;
   document.querySelector('#collectionAdvisor').hidden=!collection;
+  document.querySelector('#collectionChapterTabs').hidden=!collection;
   document.querySelector('#collectionCycles').hidden=!collection;
   document.querySelector('#marketNote').hidden=campaign;
   document.querySelector('#catalogToolbar').querySelector('#statusFilter').value='all';
@@ -2824,6 +2879,20 @@ document.querySelector('#campaignDialogContent').addEventListener('click',async 
     if(document.querySelector('#campaignDialog').open)showCampaign(check.dataset.checkCycle);
     return;
   }
+  const legacyBtn=e.target.closest('button[data-check-legacy]');
+  if(legacyBtn){
+    const cycle=legacyBtn.dataset.checkLegacy;
+    const legacy=campaignProducts(cycle).filter(p=>['Deluxe Expansion','Mythos Pack'].includes(p.category));
+    legacyBtn.disabled=true;legacyBtn.textContent=`Checking ${legacy.length} legacy products…`;
+    // Avoid simultaneous large batches and leave the server's shared cache in control.
+    for(const p of legacy)await checkProductStock(p,{silent:true});
+    if(document.querySelector('#campaignDialog').open){
+      showCampaign(cycle);
+      const exp=document.querySelector('#campaignDialogContent .legacy-expander');
+      if(exp)exp.open=true;
+    }
+    return;
+  }
   openProductAction(e);
 });
 document.querySelector('#campaignCards').addEventListener('click',e=>{
@@ -2849,36 +2918,47 @@ function setupOption(p){
 }
 function renderSetupChecklist(){
   const root=document.querySelector('#setupChecklist');
-  const campaigns=CAMPAIGN_CYCLES.map(c=>{
+  const cycles=setupChapter==='one'?CHAPTER_ONE_CYCLES:CHAPTER_TWO_CYCLES;
+  const campaigns=cycles.map(c=>{
     const products=campaignProducts(c);
     const modern=products.filter(p=>['Campaign Expansion','Investigator Expansion'].includes(p.category));
     const legacy=products.filter(p=>['Deluxe Expansion','Mythos Pack'].includes(p.category));
     const returns=products.filter(p=>p.category==='Return To');
-    return `<details class="setup-group"><summary>${esc(c)}</summary><div class="setup-options">${modern.map(setupOption).join('')}${modern.length>1?`<button type="button" class="setup-mini" data-setup-pair="${esc(c)}">Select both modern boxes</button>`:''}</div>${legacy.length?`<details class="setup-legacy"><summary>Original deluxe + Mythos packs (${legacy.length})</summary><div class="setup-options">${legacy.map(setupOption).join('')}</div></details>`:''}${returns.length?`<details class="setup-legacy"><summary>Return To (${returns.length})</summary><div class="setup-options">${returns.map(setupOption).join('')}</div></details>`:''}</details>`;
+    return `<details class="setup-group"><summary>${esc(c)}</summary><div class="setup-options">${modern.map(setupOption).join('')}${modern.length>1?`<button type="button" class="setup-mini" data-setup-pair="${esc(c)}">Select both modern boxes</button>`:''}</div>${legacy.length?`<details class="setup-legacy"><summary>Original deluxe + Mythos packs (${legacy.length})</summary><div class="setup-options">${legacy.map(setupOption).join('')}</div></details>`:''}${returns.length?`<details class="setup-legacy"><summary>Optional Return To (${returns.length})</summary><div class="setup-options">${returns.map(setupOption).join('')}</div></details>`:''}</details>`;
   }).join('');
-  const covered=new Set(CAMPAIGN_CYCLES);
-  const extras=PRODUCTS.filter(p=>!covered.has(p.cycle));
+  const covered=new Set(cycles);
+  const extras=PRODUCTS.filter(p=>chapterFor(p)===setupChapter && !covered.has(p.cycle));
   const byGroup=new Map();
   for(const p of extras){
-    const group=p.cycle==='Core'?'Core sets':p.category.includes('Standalone')?'Standalone scenarios':p.category.includes('Investigator')?'Investigator decks':p.category==='Return To'?'Return To boxes':'Other products';
+    const group=p.cycle==='Core'?'Core sets':p.category==='Scenario Pack'?'Standalone scenarios':p.category==='Investigator Deck'?'Investigator decks':p.category==='Return To'?'Return To boxes':p.category==='Promo / Novella'?'Promotional/novella':p.category==='Parallel / Print-and-Play'?'Print-and-play':'Other products';
     if(!byGroup.has(group))byGroup.set(group,[]);
     byGroup.get(group).push(p);
   }
   const groups=[...byGroup].map(([label,items])=>`<details class="setup-group"><summary>${esc(label)} (${items.length})</summary><div class="setup-options">${items.map(setupOption).join('')}</div></details>`).join('');
   root.innerHTML=campaigns+groups;
-  document.querySelector('#setupCount').textContent=setupSelection.size+' products selected';
+  document.querySelector('#setupCount').textContent=setupSelection.size+' products selected across both chapters';
+}
+function setSetupChapter(chapter){
+  setupChapter=chapter==='two'?'two':'one';
+  for(const btn of document.querySelectorAll('#setupChapterTabs [data-chapter]')){
+    const active=btn.dataset.chapter===setupChapter;
+    btn.classList.toggle('active',active);btn.setAttribute('aria-pressed',String(active));
+  }
+  renderSetupChecklist();
 }
 function openSetup(){
   setupSelection=new Set(Object.keys(state.owned).filter(k=>state.owned[k]));
   renderSetupChecklist();document.querySelector('#setupDialog').showModal();
 }
 document.querySelector('#setupBtn').addEventListener('click',openSetup);
+document.querySelector('#collectionChapterTabs').addEventListener('click',e=>{const b=e.target.closest('button[data-chapter]');if(b)setCollectionChapter(b.dataset.chapter);});
+document.querySelector('#setupChapterTabs').addEventListener('click',e=>{const b=e.target.closest('button[data-chapter]');if(b)setSetupChapter(b.dataset.chapter);});
 document.querySelector('#setupClose').addEventListener('click',()=>document.querySelector('#setupDialog').close());
 document.querySelector('#setupCancel').addEventListener('click',()=>document.querySelector('#setupDialog').close());
 document.querySelector('#setupChecklist').addEventListener('change',e=>{
   const id=e.target.dataset?.setupProduct;if(!id)return;
   if(e.target.checked)setupSelection.add(id);else setupSelection.delete(id);
-  document.querySelector('#setupCount').textContent=setupSelection.size+' products selected';
+  document.querySelector('#setupCount').textContent=setupSelection.size+' products selected across both chapters';
 });
 document.querySelector('#setupChecklist').addEventListener('click',e=>{
   const btn=e.target.closest('button[data-setup-pair]');if(!btn)return;
