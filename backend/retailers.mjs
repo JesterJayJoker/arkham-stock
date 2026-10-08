@@ -1,4 +1,4 @@
-import { chooseBestCandidate, normalizeTitle } from './matcher.mjs';
+import { chooseBestCandidate, normalizeTitle, scoreCandidate } from './matcher.mjs';
 
 const UA = 'ArkhamStock/0.4 (+fan availability tracker; low-frequency requests)';
 const FETCH_TIMEOUT = Number(process.env.RETAILER_FETCH_TIMEOUT_MS||4500);
@@ -82,7 +82,7 @@ function stockFromText(text='') {
 function parseMoney(v) {
   if(v==null) return null;
   const n=Number(String(v).replace(/[^0-9.]/g,''));
-  return Number.isFinite(n) ? n : null;
+  return Number.isFinite(n) && n > 0 ? n : null;
 }
 
 async function parseGenericProductPage(url, retailerId, productId, confidence=0.75, signal=null) {
@@ -120,7 +120,7 @@ async function shopifyProductJson(url, retailerId, productId, confidence, signal
     const p=await r.json();
     const vars=Array.isArray(p.variants)?p.variants:[];
     const available=vars.some(v=>v.available===true);
-    const prices=vars.map(v=>Number(v.price)/100).filter(Number.isFinite);
+    const prices=vars.map(v=>Number(v.price)/100).filter(v=>Number.isFinite(v) && v > 0);
     const price=prices.length?Math.min(...prices):null;
     const variant=vars.find(v=>v.available)||vars[0]||{};
     const bodyTitle=p.title||'';
@@ -129,6 +129,38 @@ async function shopifyProductJson(url, retailerId, productId, confidence, signal
   } catch {
     return parseGenericProductPage(u.href,retailerId,productId,confidence-0.05,signal);
   }
+}
+
+
+// A search hit is not proof of product identity. Re-validate the retailer's
+// actual product record, especially for overlapping Core Set editions.
+export function verifyOfferIdentity(product, offer) {
+  const title = String(offer.titleSeen || '');
+  const sku = String(offer.skuSeen || '').replace(/[^a-z0-9]/gi,'').toUpperCase();
+  const expectedSku = String(product.sku || '').replace(/[^a-z0-9]/gi,'').toUpperCase();
+  const upc = String(offer.upcSeen || '').replace(/\D/g,'');
+  const expectedUpc = String(product.upc || '').replace(/\D/g,'');
+  if (expectedUpc && upc && expectedUpc !== upc) return {valid:false, reason:'UPC differs from requested product'};
+  if (expectedSku && sku && expectedSku !== sku) return {valid:false, reason:'SKU differs from requested product'};
+  const identifierMatch = Boolean((expectedUpc && upc && expectedUpc === upc) || (expectedSku && sku && expectedSku === sku));
+  const t = normalizeTitle(title);
+  if (/playmat|game mat|deck tome|sleeve|binder|token|insert|storage|upgrade kit/.test(t))
+    return {valid:false,reason:'Accessory rather than requested game product'};
+  // The 2016, 2021 revised, and 2026 core sets share ambiguous retailer titles.
+  // An unqualified 'Core Set' listing is never enough to identify the edition.
+  if (['core-2016','core-revised','core-2026'].includes(product.id)) {
+    const is2016 = /(?:2016|original core|first edition|old core|1st edition)/.test(t);
+    const isRevised = /(?:revised|2021)/.test(t);
+    const is2026 = /(?:2026|chapter two|chapter 2|second chapter)/.test(t);
+    if (product.id === 'core-2016' && (isRevised || is2026)) return {valid:false,reason:'Different Core Set edition'};
+    if (product.id === 'core-revised' && (is2016 || is2026)) return {valid:false,reason:'Different Core Set edition'};
+    if (product.id === 'core-2026' && (is2016 || isRevised)) return {valid:false,reason:'Different Core Set edition'};
+    if (!identifierMatch && !(product.id === 'core-2016' ? is2016 : product.id === 'core-revised' ? isRevised : is2026))
+      return {valid:false,reason:'Core Set edition not verified'};
+  }
+  if (!identifierMatch && scoreCandidate(product,{title}) < 0.70)
+    return {valid:false,reason:'Retailer product title is insufficiently specific'};
+  return {valid:true,reason:identifierMatch?'Retailer SKU/UPC verified':'Retailer edition/title verified'};
 }
 
 function retailerSearchUrl(cfg,q) {
@@ -172,10 +204,18 @@ export async function fetchOffer(product,cfg,{signal=null}={}) {
       const chosen=chooseBestCandidate(product,all,product.sku?0.45:0.58);
       if(chosen) {
         const conf=Math.max(0.55,chosen.matchScore);
-        if(cfg.kind==='shopify' && /\/products\//.test(new URL(chosen.url).pathname)) {
-          return await shopifyProductJson(chosen.url,cfg.id,product.id,conf,signal);
+        const offer = cfg.kind==='shopify' && /\/products\//.test(new URL(chosen.url).pathname)
+          ? await shopifyProductJson(chosen.url,cfg.id,product.id,conf,signal)
+          : await parseGenericProductPage(chosen.url,cfg.id,product.id,conf,signal);
+        const identity = verifyOfferIdentity(product,offer);
+        if (!identity.valid) {
+          lastError=new Error(identity.reason);
+          continue;
         }
-        return await parseGenericProductPage(chosen.url,cfg.id,product.id,conf,signal);
+        offer.evidence += '; '+identity.reason;
+        // Zero and missing prices are unknown, not free products.
+        if (!(Number.isFinite(offer.price) && offer.price > 0)) offer.price=null;
+        return offer;
       }
     } catch(e) { lastError=e; if(signal?.aborted) break; }
   }
